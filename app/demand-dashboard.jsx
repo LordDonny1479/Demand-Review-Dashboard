@@ -275,9 +275,9 @@ function DataTable({ expandedGroups, labelHeader, rows, tabId, toggleGroup }) {
           <tr className="hdr1">
             <th className="lhdr" rowSpan="2">{labelHeader}</th>
             {MONTHS.map((month) => (
-              <th colSpan="3" key={month}>{month}</th>
+              <th className="month-head" colSpan="3" key={month}>{month}</th>
             ))}
-            <th colSpan="3">FULL YEAR</th>
+            <th className="month-head fy-head" colSpan="3">FULL YEAR</th>
           </tr>
           <tr className="hdr2">
             {Array.from({ length: 13 }, (_, index) => (
@@ -346,6 +346,7 @@ function DataTable({ expandedGroups, labelHeader, rows, tabId, toggleGroup }) {
                     base={row.m25?.[monthIndex] || 0}
                     comparison={row.m26?.[monthIndex] || 0}
                     key={month}
+                    monthIndex={monthIndex}
                   />
                 ))}
                 <MonthCells base={row.fy25 || 0} comparison={row.fy26 || 0} fullYear />
@@ -358,10 +359,12 @@ function DataTable({ expandedGroups, labelHeader, rows, tabId, toggleGroup }) {
   );
 }
 
-function MonthSubhead() {
+function MonthSubhead({ index }) {
+  const boundaryClass = index === 12 ? " fy-boundary" : " month-boundary";
+
   return (
     <>
-      <th>&apos;25</th>
+      <th className={`subhead-cell${boundaryClass}`}>&apos;25</th>
       <th>&apos;26</th>
       <th>Delta</th>
     </>
@@ -410,10 +413,12 @@ function LabelCell({ groupKey, isOpen, row, toggleGroup }) {
   return <td className="slbl">{row.label}</td>;
 }
 
-function MonthCells({ base, comparison, fullYear = false }) {
+function MonthCells({ base, comparison, fullYear = false, monthIndex = null }) {
+  const boundaryClass = fullYear || monthIndex !== null ? (fullYear ? " fy-boundary" : " month-boundary") : "";
+
   return (
     <>
-      <td className="y25">{formatNumber(base)}</td>
+      <td className={`y25${boundaryClass}`}>{formatNumber(base)}</td>
       <td className="y26">{formatNumber(comparison)}</td>
       <td className={deltaClass(base, comparison)}>
         {fullYear ? formatFullYearDelta(base, comparison) : formatDelta(base, comparison)}
