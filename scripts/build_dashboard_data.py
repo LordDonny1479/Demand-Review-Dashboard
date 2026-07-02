@@ -74,6 +74,11 @@ GROUP_ORDER = [
     "Other",
 ]
 
+DATA_MODES = {
+    "blended": "Blend DRPs/displays into regular-case equivalents",
+    "separate": "Keep DRPs/displays separate and count each display as 1 case",
+}
+
 DISPLAY_RE = re.compile(
     r"DISPLAY|DISPLAYER|\bDISP\b|\bDRP\b|1/2\s*DRP|HALF\s*DRP|PDQ|DISPLY",
     re.IGNORECASE,
@@ -218,6 +223,10 @@ def product_group_label(mpg: str, planner: str, segment: str = "") -> str:
     if "TEA" in text:
         return "Tea"
     return "Other"
+
+
+def display_group_label(group: str) -> str:
+    return f"{group} Displays"
 
 
 def family_key(rec: dict) -> str:
@@ -489,10 +498,12 @@ def add_values(target: dict, source: dict):
 
 
 def group_sort_key(group_name: str):
+    display_rank = 1 if group_name.endswith(" Displays") else 0
+    base_name = group_name.removesuffix(" Displays")
     try:
-        return (GROUP_ORDER.index(group_name), group_name)
+        return (GROUP_ORDER.index(base_name), display_rank, group_name)
     except ValueError:
-        return (len(GROUP_ORDER), group_name)
+        return (len(GROUP_ORDER), display_rank, group_name)
 
 
 def build_product_table(rows):
@@ -579,13 +590,27 @@ def conversion_for_row(row: dict, base_lookup: dict):
     }
 
 
+def build_dashboard_from_rows(rows: list[dict]):
+    rollup_ret, total_values = build_retailer_rollup(rows)
+    return {
+        "rollup_ret": rollup_ret,
+        "rollup_grp": build_product_table(rows),
+        "retailers": {
+            banner: build_product_table([row for row in rows if row["banner"] == banner])
+            for banner in BANNER_ORDER
+        },
+        "stats": build_stats(total_values),
+    }
+
+
 def build_outputs():
     products, item_by_id, pack_groups = load_products()
     demand_rows = raw_demand_rows(item_by_id, pack_groups)
     base_lookup = build_base_pack_lookup(products, demand_rows)
 
-    normalized = []
+    mode_rows = {mode: [] for mode in DATA_MODES}
     detail_rows = []
+    included_split_keys = set()
     excluded_rows = []
     display_audit = {}
 
@@ -611,45 +636,60 @@ def build_outputs():
             continue
 
         conversion = conversion_for_row(row, base_lookup)
-        mpg = pretty_pack_size(conversion["base_pack_size"])
-        product_group = product_group_label(mpg, rec["planner"], rec["segment"])
+        blended_mpg = pretty_pack_size(conversion["base_pack_size"])
+        blended_product_group = product_group_label(blended_mpg, rec["planner"], rec["segment"])
+        separate_mpg = pretty_pack_size(rec["pack_size"])
+        separate_product_group = product_group_label(separate_mpg, rec["planner"], rec["segment"])
         source_cases = row["forecast_incremental_cases"]
         converted_cases = source_cases * conversion["conversion"]
+
+        if conversion["unit_type"] == "DRP":
+            separate_product_group = display_group_label(blended_product_group)
 
         if conversion["unit_type"] == "DRP":
             converted = "without matching regular pack" not in conversion["conversion_note"]
             audit_key = (
                 row["product_id"],
                 row["product"],
-                mpg,
+                blended_mpg,
+                separate_mpg,
                 conversion["conversion"],
                 conversion["conversion_note"],
             )
             display_audit[audit_key] = {
                 "product_id": row["product_id"],
                 "product": row["product"],
-                "mpg": mpg,
-                "product_group": product_group,
+                "blended_mpg": blended_mpg,
+                "separate_mpg": separate_mpg,
+                "blended_product_group": blended_product_group,
+                "separate_product_group": separate_product_group,
                 "cases_per_display": round(conversion["conversion"], 6),
                 "converted": "yes" if converted else "no",
                 "conversion_note": conversion["conversion_note"],
             }
 
         for month_index, weight, split_days, total_days in month_splits(row["execution_start"], row["execution_end"]):
-            month_cases = converted_cases * weight
-            normalized_row = {
-                "banner": banner,
-                "market": row["market"],
-                "year": year,
-                "month": MONTHS[month_index],
-                "month_index": month_index,
-                "product_group": product_group,
-                "mpg": mpg,
-                "cases": month_cases,
-            }
-            normalized.append(normalized_row)
-            detail_rows.append(
-                {
+            included_split_keys.add((row["source_sheet"], row["source_row"], month_index))
+            mode_definitions = [
+                ("blended", blended_product_group, blended_mpg, converted_cases),
+                ("separate", separate_product_group, separate_mpg, source_cases),
+            ]
+            for data_mode, product_group, mpg, mode_cases in mode_definitions:
+                month_cases = mode_cases * weight
+                mode_rows[data_mode].append(
+                    {
+                        "banner": banner,
+                        "market": row["market"],
+                        "year": year,
+                        "month": MONTHS[month_index],
+                        "month_index": month_index,
+                        "product_group": product_group,
+                        "mpg": mpg,
+                        "cases": month_cases,
+                    }
+                )
+                detail_rows.append({
+                    "data_mode": data_mode,
                     "banner": banner,
                     "market": row["market"],
                     "year": year,
@@ -667,6 +707,7 @@ def build_outputs():
                     "unit_type": conversion["unit_type"],
                     "cases_per_display": "" if conversion["unit_type"] == "CASE" else round(conversion["conversion"], 6),
                     "converted_fcst_inc_cases": round(converted_cases, 6),
+                    "mode_fcst_inc_cases": round(mode_cases, 6),
                     "prorate_weight": round(weight, 8),
                     "execution_days_in_month": split_days,
                     "execution_days_total": total_days,
@@ -674,19 +715,18 @@ def build_outputs():
                     "source_sheet": row["source_sheet"],
                     "source_row": row["source_row"],
                     "conversion_note": conversion["conversion_note"],
-                }
-            )
+                })
 
-    rollup_ret, total_values = build_retailer_rollup(normalized)
+    dashboard_modes = {
+        mode: build_dashboard_from_rows(rows)
+        for mode, rows in mode_rows.items()
+    }
     dashboard = {
-        "rollup_ret": rollup_ret,
-        "rollup_grp": build_product_table(normalized),
-        "retailers": {
-            banner: build_product_table([row for row in normalized if row["banner"] == banner])
-            for banner in BANNER_ORDER
-        },
         "banner_order": BANNER_ORDER,
-        "stats": build_stats(total_values),
+        "default_mode": "blended",
+        "mode_labels": DATA_MODES,
+        "modes": dashboard_modes,
+        **dashboard_modes["blended"],
     }
 
     summary = {
@@ -702,22 +742,27 @@ def build_outputs():
                 "2025": sorted(STATUS_BY_YEAR[2025]),
                 "2026": sorted(STATUS_BY_YEAR[2026]),
             },
-            "display_method": "Display/DRP/PDQ pack sizes converted to equivalent regular cases before monthly proration",
+            "display_method": "Toggleable: blended mode converts display/DRP/PDQ pack sizes to equivalent regular cases; separate mode keeps display/DRP rows separate and counts each as 1 case",
             "product_level": "MPG pack-size level from Product List; individual flavours are combined",
             "banner_scope": BANNER_ORDER,
         },
         "source_rows_read": len(demand_rows),
-        "included_source_month_rows": len(detail_rows),
+        "data_modes": DATA_MODES,
+        "included_source_month_rows": len(included_split_keys),
         "included_source_rows": len({(row["source_sheet"], row["source_row"]) for row in detail_rows}),
         "excluded_rows": len(excluded_rows),
         "display_products_reviewed": len(display_audit),
         "display_products_converted": sum(1 for row in display_audit.values() if row["converted"] == "yes"),
         "unconverted_display_products": sum(1 for row in display_audit.values() if row["converted"] == "no"),
         "detail_rows": len(detail_rows),
-        "total_cases_2025": dashboard["stats"]["fy25"],
-        "total_cases_2026": dashboard["stats"]["fy26"],
-        "delta_cases": dashboard["stats"]["delta"],
-        "delta_pct": dashboard["stats"]["delta_pct"],
+        "mode_totals": {
+            mode: data["stats"]
+            for mode, data in dashboard_modes.items()
+        },
+        "total_cases_2025": dashboard_modes["blended"]["stats"]["fy25"],
+        "total_cases_2026": dashboard_modes["blended"]["stats"]["fy26"],
+        "delta_cases": dashboard_modes["blended"]["stats"]["delta"],
+        "delta_pct": dashboard_modes["blended"]["stats"]["delta_pct"],
     }
 
     OUTPUT_MODULE.parent.mkdir(parents=True, exist_ok=True)
@@ -733,13 +778,15 @@ def build_outputs():
         [
             "product_id",
             "product",
-            "product_group",
-            "mpg",
+            "blended_product_group",
+            "blended_mpg",
+            "separate_product_group",
+            "separate_mpg",
             "cases_per_display",
             "converted",
             "conversion_note",
         ],
-        sorted(display_audit.values(), key=lambda row: (row["product_group"], row["mpg"], row["product_id"])),
+        sorted(display_audit.values(), key=lambda row: (row["blended_product_group"], row["blended_mpg"], row["product_id"])),
     )
 
     return summary
@@ -789,6 +836,7 @@ def excluded_row(row: dict, banner: str | None, reason: str):
 
 def detail_fieldnames():
     return [
+        "data_mode",
         "banner",
         "market",
         "year",
@@ -806,6 +854,7 @@ def detail_fieldnames():
         "unit_type",
         "cases_per_display",
         "converted_fcst_inc_cases",
+        "mode_fcst_inc_cases",
         "prorate_weight",
         "execution_days_in_month",
         "execution_days_total",

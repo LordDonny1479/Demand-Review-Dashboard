@@ -57,16 +57,21 @@ function tabTitle(activeTab) {
   return `${banner} - Fcst Inc Cases by Product Group / MPG`;
 }
 
-function tabSubtitle(activeTab) {
+function tabSubtitle(activeTab, blendDisplays) {
   if (activeTab === ROLLUP_RETAILER_TAB) {
     return "Each row is one banner/customer total across all MPGs.";
   }
-  return "MPG rows combine flavours and include display volume converted to regular cases.";
+  return blendDisplays
+    ? "MPG rows combine flavours and include display volume converted to regular cases."
+    : "Display and DRP rows stay separate and count each display as 1 case.";
 }
 
 export default function DemandDashboard() {
   const [activeTab, setActiveTab] = useState(ROLLUP_RETAILER_TAB);
+  const [blendDisplays, setBlendDisplays] = useState(true);
   const [expandedGroups, setExpandedGroups] = useState(() => new Set());
+  const dataMode = blendDisplays ? "blended" : "separate";
+  const activeData = RAW.modes[dataMode];
 
   const tabs = useMemo(
     () => [
@@ -78,11 +83,11 @@ export default function DemandDashboard() {
   );
 
   const activeRows = useMemo(() => {
-    if (activeTab === ROLLUP_RETAILER_TAB) return RAW.rollup_ret;
-    if (activeTab === ROLLUP_GROUP_TAB) return RAW.rollup_grp;
+    if (activeTab === ROLLUP_RETAILER_TAB) return activeData.rollup_ret;
+    if (activeTab === ROLLUP_GROUP_TAB) return activeData.rollup_grp;
     const banner = RAW.banner_order.find((name) => bannerTabId(name) === activeTab);
-    return RAW.retailers[banner] || [];
-  }, [activeTab]);
+    return activeData.retailers[banner] || [];
+  }, [activeData, activeTab]);
 
   function toggleGroup(groupKey) {
     setExpandedGroups((current) => {
@@ -99,13 +104,20 @@ export default function DemandDashboard() {
         <h1>TH CPG - Promotional Fcst Inc Cases Year-over-Year (2025 vs 2026)</h1>
         <p>
           In-market execution dates | Cases pro-rated by execution days per
-          calendar month | Fcst Inc Cases &gt; 0 rows only | DRP/display packs
-          converted to regular cases | 2025 = Closed/Committed | 2026 =
-          Planned/Committed
+          calendar month | Fcst Inc Cases &gt; 0 rows only | 2025 =
+          Closed/Committed | 2026 = Planned/Committed
         </p>
       </header>
 
-      <StatsBar stats={RAW.stats} />
+      <StatsBar stats={activeData.stats} />
+
+      <ModeToggle
+        blendDisplays={blendDisplays}
+        onChange={(checked) => {
+          setBlendDisplays(checked);
+          setExpandedGroups(new Set());
+        }}
+      />
 
       <section className="cards" aria-label="Retailer summary cards">
         {RAW.banner_order.map((name) => (
@@ -113,7 +125,7 @@ export default function DemandDashboard() {
             key={name}
             active={activeTab === bannerTabId(name)}
             name={name}
-            row={RAW.rollup_ret.find((item) => item.label === name)}
+            row={activeData.rollup_ret.find((item) => item.label === name)}
             onClick={() => setActiveTab(bannerTabId(name))}
           />
         ))}
@@ -135,13 +147,13 @@ export default function DemandDashboard() {
 
       <section className="tab-pane active">
         <h2>{tabTitle(activeTab)}</h2>
-        <div className="sub">{tabSubtitle(activeTab)}</div>
+        <div className="sub">{tabSubtitle(activeTab, blendDisplays)}</div>
         <Legend />
         <DataTable
           expandedGroups={expandedGroups}
           labelHeader={activeTab === ROLLUP_RETAILER_TAB ? "Retailer" : "Product Group / MPG"}
           rows={activeRows}
-          tabId={activeTab}
+          tabId={`${dataMode}-${activeTab}`}
           toggleGroup={toggleGroup}
         />
       </section>
@@ -174,6 +186,29 @@ function Stat({ className = "", label, value }) {
       <div className={`val ${className}`}>{value}</div>
       <div className="lbl">{label}</div>
     </div>
+  );
+}
+
+function ModeToggle({ blendDisplays, onChange }) {
+  return (
+    <section className="mode-bar" aria-label="Display treatment">
+      <label className="switch-row">
+        <span>Blend DRPs into cases</span>
+        <input
+          checked={blendDisplays}
+          onChange={(event) => onChange(event.target.checked)}
+          type="checkbox"
+        />
+        <span className="switch-track" aria-hidden="true">
+          <span className="switch-thumb" />
+        </span>
+      </label>
+      <span className="mode-note">
+        {blendDisplays
+          ? "Displays converted to regular-case equivalents"
+          : "Displays shown separately and counted as 1 case each"}
+      </span>
+    </section>
   );
 }
 

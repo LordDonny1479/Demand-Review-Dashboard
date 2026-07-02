@@ -40,7 +40,11 @@ The builder:
 - pro-rates cases into calendar months by inclusive execution days;
 - maps products through the product list and combines flavours at MPG pack-size
   level;
-- converts display, DRP, and PDQ pack sizes into equivalent regular cases;
+- generates two display modes:
+  - blended mode converts display, DRP, and PDQ pack sizes into equivalent
+    regular cases and blends them into the regular MPG;
+  - separate mode keeps display rows on their display MPG and counts each
+    display/DRP as 1 case;
 - renders the 11 customer/banner groups from the reference view.
 
 Rows that cannot be mapped to a displayed banner, have no positive incremental

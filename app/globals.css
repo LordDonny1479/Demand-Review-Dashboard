@@ -92,6 +92,73 @@ button {
   color: var(--neg) !important;
 }
 
+.mode-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  padding: 7px 20px;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+.switch-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--blue);
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.switch-row input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.switch-track {
+  position: relative;
+  width: 32px;
+  height: 16px;
+  background: #c7d2df;
+  border-radius: 999px;
+  transition: background 0.15s;
+}
+
+.switch-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  transition: transform 0.15s;
+}
+
+.switch-row input:checked + .switch-track {
+  background: var(--blue);
+}
+
+.switch-row input:checked + .switch-track .switch-thumb {
+  transform: translateX(16px);
+}
+
+.switch-row input:focus-visible + .switch-track {
+  outline: 2px solid var(--blue-2);
+  outline-offset: 2px;
+}
+
+.mode-note {
+  color: #777;
+  font-size: 10px;
+}
+
 .cards {
   display: flex;
   flex-wrap: wrap;
@@ -400,6 +467,7 @@ td.totlbl {
 @media (max-width: 760px) {
   .promo-header,
   .stats-bar,
+  .mode-bar,
   .cards,
   .tabs,
   .tab-pane,
