@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Demand Review Dashboard",
+  title: "TH CPG Promo YoY Dashboard",
   description:
-    "Compare 2026 and 2025 monthly case volume by retailer and MPG.",
+    "Compare 2026 and 2025 promotional incremental cases by retailer and MPG.",
   icons: {
     icon: "/favicon.svg",
     shortcut: "/favicon.svg",

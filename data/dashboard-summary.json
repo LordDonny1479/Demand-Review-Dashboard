@@ -3,12 +3,46 @@
     "demand_workbook": "DR 06 June - 2025 vs 2026.xlsx",
     "product_workbook": "Product List 20260629.xlsx"
   },
-  "output_rows": 7940,
-  "unique_retailers": 43,
-  "unique_mpgs": 57,
-  "display_rows_converted": 506,
-  "unmapped_rows": 198,
-  "unconverted_display_rows": 22,
-  "total_cases_2025": 10656998.3,
-  "total_cases_2026": 14165245.28
+  "methodology": {
+    "volume_source": "Product-level Fcst Inc Cases",
+    "row_filter": "Fcst Inc Cases > 0",
+    "date_method": "Execution Start through Execution End, prorated by inclusive execution days per calendar month",
+    "year_status_filter": {
+      "2025": [
+        "Closed",
+        "Committed"
+      ],
+      "2026": [
+        "Committed",
+        "Planned"
+      ]
+    },
+    "display_method": "Display/DRP/PDQ pack sizes converted to equivalent regular cases before monthly proration",
+    "product_level": "MPG pack-size level from Product List; individual flavours are combined",
+    "banner_scope": [
+      "Sobeys Banners FS",
+      "FreshCo",
+      "Sobeys Quebec",
+      "Metro Ontario",
+      "Metro Quebec",
+      "Pattison Food Group",
+      "Giant Tiger",
+      "FCL",
+      "Canadian Tire",
+      "Walmart",
+      "Loblaws"
+    ]
+  },
+  "source_rows_read": 8138,
+  "included_source_month_rows": 5719,
+  "included_source_rows": 3647,
+  "excluded_rows": 4491,
+  "display_products_reviewed": 50,
+  "display_products_converted": 47,
+  "unconverted_display_products": 3,
+  "detail_rows": 5719,
+  "total_cases_2025": 1432728,
+  "total_cases_2026": 1157633,
+  "delta_cases": -275095,
+  "delta_pct": -19.2
 }

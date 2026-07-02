@@ -1,44 +1,52 @@
 import assert from "node:assert";
 import fs from "node:fs";
-import {
-  buildDemandReview,
-  parseCsv,
-  pivotByRetailerAndMpg,
-  toCases,
-} from "../app/lib/demand-review.js";
+import { META, MONTHS, RAW } from "../app/data/promo-yoy-data.js";
 
-const rows = parseCsv(`retailer,year,month,mpg,product,unit_type,quantity,cases_per_drp
-Retailer A,2025,June,Instant 6/100g,Flavour A,CASE,2500,
-Retailer A,2026,June,Instant 6/100g,Flavour A,CASE,3000,
-Retailer A,2026,June,Instant 6/100g,Display,DRP,2,12`);
+assert.deepStrictEqual(MONTHS, [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+]);
 
-assert.strictEqual(toCases(rows[2]), 24);
-const review = buildDemandReview(rows);
-assert.strictEqual(review.length, 1);
-assert.strictEqual(review[0].baseCases, 2500);
-assert.strictEqual(review[0].comparisonCases, 3024);
-assert.strictEqual(review[0].difference, 524);
-const pivot = pivotByRetailerAndMpg(review);
-assert.strictEqual(pivot[0].months.June.difference, 524);
+assert.strictEqual(RAW.banner_order.length, 11);
+assert.strictEqual(RAW.stats.fy25, 1432728);
+assert.strictEqual(RAW.stats.fy26, 1157633);
+assert.strictEqual(RAW.stats.delta, -275095);
+assert.strictEqual(RAW.stats.delta_pct, -19.2);
 
-const quoted = parseCsv('retailer,product,quantity\n"Retailer, A","Coffee ""Display""",5');
-assert.strictEqual(quoted[0].retailer, "Retailer, A");
-assert.strictEqual(quoted[0].product, 'Coffee "Display"');
+const grandTotal = RAW.rollup_ret.find((row) => row.label === "GRAND TOTAL");
+assert.ok(grandTotal);
+assert.strictEqual(grandTotal.fy25, RAW.stats.fy25);
+assert.strictEqual(grandTotal.fy26, RAW.stats.fy26);
 
-assert.strictEqual(toCases({ unit_type: "DRP", quantity: "2", cases_per_drp: "12", cases: "99" }), 99);
+const walmart = RAW.rollup_ret.find((row) => row.label === "Walmart");
+assert.ok(walmart);
+assert.strictEqual(walmart.fy25, 394261);
+assert.strictEqual(walmart.fy26, 319133);
 
-const realRows = parseCsv(fs.readFileSync("data/demand-review.csv", "utf8"));
-assert.ok(realRows.length > 7000);
+const audit = fs.readFileSync("data/display-conversion-audit.csv", "utf8");
+assert.ok(audit.includes("TDRGSB-48/300,R&G SMALL BAG 48/300GR,Roast & Ground,R&G Small Bag 6/300g,8.0,yes"));
+assert.ok(audit.includes("TDSSKC-48/12,SS KCOMP 48/12CT,Single Serve (K-Cup),SS KComp 6/12ct,8.0,yes"));
+assert.ok(audit.includes("6320912131,TDL ORG/DR/COL KCUP SS 1/2 DRP 145/30 CT,Single Serve (K-Cup),SS KComp 4/30ct,36.25,yes"));
 
-const instantDisplay = realRows.find((row) => row.product_id === "TDIC-288/100");
-assert.ok(instantDisplay);
-assert.strictEqual(instantDisplay.mpg, "Instant Coffee 12/100g");
-assert.strictEqual(instantDisplay.unit_type, "DRP");
-assert.strictEqual(Number(instantDisplay.cases_per_drp), 24);
+assert.strictEqual(META.methodology.volume_source, "Product-level Fcst Inc Cases");
+assert.strictEqual(META.methodology.row_filter, "Fcst Inc Cases > 0");
+assert.strictEqual(META.methodology.product_level, "MPG pack-size level from Product List; individual flavours are combined");
+assert.strictEqual(META.display_products_converted, 47);
+assert.strictEqual(META.unconverted_display_products, 3);
 
-const singleServeDisplay = realRows.find((row) => row.product_id === "TDSSKC-48/12");
-assert.ok(singleServeDisplay);
-assert.strictEqual(singleServeDisplay.mpg, "SS KComp 6/12ct");
-assert.strictEqual(Number(singleServeDisplay.cases_per_drp), 8);
+const dashboardSource = fs.readFileSync("app/demand-dashboard.jsx", "utf8");
+assert.ok(!dashboardSource.includes('type="file"'));
+assert.ok(!dashboardSource.includes("Upload"));
+assert.ok(dashboardSource.includes("./data/promo-yoy-data"));
 
-console.log("transform tests passed");
+console.log("dashboard data tests passed");

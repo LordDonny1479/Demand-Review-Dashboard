@@ -1,7 +1,10 @@
 # Demand Review Dashboard
 
-Sites dashboard for reviewing monthly demand changes by customer/retailer and
-MPG. The main table shows `2026 cases - 2025 cases` for each month.
+Sites dashboard for reviewing Tim Hortons CPG promotional forecast incremental
+cases year-over-year between 2025 and 2026.
+
+The dashboard is built from embedded generated data. There is no upload control
+in the site.
 
 ## Source data
 
@@ -10,11 +13,16 @@ Raw workbooks are stored in `data/raw`:
 - `DR 06 June - 2025 vs 2026.xlsx`
 - `Product List 20260629.xlsx`
 
-The generated dashboard CSV is stored in both `data/demand-review.csv` and
-`public/data/demand-review.csv`; the `public` copy is what the hosted site
-loads.
+Generated dashboard data is written to:
 
-## Data transformation
+- `app/data/promo-yoy-data.js` for the website bundle
+- `data/promo-yoy-dashboard.json` for the table payload
+- `data/promo-yoy-detail.csv` for row-level audit detail
+- `data/display-conversion-audit.csv` for DRP/display conversion checks
+- `data/promo-yoy-excluded-rows.csv` for rows excluded by methodology
+- `data/dashboard-summary.json` for transformation totals
+
+## Methodology
 
 Run:
 
@@ -24,19 +32,20 @@ python scripts/build_dashboard_data.py
 
 The builder:
 
-- uses product-level `Fcst Total Cases` from the demand workbook;
-- uses `TLS Ship Start` for the demand month, falling back to execution or
-  contract start when needed;
-- maps demand product IDs through `Item ID` or `Pack Size ID` in the product
-  list;
-- groups products at MPG pack-size level, such as `Instant Coffee 12/100g`;
-- converts display/DRP/PDQ rows into regular cases using matching regular pack
-  sizes from demand-used product master data;
-- writes audit files for product mapping, unmapped rows, and display rows that
-  could not be converted from available metadata.
+- uses product-level `Fcst Inc Cases`;
+- keeps only rows where `Fcst Inc Cases > 0`;
+- includes 2025 rows with `Closed` or `Committed` promo status;
+- includes 2026 rows with `Planned` or `Committed` promo status;
+- uses `Execution Start` through `Execution End`;
+- pro-rates cases into calendar months by inclusive execution days;
+- maps products through the product list and combines flavours at MPG pack-size
+  level;
+- converts display, DRP, and PDQ pack sizes into equivalent regular cases;
+- renders the 11 customer/banner groups from the reference view.
 
-Rows that only map to broad `TDL CAN` product IDs are excluded from product MPG
-totals and preserved in `data/unmapped-products.csv`.
+Rows that cannot be mapped to a displayed banner, have no positive incremental
+cases, fail the status filter, or cannot map to an MPG are preserved in
+`data/promo-yoy-excluded-rows.csv`.
 
 ## Run locally
 
