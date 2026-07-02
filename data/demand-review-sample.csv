@@ -1,0 +1,12 @@
+retailer,year,month,mpg,product,unit_type,quantity,cases_per_drp
+Retailer A,2025,June,Instant 6/100g,Classic Roast 100g,CASE,2500,
+Retailer A,2026,June,Instant 6/100g,Classic Roast 100g,CASE,2850,
+Retailer A,2026,June,Instant 6/100g,Classic Roast Display,DRP,15,10
+Retailer A,2025,July,Instant 6/100g,Classic Roast 100g,CASE,2100,
+Retailer A,2026,July,Instant 6/100g,Classic Roast 100g,CASE,2300,
+Retailer A,2025,June,Premium 12/200g,Gold 200g,CASE,1800,
+Retailer A,2026,June,Premium 12/200g,Gold 200g,CASE,1600,
+Retailer B,2025,June,Instant 6/100g,Decaf 100g,CASE,900,
+Retailer B,2026,June,Instant 6/100g,Decaf 100g,CASE,1000,
+Retailer B,2025,June,Premium 12/200g,Gold Display,DRP,20,8
+Retailer B,2026,June,Premium 12/200g,Gold Display,DRP,25,8
