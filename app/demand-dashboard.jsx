@@ -61,6 +61,11 @@ function tabSubtitle(activeTab, blendDisplays) {
   if (activeTab === ROLLUP_RETAILER_TAB) {
     return "Each row is one banner/customer total across all MPGs.";
   }
+  if (activeTab === ROLLUP_GROUP_TAB) {
+    return blendDisplays
+      ? "MPGs include display volume converted to regular cases. Retailer drilldowns are sorted by FY delta."
+      : "Displays stay separate and count as 1 case each. Retailer drilldowns are sorted by FY delta.";
+  }
   return blendDisplays
     ? "MPG rows combine flavours and include display volume converted to regular cases."
     : "Display and DRP rows stay separate and count each display as 1 case.";
@@ -151,7 +156,13 @@ export default function DemandDashboard() {
         <Legend />
         <DataTable
           expandedGroups={expandedGroups}
-          labelHeader={activeTab === ROLLUP_RETAILER_TAB ? "Retailer" : "Product Group / MPG"}
+          labelHeader={
+            activeTab === ROLLUP_RETAILER_TAB
+              ? "Retailer"
+              : activeTab === ROLLUP_GROUP_TAB
+                ? "Product Group / MPG / Retailer"
+                : "Product Group / MPG"
+          }
           rows={activeRows}
           tabId={`${dataMode}-${activeTab}`}
           toggleGroup={toggleGroup}
@@ -252,7 +263,10 @@ function Legend() {
 function DataTable({ expandedGroups, labelHeader, rows, tabId, toggleGroup }) {
   let currentGroup = null;
   let currentGroupOpen = true;
+  let currentMpg = null;
+  let currentMpgOpen = true;
   let groupIndex = 0;
+  let mpgIndex = 0;
 
   return (
     <div className="tbl-wrap">
@@ -274,27 +288,56 @@ function DataTable({ expandedGroups, labelHeader, rows, tabId, toggleGroup }) {
         <tbody>
           {rows.map((row, index) => {
             let groupKey = currentGroup;
+            let mpgKey = currentMpg;
+            let rowKey = null;
             let visible = currentGroupOpen;
+            let isOpen = false;
 
             if (row.is_group && !row.is_total) {
               groupKey = `${tabId}-${groupIndex}-${row.label}`;
               currentGroup = groupKey;
+              currentMpg = null;
+              currentMpgOpen = false;
               groupIndex += 1;
-              currentGroupOpen = expandedGroups.has(groupKey);
+              mpgIndex = 0;
+              currentGroupOpen = row.has_children ? expandedGroups.has(groupKey) : true;
               visible = true;
+              rowKey = row.has_children ? groupKey : null;
+              isOpen = currentGroupOpen;
+            } else if (row.is_mpg) {
+              mpgKey = `${groupKey}-${mpgIndex}-${row.label}`;
+              currentMpg = mpgKey;
+              mpgIndex += 1;
+              currentMpgOpen = row.has_children ? expandedGroups.has(mpgKey) : true;
+              visible = currentGroupOpen;
+              rowKey = row.has_children ? mpgKey : null;
+              isOpen = currentMpgOpen;
+            } else if (row.is_retailer) {
+              visible = currentGroupOpen && currentMpgOpen;
             } else if (row.is_total) {
               groupKey = null;
+              mpgKey = null;
               visible = true;
+            } else {
+              visible = currentGroupOpen;
             }
 
             if (!visible) return null;
 
-            const rowClass = row.is_total ? "tot-row" : row.is_group ? "grp-hdr" : "sku-row";
+            const rowClass = row.is_total
+              ? "tot-row"
+              : row.is_group
+                ? "grp-hdr"
+                : row.is_mpg
+                  ? "mpg-row"
+                  : row.is_retailer
+                    ? "retailer-row"
+                    : "sku-row";
             return (
               <tr className={rowClass} key={`${tabId}-${index}-${row.label}`}>
                 <LabelCell
-                  groupKey={groupKey}
-                  isOpen={groupKey ? expandedGroups.has(groupKey) : false}
+                  groupKey={rowKey}
+                  isOpen={isOpen}
                   row={row}
                   toggleGroup={toggleGroup}
                 />
@@ -329,6 +372,8 @@ function LabelCell({ groupKey, isOpen, row, toggleGroup }) {
   if (row.is_total) return <td className="totlbl">{row.label}</td>;
 
   if (row.is_group) {
+    if (!row.has_children) return <td className="glbl">{row.label}</td>;
+
     return (
       <td className="glbl">
         <button
@@ -343,6 +388,24 @@ function LabelCell({ groupKey, isOpen, row, toggleGroup }) {
       </td>
     );
   }
+
+  if (row.is_mpg) {
+    return (
+      <td className="mlbl">
+        <button
+          aria-expanded={isOpen}
+          className="group-toggle"
+          onClick={() => toggleGroup(groupKey)}
+          type="button"
+        >
+          <span className={`arr${isOpen ? " open" : ""}`} aria-hidden="true">&gt;</span>
+          <span>{row.label}</span>
+        </button>
+      </td>
+    );
+  }
+
+  if (row.is_retailer) return <td className="rlbl">{row.label}</td>;
 
   return <td className="slbl">{row.label}</td>;
 }

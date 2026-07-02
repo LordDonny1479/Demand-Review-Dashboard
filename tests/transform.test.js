@@ -53,6 +53,39 @@ assert.strictEqual(separateDisplayGroup.fy26, 5039);
 const blendedDisplayGroup = RAW.modes.blended.rollup_grp.find((row) => row.label === "Roast & Ground Displays");
 assert.strictEqual(blendedDisplayGroup, undefined);
 
+function retailerRowsForMpg(rows, mpg) {
+  const start = rows.findIndex((row) => row.label === mpg && row.is_mpg);
+  assert.ok(start >= 0, `Missing MPG row for ${mpg}`);
+  const retailers = [];
+  for (const row of rows.slice(start + 1)) {
+    if (row.is_group || row.is_mpg || row.is_total) break;
+    if (row.is_retailer) retailers.push(row);
+  }
+  return retailers;
+}
+
+function assertSortedByDeltaDesc(rows) {
+  for (let index = 1; index < rows.length; index += 1) {
+    const previous = rows[index - 1].fy26 - rows[index - 1].fy25;
+    const current = rows[index].fy26 - rows[index].fy25;
+    assert.ok(previous >= current, `${rows[index - 1].label} should sort before ${rows[index].label}`);
+  }
+}
+
+const blendedRetailers = retailerRowsForMpg(RAW.modes.blended.rollup_grp, "R&G Small Bag 6/300g");
+assert.ok(blendedRetailers.length > 5);
+assert.strictEqual(blendedRetailers[0].label, "Walmart");
+assert.strictEqual(blendedRetailers[0].fy25, 0);
+assert.strictEqual(blendedRetailers[0].fy26, 40000);
+assertSortedByDeltaDesc(blendedRetailers);
+
+const separateRetailers = retailerRowsForMpg(RAW.modes.separate.rollup_grp, "R&G Small Bag 6/300g");
+assert.ok(separateRetailers.length > 5);
+assert.strictEqual(separateRetailers[0].label, "Walmart");
+assert.strictEqual(separateRetailers[0].fy25, 0);
+assert.strictEqual(separateRetailers[0].fy26, 18000);
+assertSortedByDeltaDesc(separateRetailers);
+
 const audit = fs.readFileSync("data/display-conversion-audit.csv", "utf8");
 assert.ok(audit.includes("TDRGSB-48/300,R&G SMALL BAG 48/300GR,Roast & Ground,R&G Small Bag 6/300g,Roast & Ground Displays,R&G Small Bag 48/300g,8.0,yes"));
 assert.ok(audit.includes("TDSSKC-48/12,SS KCOMP 48/12CT,Single Serve (K-Cup),SS KComp 6/12ct,Single Serve (K-Cup) Displays,SS KComp 48/12ct,8.0,yes"));
@@ -71,5 +104,7 @@ assert.ok(!dashboardSource.includes('type="file"'));
 assert.ok(!dashboardSource.includes("Upload"));
 assert.ok(dashboardSource.includes("./data/promo-yoy-data"));
 assert.ok(dashboardSource.includes("Blend DRPs into cases"));
+assert.ok(dashboardSource.includes("row.is_mpg"));
+assert.ok(dashboardSource.includes("row.is_retailer"));
 
 console.log("dashboard data tests passed");

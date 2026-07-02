@@ -506,26 +506,54 @@ def group_sort_key(group_name: str):
         return (len(GROUP_ORDER), display_rank, group_name)
 
 
-def build_product_table(rows):
+def fy_delta(row: dict) -> int:
+    return (row.get("fy26") or 0) - (row.get("fy25") or 0)
+
+
+def build_product_table(rows, include_retailer_drilldown: bool = False):
     group_values = defaultdict(empty_years)
     mpg_values = defaultdict(empty_years)
+    retailer_values = defaultdict(empty_years)
     total_values = empty_years()
 
     for row in rows:
         key = (row["product_group"], row["mpg"])
+        retailer_key = (row["product_group"], row["mpg"], row["banner"])
         add_month(group_values[row["product_group"]], row["year"], row["month_index"], row["cases"])
         add_month(mpg_values[key], row["year"], row["month_index"], row["cases"])
+        add_month(retailer_values[retailer_key], row["year"], row["month_index"], row["cases"])
         add_month(total_values, row["year"], row["month_index"], row["cases"])
 
     table_rows = []
     for group in sorted(group_values, key=group_sort_key):
-        table_rows.append(row_from_values(group, group_values[group], is_group=True))
+        group_row = row_from_values(group, group_values[group], is_group=True)
+        group_row["row_type"] = "group"
+        group_row["has_children"] = True
+        table_rows.append(group_row)
+
         children = sorted(
             (key for key in mpg_values if key[0] == group),
             key=lambda key: key[1],
         )
         for _, mpg in children:
-            table_rows.append(row_from_values(mpg, mpg_values[(group, mpg)]))
+            mpg_row = row_from_values(mpg, mpg_values[(group, mpg)])
+            if include_retailer_drilldown:
+                mpg_row["row_type"] = "mpg"
+                mpg_row["is_mpg"] = True
+                mpg_row["has_children"] = True
+            table_rows.append(mpg_row)
+
+            if include_retailer_drilldown:
+                retailer_rows = []
+                for _, _, banner in (key for key in retailer_values if key[0] == group and key[1] == mpg):
+                    retailer_row = row_from_values(banner, retailer_values[(group, mpg, banner)])
+                    retailer_row["row_type"] = "retailer"
+                    retailer_row["is_retailer"] = True
+                    retailer_rows.append(retailer_row)
+
+                table_rows.extend(
+                    sorted(retailer_rows, key=lambda row: (-fy_delta(row), row["label"]))
+                )
 
     table_rows.append(row_from_values("GRAND TOTAL", total_values, is_total=True))
     return table_rows
@@ -594,7 +622,7 @@ def build_dashboard_from_rows(rows: list[dict]):
     rollup_ret, total_values = build_retailer_rollup(rows)
     return {
         "rollup_ret": rollup_ret,
-        "rollup_grp": build_product_table(rows),
+        "rollup_grp": build_product_table(rows, include_retailer_drilldown=True),
         "retailers": {
             banner: build_product_table([row for row in rows if row["banner"] == banner])
             for banner in BANNER_ORDER

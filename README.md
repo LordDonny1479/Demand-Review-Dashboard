@@ -6,6 +6,10 @@ cases year-over-year between 2025 and 2026.
 The dashboard is built from embedded generated data. There is no upload control
 in the site.
 
+In the all-retailer Product Group view, product groups expand into MPGs and
+MPGs expand into retailer rows sorted by full-year delta from highest to lowest.
+Those drilldown values switch with the display blending toggle.
+
 ## Source data
 
 Raw workbooks are stored in `data/raw`:

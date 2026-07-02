@@ -358,6 +358,22 @@ tr.sku-row:hover td {
   background: #f0f4ff !important;
 }
 
+tr.mpg-row td {
+  background: #fafcff;
+}
+
+tr.mpg-row:hover td {
+  background: #eef5ff !important;
+}
+
+tr.retailer-row td {
+  background: #fff;
+}
+
+tr.retailer-row:hover td {
+  background: #f7fbff !important;
+}
+
 tr.tot-row td {
   color: #fff !important;
   font-weight: 700;
@@ -365,6 +381,8 @@ tr.tot-row td {
 }
 
 td.glbl,
+td.mlbl,
+td.rlbl,
 td.slbl,
 td.totlbl {
   position: sticky;
@@ -384,6 +402,22 @@ td.slbl {
   padding-left: 22px;
   background: #fafcff;
   border-right-color: #ccd;
+  font-size: 9px;
+}
+
+td.mlbl {
+  padding-left: 18px;
+  background: #fafcff;
+  border-right-color: #ccd;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+td.rlbl {
+  padding-left: 38px;
+  color: #555;
+  background: #fff;
+  border-right-color: #ddd;
   font-size: 9px;
 }
 
