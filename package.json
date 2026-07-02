@@ -11,6 +11,7 @@
     "start": "vinext start",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "drizzle-kit generate",
+    "data:build": "python scripts/build_dashboard_data.py",
     "test": "node tests/transform.test.js"
   },
   "dependencies": {

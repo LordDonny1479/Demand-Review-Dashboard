@@ -1,0 +1,211 @@
+product_id,product,mpg,unit_type,product_pack_size,base_pack_size,cases_per_drp,conversion_note
+TDDCR-6/750,CREAMER 6/750ML,Creamer 6/750ml,CASE,Creamer 6/750ml,Creamer 6/750ml,,Product-level forecast total cases
+6320914195,TDL GRANOLA BAR APPLE FRITTER 12/5 EA,Granola Bar 12/5/30g,CASE,Granola Bar 12/5/30g,Granola Bar 12/5/30g,,Product-level forecast total cases
+6320914197,TDL GRANOLA BAR SALTED CARAMEL 12/5 EA,Granola Bar 12/5/30g,CASE,Granola Bar 12/5/30g,Granola Bar 12/5/30g,,Product-level forecast total cases
+6320916556,TDL GRANOLA BAR BLUEBERRY 12/5 EA,Granola Bar 12/5/30g,CASE,Granola Bar 12/5/30g,Granola Bar 12/5/30g,,Product-level forecast total cases
+TDGB-12/5/30,GRANOLA BAR 12/5/30GR,Granola Bar 12/5/30g,CASE,Granola Bar 12/5/30g,Granola Bar 12/5/30g,,Product-level forecast total cases
+6320914293,TDL GRANOLA BAR AF/DC/SC DISP 56/5 EA,Granola Bar 56/5ea,DRP,Granola Bar 56/5ea,Granola Bar 56/5ea,1.0,Display product without matching regular pack; left as reported cases
+6320917215,TDL GRANOLA BAR BC/DC/SC DISP 56/5 EA,Granola Bar 56/5ea,DRP,Granola Bar 56/5ea,Granola Bar 56/5ea,1.0,Display product without matching regular pack; left as reported cases
+TDGB-56/5,GRANOLA BAR 56/5EA,Granola Bar 56/5ea,DRP,Granola Bar 56/5ea,Granola Bar 56/5ea,1.0,Display product without matching regular pack; left as reported cases
+6320909370,TDL CAPPUCCINO FRENCH VANILLA 12/454 GR,HB Cappuccino 12/454g,CASE,HB Cappuccino 12/454g,HB Cappuccino 12/454g,,Product-level forecast total cases
+TDHBCAP-12/343,HB CAPPUCCINO 12/454GR,HB Cappuccino 12/454g,CASE,HB Cappuccino 12/454g,HB Cappuccino 12/454g,,Product-level forecast total cases
+6320915305,TDL CAPPUCCINO FRENCH VAN PACKET 5/8 EA,HB Cappuccino 5/8ct,CASE,HB Cappuccino 5/8ct,HB Cappuccino 5/8ct,,Product-level forecast total cases
+6320916881,TDL DOUBLE DOUBLE PACKET 5/8 EA,HB Cappuccino 5/8ct,CASE,HB Cappuccino 5/8ct,HB Cappuccino 5/8ct,,Product-level forecast total cases
+6320916882,TDL CAFE MOCHA PACKET 5/8 EA,HB Cappuccino 5/8ct,CASE,HB Cappuccino 5/8ct,HB Cappuccino 5/8ct,,Product-level forecast total cases
+TDHBCAP-5/8,HB CAPPUCCINO 5/8CT,HB Cappuccino 5/8ct,CASE,HB Cappuccino 5/8ct,HB Cappuccino 5/8ct,,Product-level forecast total cases
+6320923611,TDL CAPPUCCINO FRENCH VANILLA 6/1 KG,HB Cappuccino 6/1kg,CASE,HB Cappuccino 6/1kg,HB Cappuccino 6/1kg,,Product-level forecast total cases
+TDHBCA-6/1,HB CAPPUCCINO 6/1KG,HB Cappuccino 6/1kg,CASE,HB Cappuccino 6/1kg,HB Cappuccino 6/1kg,,Product-level forecast total cases
+6320920264,TDL CANDY CANE HOT CHOCOLATE 12/450 GR,HB Hot Chocolate 12/450g,CASE,HB Hot Chocolate 12/450g,HB Hot Chocolate 12/450g,,Product-level forecast total cases
+TDHBHC-12/450,HB HOT CHOCOLATE 12/450GR,HB Hot Chocolate 12/450g,CASE,HB Hot Chocolate 12/450g,HB Hot Chocolate 12/450g,,Product-level forecast total cases
+6320909069,TDL HOT CHOCOLATE 12/500 GR,HB Hot Chocolate 12/500g,CASE,HB Hot Chocolate 12/500g,HB Hot Chocolate 12/500g,,Product-level forecast total cases
+6320912137,TDL ORIGINAL HOT CHOC DISPLAY 36/500 GR,HB Hot Chocolate 12/500g,DRP,HB Hot Chocolate 36/500g,HB Hot Chocolate 12/500g,3.0,Display pack 36/500G converted to regular case pack 12/500G
+6320914324,TDL HOT CHOCOLATE 1/2 DRP 240/500 GR,HB Hot Chocolate 12/500g,DRP,HB Hot Chocolate 240/500g,HB Hot Chocolate 12/500g,20.0,Display pack 240/500G converted to regular case pack 12/500G
+6320920672,TDL ORG/CANDY HOT CHOC DISPLAY 36/500 GR,HB Hot Chocolate 12/500g,DRP,HB Hot Chocolate 36/500g,HB Hot Chocolate 12/500g,3.0,Display pack 36/500G converted to regular case pack 12/500G
+6320924585,TDL ORG/CANDY HOT CHOC 1/2 DRP 240/500 G,HB Hot Chocolate 12/500g,DRP,HB Hot Chocolate 240/500g,HB Hot Chocolate 12/500g,20.0,Display pack 240/500G converted to regular case pack 12/500G
+TDHBHC-12/500,HB HOT CHOCOLATE 12/500GR,HB Hot Chocolate 12/500g,CASE,HB Hot Chocolate 12/500g,HB Hot Chocolate 12/500g,,Product-level forecast total cases
+TDHBHC-36/500,HB HOT CHOCOLATE 36/500GR,HB Hot Chocolate 12/500g,DRP,HB Hot Chocolate 36/500g,HB Hot Chocolate 12/500g,3.0,Display pack 36/500G converted to regular case pack 12/500G
+TDHBHC240/500,HB HOT CHOCOLATE 240/500GR,HB Hot Chocolate 12/500g,DRP,HB Hot Chocolate 240/500g,HB Hot Chocolate 12/500g,20.0,Display pack 240/500G converted to regular case pack 12/500G
+TDHBHC-3/20,HB HOT CHOCOLATE 3/20CT,HB Hot Chocolate 3/20ct,CASE,HB Hot Chocolate 3/20ct,HB Hot Chocolate 3/20ct,,Product-level forecast total cases
+TDHBHC-36/1,HB HOT CHOCOLATE 36/1 EA,HB Hot Chocolate 36/1ea,DRP,HB Hot Chocolate 36/1ea,HB Hot Chocolate 36/1ea,1.0,Display product without matching regular pack; left as reported cases
+TDHBHC-4/20,HB HOT CHOCOLATE 4/20CT,HB Hot Chocolate 4/20ct,CASE,HB Hot Chocolate 4/20ct,HB Hot Chocolate 4/20ct,,Product-level forecast total cases
+6320915261,TDL HOT CHOCOLATE PACKET 5/8 EA,HB Hot Chocolate 5/8ct,CASE,HB Hot Chocolate 5/8ct,HB Hot Chocolate 5/8ct,,Product-level forecast total cases
+TDHBHC-5/8,HB HOT CHOCOLATE 5/8CT,HB Hot Chocolate 5/8ct,CASE,HB Hot Chocolate 5/8ct,HB Hot Chocolate 5/8ct,,Product-level forecast total cases
+6320917577,TDL HOT CHOCOLATE 1/2 DRP 144/1.5 KG,HB Hot Chocolate 6/1.5kg,DRP,HB Hot Chocolate 144/1.5kg,HB Hot Chocolate 6/1.5kg,24.0,Display pack 144/1.5KG converted to regular case pack 6/1.5KG
+TDHBHC-6/1.5,HB HOT CHOCOLATE 6/1.5KG,HB Hot Chocolate 6/1.5kg,CASE,HB Hot Chocolate 6/1.5kg,HB Hot Chocolate 6/1.5kg,,Product-level forecast total cases
+6320911300,TDL KCUP HOT CHOC ORIGINAL SS 6/10 CT,HB Hot Chocolate 6/10ct,CASE,HB Hot Chocolate 6/10ct,HB Hot Chocolate 6/10ct,,Product-level forecast total cases
+6320911302,TDL KCUP HOT CHOC CARAMEL SS 6/10 CT,HB Hot Chocolate 6/10ct,CASE,HB Hot Chocolate 6/10ct,HB Hot Chocolate 6/10ct,,Product-level forecast total cases
+6320912136,*TDL ORIG/CRML/FV HC KCUPDISPLAY 48/10CT,HB Hot Chocolate 6/10ct,DRP,HB Hot Chocolate 48/10ct,HB Hot Chocolate 6/10ct,8.0,Display pack 48/10CT converted to regular case pack 6/10CT
+TDHBHC-6/10,HB HOT CHOCOLATE 6/10CT,HB Hot Chocolate 6/10ct,CASE,HB Hot Chocolate 6/10ct,HB Hot Chocolate 6/10ct,,Product-level forecast total cases
+TDHBKC-6/10,HB KCOMP 6/10CT,HB KComp 6/10ct,CASE,HB KComp 6/10ct,HB KComp 6/10ct,,Product-level forecast total cases
+6320915282,TDL HOT CHOC / FV PACKET 256/30 EA,HB Mix 256/30ea,CASE,HB Mix 256/30ea,HB Mix 256/30ea,,Product-level forecast total cases
+6320915074,TDL HOT CHOC / FV PACKET 4/24 EA,HB Mix 4/24ea,CASE,HB Mix 4/24ea,HB Mix 4/24ea,,Product-level forecast total cases
+TDHBMX-4/24,HB MIX 4/24EA,HB Mix 4/24ea,CASE,HB Mix 4/24ea,HB Mix 4/24ea,,Product-level forecast total cases
+6320915034,TDL HOT BEVERAGE MIX DISPLAYER 36/1 EA,HB Mix Displayer 36/1ea,DRP,HB Mix Displayer 36/1ea,HB Mix Displayer 36/1ea,1.0,Display product without matching regular pack; left as reported cases
+TDHBMX-36/1,HB MIX DISPLAYER 36/1EA,HB Mix Displayer 36/1ea,DRP,HB Mix Displayer 36/1ea,HB Mix Displayer 36/1ea,1.0,Display product without matching regular pack; left as reported cases
+6320920674,TDL KCUP WINTER/HC/FVC DISPLAY 48/10 CT,HB Mix Displayer 48/10ea,DRP,HB Mix Displayer 48/10ea,HB Mix Displayer 48/10ea,1.0,Display product without matching regular pack; left as reported cases
+TDHBMX-48/10,HB MIX DISPLAYER 48/10EA,HB Mix Displayer 48/10ea,DRP,HB Mix Displayer 48/10ea,HB Mix Displayer 48/10ea,1.0,Display product without matching regular pack; left as reported cases
+6320924394,TDL HOT CHOC/FVC 1/2 DRP 150/1 EA,HB Mix Drp 150/1ea,DRP,HB Mix Drp 150/1ea,HB Mix Drp 150/1ea,1.0,Display product without matching regular pack; left as reported cases
+TDHBSC-12/350,HB SWEET+CREAMY 12/350GR,HB Sweet+creamy 12/350g,CASE,HB Sweet+creamy 12/350g,HB Sweet+creamy 12/350g,,Product-level forecast total cases
+6320912803,TDL BEEF CHILI 12/425 GR,Hot Bowls 12/425g,CASE,Hot Bowls 12/425g,Hot Bowls 12/425g,,Product-level forecast total cases
+6320916324,TDL SPICY BEEF CHILI 12/425 GR,Hot Bowls 12/425g,CASE,Hot Bowls 12/425g,Hot Bowls 12/425g,,Product-level forecast total cases
+TDSHHB-12/425,HOT BOWLS 12/425GR,Hot Bowls 12/425g,CASE,Hot Bowls 12/425g,Hot Bowls 12/425g,,Product-level forecast total cases
+6320912634,*TDL BEEF CHILI 6/425 GR,Hot Bowls 6/425g,CASE,Hot Bowls 6/425g,Hot Bowls 6/425g,,Product-level forecast total cases
+TDSHHB-6/425,HOT BOWLS 6/425GR,Hot Bowls 6/425g,CASE,Hot Bowls 6/425g,Hot Bowls 6/425g,,Product-level forecast total cases
+6320923208,TDL ICED COFFEE BLACK EXTRACT 6/1.42 L,Iced Coffee 6/1.42l,CASE,Iced Coffee 6/1.42l,Iced Coffee 6/1.42l,,Product-level forecast total cases
+6320923230,TDL ICED COFFEE VANILLA EXTRACT 6/1.42 L,Iced Coffee 6/1.42l,CASE,Iced Coffee 6/1.42l,Iced Coffee 6/1.42l,,Product-level forecast total cases
+6320923231,TDL ICED COFFEE CARAMEL EXTRACT 6/1.42 L,Iced Coffee 6/1.42l,CASE,Iced Coffee 6/1.42l,Iced Coffee 6/1.42l,,Product-level forecast total cases
+TDRDIC-6/142,ICED COFFEE 6/1.42L,Iced Coffee 6/1.42l,CASE,Iced Coffee 6/1.42l,Iced Coffee 6/1.42l,,Product-level forecast total cases
+6320925922,TDL INST MED/IC SYR CAP/MOC 1/2DRP 288EA,Instant & Syrup Drp 288/1ea,DRP,Instant & Syrup Drp 288/1ea,Instant & Syrup Drp 288/1ea,1.0,Display product without matching regular pack; left as reported cases
+6320911791,TDL INSTANT COFFEE MEDIUM 12/100 GR,Instant Coffee 12/100g,CASE,Instant Coffee 12/100g,Instant Coffee 12/100g,,Product-level forecast total cases
+6320911793,TDL INSTANT COFFEE DECAF 12/100 GR,Instant Coffee 12/100g,CASE,Instant Coffee 12/100g,Instant Coffee 12/100g,,Product-level forecast total cases
+6320911794,TDL INSTANT COFFEE LIGHT 12/100 GR,Instant Coffee 12/100g,CASE,Instant Coffee 12/100g,Instant Coffee 12/100g,,Product-level forecast total cases
+6320912112,TDL INSTANT COFFEE MEDIUM DISPLY36/100GR,Instant Coffee 12/100g,DRP,Instant Coffee 36/100g,Instant Coffee 12/100g,3.0,Display pack 36/100G converted to regular case pack 12/100G
+6320914642,TDL INSTANT COFFEE DARK 12/100 GR,Instant Coffee 12/100g,CASE,Instant Coffee 12/100g,Instant Coffee 12/100g,,Product-level forecast total cases
+6320915513,TDL INSTANT MED/DR/DCF 1/2 DRP 288/100GR,Instant Coffee 12/100g,DRP,Instant Coffee 288/100g,Instant Coffee 12/100g,24.0,Display pack 288/100G converted to regular case pack 12/100G
+6320917762,TDL INSTANT COFFEE MED FLR DISP 60/100GR,Instant Coffee 12/100g,DRP,Instant Coffee 60/100g,Instant Coffee 12/100g,5.0,Display pack 60/100G converted to regular case pack 12/100G
+6320923232,TDL INSTANT COLD COFFEE MEDIUM 12/100 GR,Instant Coffee 12/100g,CASE,Instant Coffee 12/100g,Instant Coffee 12/100g,,Product-level forecast total cases
+TDIC-12/100,INSTANT COFFEE 12/100GR,Instant Coffee 12/100g,CASE,Instant Coffee 12/100g,Instant Coffee 12/100g,,Product-level forecast total cases
+TDIC-288/100,INSTANT COFFEE 288/100GR,Instant Coffee 12/100g,DRP,Instant Coffee 288/100g,Instant Coffee 12/100g,24.0,Display pack 288/100G converted to regular case pack 12/100G
+TDIC-36/100,INSTANT COFFEE 36/100GR,Instant Coffee 12/100g,DRP,Instant Coffee 36/100g,Instant Coffee 12/100g,3.0,Display pack 36/100G converted to regular case pack 12/100G
+TDIC-60/100,INSTANT COFFEE 60/100GR,Instant Coffee 12/100g,DRP,Instant Coffee 60/100g,Instant Coffee 12/100g,5.0,Display pack 60/100G converted to regular case pack 12/100G
+TDIC-12/12,INSTANT COFFEE 12/12CT,Instant Coffee 12/12ct,CASE,Instant Coffee 12/12ct,Instant Coffee 12/12ct,,Product-level forecast total cases
+TDIC-6/300,INSTANT COFFEE 6/300GR,Instant Coffee 6/300g,CASE,Instant Coffee 6/300g,Instant Coffee 6/300g,,Product-level forecast total cases
+TDNC-1/60,NCOMP 1/60CT,NComp 1/60ct,CASE,NComp 1/60ct,NComp 1/60ct,,Product-level forecast total cases
+6320918580,6320918580,NComp 10/10ct,CASE,NComp 10/10ct,NComp 10/10ct,,Product-level forecast total cases
+6320918580,TDL NCOMP CLASSIC LUNGO 10/10 CT,NComp 10/10ct,CASE,NComp 10/10ct,NComp 10/10ct,,Product-level forecast total cases
+6320918581,TDL NCOMP BRIGHT ESPRESSO 10/10 CT,NComp 10/10ct,CASE,NComp 10/10ct,NComp 10/10ct,,Product-level forecast total cases
+6320918581,6320918581,NComp 10/10ct,CASE,NComp 10/10ct,NComp 10/10ct,,Product-level forecast total cases
+6320918582,6320918582,NComp 10/10ct,CASE,NComp 10/10ct,NComp 10/10ct,,Product-level forecast total cases
+6320918582,TDL NCOMP BOLD ESPRESSO 10/10 CT,NComp 10/10ct,CASE,NComp 10/10ct,NComp 10/10ct,,Product-level forecast total cases
+6320918583,TDL NCOMP DECAF ESPRESSO 10/10 CT,NComp 10/10ct,CASE,NComp 10/10ct,NComp 10/10ct,,Product-level forecast total cases
+6320918583,6320918583,NComp 10/10ct,CASE,NComp 10/10ct,NComp 10/10ct,,Product-level forecast total cases
+6320919390,TDL NCOMP PDQ 24/10 CT,NComp 10/10ct,DRP,NComp 24/10ct,NComp 10/10ct,2.4,Display pack 24/10CT converted to regular case pack 10/10CT
+6320919391,*TDL NCOMP DISPLAY 32/10 CT,NComp 10/10ct,DRP,NComp 32/10ct,NComp 10/10ct,3.2,Display pack 32/10CT converted to regular case pack 10/10CT
+6320919832,TDL NCOMP DARK LUNGO 10/10 CT,NComp 10/10ct,CASE,NComp 10/10ct,NComp 10/10ct,,Product-level forecast total cases
+6320919832,6320919832,NComp 10/10ct,CASE,NComp 10/10ct,NComp 10/10ct,,Product-level forecast total cases
+6320919834,6320919834,NComp 10/10ct,CASE,NComp 10/10ct,NComp 10/10ct,,Product-level forecast total cases
+6320919834,TDL NCOMP CARAMEL ESPRESSO 10/10 CT,NComp 10/10ct,CASE,NComp 10/10ct,NComp 10/10ct,,Product-level forecast total cases
+6320923323,TDL NCOMP DISPLAY 32/10 CT,NComp 10/10ct,DRP,NComp 32/10ct,NComp 10/10ct,3.2,Display pack 32/10CT converted to regular case pack 10/10CT
+TDNC-10/10,NCOMP 10/10CT,NComp 10/10ct,CASE,NComp 10/10ct,NComp 10/10ct,,Product-level forecast total cases
+TDNC-32/10,NCOMP 32/10CT,NComp 10/10ct,DRP,NComp 32/10ct,NComp 10/10ct,3.2,Display pack 32/10CT converted to regular case pack 10/10CT
+6320913663,TDL WHOLE BEAN BAG 6/2 LB,R&G Large Bag 6/2lb,CASE,R&G Large Bag 6/2lb,R&G Large Bag 6/2lb,,Product-level forecast total cases
+TDRGLB-6/2,R&G LARGE BAG 6/2LB,R&G Large Bag 6/2lb,CASE,R&G Large Bag 6/2lb,R&G Large Bag 6/2lb,,Product-level forecast total cases
+TDRGLB-6/652,R&G LARGE BAG 6/652GR,R&G Large Bag 6/652g,CASE,R&G Large Bag 6/652g,R&G Large Bag 6/652g,,Product-level forecast total cases
+TDRGLB-8/2,R&G LARGE BAG 8/2LB,R&G Large Bag 8/2lb,CASE,R&G Large Bag 8/2lb,R&G Large Bag 8/2lb,,Product-level forecast total cases
+6320908885,TDL ORIGINAL BLEND 252/3 LB,R&G Large Can 252/3lb,CASE,R&G Large Can 252/3lb,R&G Large Can 252/3lb,,Product-level forecast total cases
+TDRGLC-252/3,R&G LARGE CAN 252/3LB,R&G Large Can 252/3lb,CASE,R&G Large Can 252/3lb,R&G Large Can 252/3lb,,Product-level forecast total cases
+6320907227,TDL COFFEE FINE GRIND CAN 6/930 GR,R&G Large Can 6/930g,CASE,R&G Large Can 6/930g,R&G Large Can 6/930g,,Product-level forecast total cases
+6320909122,TDL DARK ROAST CAN 6/875 GR,R&G Large Can 6/930g,CASE,R&G Large Can 6/930g,R&G Large Can 6/930g,,Product-level forecast total cases
+6320909463,TDL COFFEE FINE GRIND HALF DRP 126/930GR,R&G Large Can 6/930g,DRP,R&G Large Can 126/930g,R&G Large Can 6/930g,21.0,Display pack 126/930G converted to regular case pack 6/930G
+6320909464,TDL COFFEE FINE/DARK HALF DRP 126/930GR,R&G Large Can 6/930g,DRP,R&G Large Can 126/930g,R&G Large Can 6/930g,21.0,Display pack 126/930G converted to regular case pack 6/930G
+6320923703,TDL COFFEE FINE GRIND CAN 6/875 GR,R&G Large Can 6/930g,CASE,R&G Large Can 6/930g,R&G Large Can 6/930g,,Product-level forecast total cases
+6320923704,TDL DARK ROAST CAN 6/825 GR,R&G Large Can 6/930g,CASE,R&G Large Can 6/930g,R&G Large Can 6/930g,,Product-level forecast total cases
+6320923706,TDL COFFEE FINE GRIND 1/2 DRP 126/875 GR,R&G Large Can 6/930g,DRP,R&G Large Can 126/930g,R&G Large Can 6/930g,21.0,Display pack 126/930G converted to regular case pack 6/930G
+6320923707,TDL COFFEE FINE/DARK 1/2 DRP 126/1 EA,R&G Large Can 6/930g,DRP,R&G Large Can 126/930g,R&G Large Can 6/930g,21.0,Display pack 126/930G converted to regular case pack 6/930G
+TDRGLC-126/930,R&G LARGE CAN 126/930GR,R&G Large Can 6/930g,DRP,R&G Large Can 126/930g,R&G Large Can 6/930g,21.0,Display pack 126/930G converted to regular case pack 6/930G
+TDRGLC-6/930,R&G LARGE CAN 6/930GR,R&G Large Can 6/930g,CASE,R&G Large Can 6/930g,R&G Large Can 6/930g,,Product-level forecast total cases
+6320920262,TDL SPECIAL EDITION  BAG 6/283 GR,R&G Small Bag 6/283g,CASE,R&G Small Bag 6/283g,R&G Small Bag 6/283g,,Product-level forecast total cases
+TDRGSB-6/283,R&G SMALL BAG 6/283GR,R&G Small Bag 6/283g,CASE,R&G Small Bag 6/283g,R&G Small Bag 6/283g,,Product-level forecast total cases
+6320908231,TDL ORIGINAL 6/300 GR,R&G Small Bag 6/300g,CASE,R&G Small Bag 6/300g,R&G Small Bag 6/300g,,Product-level forecast total cases
+6320909608,*TDL ORGINAL/DARK DISPLAY 48/300 GR,R&G Small Bag 6/300g,DRP,R&G Small Bag 48/300g,R&G Small Bag 6/300g,8.0,Display pack 48/300G converted to regular case pack 6/300G
+6320912138,TDL ORIGINAL COFFEE DISPLAY 48/300 GR,R&G Small Bag 6/300g,DRP,R&G Small Bag 48/300g,R&G Small Bag 6/300g,8.0,Display pack 48/300G converted to regular case pack 6/300G
+6320912139,TDL ORG/DR COFFEE DISPLAY 48/300 GR,R&G Small Bag 6/300g,DRP,R&G Small Bag 48/300g,R&G Small Bag 6/300g,8.0,Display pack 48/300G converted to regular case pack 6/300G
+6320912437,TDL ORG/DR GROUND PDQ 24/300 GR,R&G Small Bag 6/300g,DRP,R&G Small Bag 24/300g,R&G Small Bag 6/300g,4.0,Display pack 24/300G converted to regular case pack 6/300G
+6320920675,TDL ORG/WINTER COFFEE DISPLAY 48/300 GR,R&G Small Bag 6/300g,DRP,R&G Small Bag 48/300g,R&G Small Bag 6/300g,8.0,Display pack 48/300G converted to regular case pack 6/300G
+TDRGSB-220/300,R&G SMALL BAG 220/300GR,R&G Small Bag 6/300g,DRP,R&G Small Bag 220/300g,R&G Small Bag 6/300g,36.666667,Display pack 220/300G converted to regular case pack 6/300G
+TDRGSB-48/300,R&G SMALL BAG 48/300GR,R&G Small Bag 6/300g,DRP,R&G Small Bag 48/300g,R&G Small Bag 6/300g,8.0,Display pack 48/300G converted to regular case pack 6/300G
+TDRGSB-6/300,R&G SMALL BAG 6/300GR,R&G Small Bag 6/300g,CASE,R&G Small Bag 6/300g,R&G Small Bag 6/300g,,Product-level forecast total cases
+6320911763,TDL COFFEE DECAF CAN 6/640 GR,R&G Small Can 6/640g,CASE,R&G Small Can 6/640g,R&G Small Can 6/640g,,Product-level forecast total cases
+6320911764,TDL COFFEE COLOMBIAN CAN 6/640 GR,R&G Small Can 6/640g,CASE,R&G Small Can 6/640g,R&G Small Can 6/640g,,Product-level forecast total cases
+6320911764,6320911764,R&G Small Can 6/640g,CASE,R&G Small Can 6/640g,R&G Small Can 6/640g,,Product-level forecast total cases
+TDRGSC-6/640,R&G SMALL CAN 6/640GR,R&G Small Can 6/640g,CASE,R&G Small Can 6/640g,R&G Small Can 6/640g,,Product-level forecast total cases
+TDSSKC-1/30,SS KCOMP 1/30CT,SS KComp 1/30ct,CASE,SS KComp 1/30ct,SS KComp 1/30ct,,Product-level forecast total cases
+TDSSKC-1/48,SS KCOMP 1/48CT,SS KComp 1/48ct,CASE,SS KComp 1/48ct,SS KComp 1/48ct,,Product-level forecast total cases
+6320911511,TDL ORIGINAL KCUP SS 1/80 CT,SS KComp 1/80ct,CASE,SS KComp 1/80ct,SS KComp 1/80ct,,Product-level forecast total cases
+6320911512,TDL DECAF KCUP SS 1/80 CT,SS KComp 1/80ct,CASE,SS KComp 1/80ct,SS KComp 1/80ct,,Product-level forecast total cases
+6320912801,TDL DARK ROAST KCUP SS 1/80 CT,SS KComp 1/80ct,CASE,SS KComp 1/80ct,SS KComp 1/80ct,,Product-level forecast total cases
+6320924954,TDL COLOMBIAN KCUP SS 1/80 CT,SS KComp 1/80ct,CASE,SS KComp 1/80ct,SS KComp 1/80ct,,Product-level forecast total cases
+TDSSKC-1/80,SS KCOMP 1/80CT,SS KComp 1/80ct,CASE,SS KComp 1/80ct,SS KComp 1/80ct,,Product-level forecast total cases
+6320911273,TDL ORIGINAL KCUP SS 4/30 CT,SS KComp 4/30ct,CASE,SS KComp 4/30ct,SS KComp 4/30ct,,Product-level forecast total cases
+6320911274,TDL VARIETY KCUP SS 4/30 CT,SS KComp 4/30ct,CASE,SS KComp 4/30ct,SS KComp 4/30ct,,Product-level forecast total cases
+6320912129,TDL ORIGINAL KCUP SS 1/2 DRP 145/30 CT,SS KComp 4/30ct,DRP,SS KComp 145/30ct,SS KComp 4/30ct,36.25,Display pack 145/30CT converted to regular case pack 4/30CT
+6320912130,TDL ORG/DR KCUP SS 1/2 DRP 145/30 CT,SS KComp 4/30ct,DRP,SS KComp 145/30ct,SS KComp 4/30ct,36.25,Display pack 145/30CT converted to regular case pack 4/30CT
+6320912131,TDL ORG/DR/COL KCUP SS 1/2 DRP 145/30 CT,SS KComp 4/30ct,DRP,SS KComp 145/30ct,SS KComp 4/30ct,36.25,Display pack 145/30CT converted to regular case pack 4/30CT
+6320912574,TDL KCUP ORANGE PEKOE TEA 4/30 CT,SS KComp 4/30ct,CASE,SS KComp 4/30ct,SS KComp 4/30ct,,Product-level forecast total cases
+6320914562,TDL KCUP FRENCH VANILLA 4/30 CT,SS KComp 4/30ct,CASE,SS KComp 4/30ct,SS KComp 4/30ct,,Product-level forecast total cases
+6320918750,TDL ORG KCUP DISPLAY 16/30 CT,SS KComp 4/30ct,DRP,SS KComp 16/30ct,SS KComp 4/30ct,4.0,Display pack 16/30CT converted to regular case pack 4/30CT
+6320918750,6320918750,SS KComp 4/30ct,DRP,SS KComp 16/30ct,SS KComp 4/30ct,4.0,Display pack 16/30CT converted to regular case pack 4/30CT
+TDSSKC-145/30,SS KCOMP 145/30CT,SS KComp 4/30ct,DRP,SS KComp 145/30ct,SS KComp 4/30ct,36.25,Display pack 145/30CT converted to regular case pack 4/30CT
+TDSSKC-16/30,SS KCOMP 16/30CT,SS KComp 4/30ct,DRP,SS KComp 16/30ct,SS KComp 4/30ct,4.0,Display pack 16/30CT converted to regular case pack 4/30CT
+TDSSKC-4/30,SS KCOMP 4/30CT,SS KComp 4/30ct,CASE,SS KComp 4/30ct,SS KComp 4/30ct,,Product-level forecast total cases
+6320914723,TDL KCUP ORIGINAL SS 4/48 CT,SS KComp 4/48ct,CASE,SS KComp 4/48ct,SS KComp 4/48ct,,Product-level forecast total cases
+6320914724,TDL KCUP DARK ROAST SS 4/48 CT,SS KComp 4/48ct,CASE,SS KComp 4/48ct,SS KComp 4/48ct,,Product-level forecast total cases
+6320918670,TDL KCUP DECAF SS 4/48 CT,SS KComp 4/48ct,CASE,SS KComp 4/48ct,SS KComp 4/48ct,,Product-level forecast total cases
+TDSSKC-4/48,SS KCOMP 4/48CT,SS KComp 4/48ct,CASE,SS KComp 4/48ct,SS KComp 4/48ct,,Product-level forecast total cases
+6320911272,TDL KCUP CAPPUCCNO FRNCH VAN SS 6/10CT,SS KComp 6/10ct,CASE,SS KComp 6/10ct,SS KComp 6/10ct,,Product-level forecast total cases
+6320920261,TDL KCUP WINTER BLEND SS 6/10 CT,SS KComp 6/10ct,CASE,SS KComp 6/10ct,SS KComp 6/10ct,,Product-level forecast total cases
+6320920678,TDL WINTER/HC/FVC KCUP SS PDQ 24/10 CT,SS KComp 6/10ct,DRP,SS KComp 24/10ct,SS KComp 6/10ct,4.0,Display pack 24/10CT converted to regular case pack 6/10CT
+6320923233,TDL KCUP BOI MEDIUM SS 6/10 CT,SS KComp 6/10ct,CASE,SS KComp 6/10ct,SS KComp 6/10ct,,Product-level forecast total cases
+6320923234,TDL KCUP BOI VANILLA SS 6/10 CT,SS KComp 6/10ct,CASE,SS KComp 6/10ct,SS KComp 6/10ct,,Product-level forecast total cases
+TDSSKC-48/10,SS KCOMP 48/10CT,SS KComp 6/10ct,DRP,SS KComp 48/10ct,SS KComp 6/10ct,8.0,Display pack 48/10CT converted to regular case pack 6/10CT
+TDSSKC-6/10,SS KCOMP 6/10CT,SS KComp 6/10ct,CASE,SS KComp 6/10ct,SS KComp 6/10ct,,Product-level forecast total cases
+6320911393,TDL KCUP TEA SS 6/12 CT,SS KComp 6/12ct,CASE,SS KComp 6/12ct,SS KComp 6/12ct,,Product-level forecast total cases
+6320911839,TDL KCUP ORIGINAL SS 6/12 CT,SS KComp 6/12ct,CASE,SS KComp 6/12ct,SS KComp 6/12ct,,Product-level forecast total cases
+6320911850,TDL KCUP DECAF SS 6/12 CT,SS KComp 6/12ct,CASE,SS KComp 6/12ct,SS KComp 6/12ct,,Product-level forecast total cases
+6320911851,TDL KCUP DARK ROAST SS 6/12 CT,SS KComp 6/12ct,CASE,SS KComp 6/12ct,SS KComp 6/12ct,,Product-level forecast total cases
+6320911856,TDL KCUP HAZELNUT SS 6/12 CT,SS KComp 6/12ct,CASE,SS KComp 6/12ct,SS KComp 6/12ct,,Product-level forecast total cases
+6320912132,TDL ORIGINAL KCUP DISPLAY 48/12 CT,SS KComp 6/12ct,DRP,SS KComp 48/12ct,SS KComp 6/12ct,8.0,Display pack 48/12CT converted to regular case pack 6/12CT
+6320912133,TDL ORG/DR KCUP DISPLAY 48/12 CT,SS KComp 6/12ct,DRP,SS KComp 48/12ct,SS KComp 6/12ct,8.0,Display pack 48/12CT converted to regular case pack 6/12CT
+6320921219,TDL KCUP CARAMEL TOFFEE SS 6/12 CT,SS KComp 6/12ct,CASE,SS KComp 6/12ct,SS KComp 6/12ct,,Product-level forecast total cases
+6320923343,TDL KCUP PUMPKIN SPICE SS 6/12 CT,SS KComp 6/12ct,CASE,SS KComp 6/12ct,SS KComp 6/12ct,,Product-level forecast total cases
+6320923397,*TDL PKS/CMT/ORG KCUP DISPLAY 48/12CT,SS KComp 6/12ct,DRP,SS KComp 48/12ct,SS KComp 6/12ct,8.0,Display pack 48/12CT converted to regular case pack 6/12CT
+6320923957,*TDL KCUP APPLE FRITTER SS 6/12 CT,SS KComp 6/12ct,CASE,SS KComp 6/12ct,SS KComp 6/12ct,,Product-level forecast total cases
+6320923958,TDL AFR/DR/ORG SS 1/2 DRP 240/12CT,SS KComp 6/12ct,DRP,SS KComp 240/1ea,SS KComp 6/12ct,40.0,Display pack 240/12CT converted to regular case pack 6/12CT
+6320923959,*TDL AFR/ORG KCUP DISPLAY 48/12CT,SS KComp 6/12ct,DRP,SS KComp 48/12ct,SS KComp 6/12ct,8.0,Display pack 48/12CT converted to regular case pack 6/12CT
+6320923971,TDL ORG/DR/PKS KCUP DISPLAY 48/12CT,SS KComp 6/12ct,DRP,SS KComp 48/12ct,SS KComp 6/12ct,8.0,Display pack 48/12CT converted to regular case pack 6/12CT
+6320925369,TDL GBR/ORG KCUP DISPLAY 48/12CT,SS KComp 6/12ct,DRP,SS KComp 48/12ct,SS KComp 6/12ct,8.0,Display pack 48/12CT converted to regular case pack 6/12CT
+6320925372,TDL KCUP GINGERBREAD 6/12 CT,SS KComp 6/12ct,CASE,SS KComp 6/12ct,SS KComp 6/12ct,,Product-level forecast total cases
+6320926000,TDL PKS/ORG KCUP DISPLAY 48/12CT,SS KComp 6/12ct,DRP,SS KComp 48/12ct,SS KComp 6/12ct,8.0,Display pack 48/12CT converted to regular case pack 6/12CT
+6320926021,TDL PKS/ORG/DEC SS 1/2 DRP 240/12CT,SS KComp 6/12ct,DRP,SS KComp 240/1ea,SS KComp 6/12ct,40.0,Display pack 240/12CT converted to regular case pack 6/12CT
+6320926022,TDL GBR/ORG/FVC SS 1/2 DRP 240/12CT,SS KComp 6/12ct,DRP,SS KComp 240/1ea,SS KComp 6/12ct,40.0,Display pack 240/12CT converted to regular case pack 6/12CT
+TDSSKC-24/12,SS KCOMP 24/12CT,SS KComp 6/12ct,DRP,SS KComp 24/12ct,SS KComp 6/12ct,4.0,Display pack 24/12CT converted to regular case pack 6/12CT
+TDSSKC-48/12,SS KCOMP 48/12CT,SS KComp 6/12ct,DRP,SS KComp 48/12ct,SS KComp 6/12ct,8.0,Display pack 48/12CT converted to regular case pack 6/12CT
+TDSSKC-6/12,SS KCOMP 6/12CT,SS KComp 6/12ct,CASE,SS KComp 6/12ct,SS KComp 6/12ct,,Product-level forecast total cases
+TDSSKC-6/30,SS KCOMP 6/30CT,SS KComp 6/30ct,CASE,SS KComp 6/30ct,SS KComp 6/30ct,,Product-level forecast total cases
+6320916687,TDL KCUP CAPPUCCNO FRNCH VAN SS 4/24 CT,SS KComp Cap 4/24ct,CASE,SS KComp Cap 4/24ct,SS KComp Cap 4/24ct,,Product-level forecast total cases
+TDSSKCC-4/24,SS KCOMP CAP 4/24CT,SS KComp Cap 4/24ct,CASE,SS KComp Cap 4/24ct,SS KComp Cap 4/24ct,,Product-level forecast total cases
+6320915103,*TDL KCUP DOUBLE DOUBLE SS 6/10 CT,SS KComp DD 6/10ct,CASE,SS KComp DD 6/10ct,SS KComp DD 6/10ct,,Product-level forecast total cases
+TDSSKCDD-6/10,SS KCOMP DD 6/10CT,SS KComp DD 6/10ct,CASE,SS KComp DD 6/10ct,SS KComp DD 6/10ct,,Product-level forecast total cases
+6320916636,TDL KCUP STEEPED TEA ORANGE PEKOE 1/72CT,SS KComp Tea 1/72ct,CASE,SS KComp Tea 1/72ct,SS KComp Tea 1/72ct,,Product-level forecast total cases
+TDSSKCT-1/72,SS KCOMP TEA 1/72CT,SS KComp Tea 1/72ct,CASE,SS KComp Tea 1/72ct,SS KComp Tea 1/72ct,,Product-level forecast total cases
+6618809041,*TDL COFFEE TASSIMO DECAF 5/14 CT,SS Tassimo 5/14ct,CASE,SS Tassimo 5/14ct,SS Tassimo 5/14ct,,Product-level forecast total cases
+TDSSTA-5/14,SS TASSIMO 5/14CT,SS Tassimo 5/14ct,CASE,SS Tassimo 5/14ct,SS Tassimo 5/14ct,,Product-level forecast total cases
+TDSSTA-5/8,SS TASSIMO 5/8CT,SS Tassimo 5/8ct,CASE,SS Tassimo 5/8ct,SS Tassimo 5/8ct,,Product-level forecast total cases
+TDSHSP-12/400,SOUPS 12/400ML,Soups 12/400ml,CASE,Soups 12/400ml,Soups 12/400ml,,Product-level forecast total cases
+6320912805,TDL CHICKEN NOODLE 12/540 ML,Soups 12/540ml,CASE,Soups 12/540ml,Soups 12/540ml,,Product-level forecast total cases
+6320913827,TDL CN/COB/CR SOUP 1/2 DRP 192/540 ML,Soups 12/540ml,DRP,Soups 192/540ml,Soups 12/540ml,16.0,Display pack 192/540ML converted to regular case pack 12/540ML
+6320915573,*TDL TOMATO PARMESAN 12/540 ML,Soups 12/540ml,CASE,Soups 12/540ml,Soups 12/540ml,,Product-level forecast total cases
+6320915575,TDL POTATO BACON 12/540 ML,Soups 12/540ml,CASE,Soups 12/540ml,Soups 12/540ml,,Product-level forecast total cases
+6320916083,*TDL SPICY THAI CHICKEN 12/540 ML,Soups 12/540ml,CASE,Soups 12/540ml,Soups 12/540ml,,Product-level forecast total cases
+6320917201,TDL BUTTERNUT SQUASH 12/540 ML,Soups 12/540ml,CASE,Soups 12/540ml,Soups 12/540ml,,Product-level forecast total cases
+6320917474,TDL COB/CN/CR/PB SOUP 1/2 DRP 288/540 ML,Soups 12/540ml,DRP,Soups 288/540ml,Soups 12/540ml,24.0,Display pack 288/540ML converted to regular case pack 12/540ML
+6320919180,TDL CREAMY CHICKEN 12/540 ML,Soups 12/540ml,CASE,Soups 12/540ml,Soups 12/540ml,,Product-level forecast total cases
+6320919183,TDL MINESTRONE 12/540 ML,Soups 12/540ml,CASE,Soups 12/540ml,Soups 12/540ml,,Product-level forecast total cases
+6320922293,TDL TOMATO BASIL + ORZO 12/540 ML,Soups 12/540ml,CASE,Soups 12/540ml,Soups 12/540ml,,Product-level forecast total cases
+6320922294,TDL BEEF BARLEY + VEGETABLES 12/540 ML,Soups 12/540ml,CASE,Soups 12/540ml,Soups 12/540ml,,Product-level forecast total cases
+6320923582,TDL ITALIAN WEDDING 12/540 ML,Soups 12/540ml,CASE,Soups 12/540ml,Soups 12/540ml,,Product-level forecast total cases
+6320923630,TDL COB/CN/IW SOUP 1/2 DRP 288/540 ML,Soups 12/540ml,DRP,Soups 288/540ml,Soups 12/540ml,24.0,Display pack 288/540ML converted to regular case pack 12/540ML
+TDSHSP-12/540,SOUPS 12/540ML,Soups 12/540ml,CASE,Soups 12/540ml,Soups 12/540ml,,Product-level forecast total cases
+TDSHSP-192/540,SOUPS 192/540ML,Soups 12/540ml,DRP,Soups 192/540ml,Soups 12/540ml,16.0,Display pack 192/540ML converted to regular case pack 12/540ML
+TDSHSP-288/540,SOUPS 288/540ML,Soups 12/540ml,DRP,Soups 288/540ml,Soups 12/540ml,24.0,Display pack 288/540ML converted to regular case pack 12/540ML
+TDSHSP-24/284,SOUPS 24/284ML,Soups 24/284ml,CASE,Soups 24/284ml,Soups 24/284ml,,Product-level forecast total cases
+TDSHSP-576/284,SOUPS 576/284ML,Soups 24/284ml,DRP,Soups 576/284ml,Soups 24/284ml,24.0,Display pack 576/284ML converted to regular case pack 24/284ML
+TDSIC-12/470,SYRUPS 12/470ML,Syrups 12/470ml,CASE,Syrups 12/470ml,Syrups 12/470ml,,Product-level forecast total cases
+TDSIC-32/470,SYRUPS 32/470ML,Syrups 12/470ml,DRP,Syrups 32/470ml,Syrups 12/470ml,2.666667,Display pack 32/470ML converted to regular case pack 12/470ML
+6320912646,TDL CHAI TEA 6/20 CT,Tea Bag 6/20ct,CASE,Tea Bag 6/20ct,Tea Bag 6/20ct,,Product-level forecast total cases
+6320912647,TDL EARL GREY TEA 6/20 CT,Tea Bag 6/20ct,CASE,Tea Bag 6/20ct,Tea Bag 6/20ct,,Product-level forecast total cases
+6320912648,TDL GREEN TEA 6/20 CT,Tea Bag 6/20ct,CASE,Tea Bag 6/20ct,Tea Bag 6/20ct,,Product-level forecast total cases
+6320912660,TDL PEPPERMINT TEA 6/20 CT,Tea Bag 6/20ct,CASE,Tea Bag 6/20ct,Tea Bag 6/20ct,,Product-level forecast total cases
+6320917204,TDL VANILLA BLACK TEA 6/20 CT,Tea Bag 6/20ct,CASE,Tea Bag 6/20ct,Tea Bag 6/20ct,,Product-level forecast total cases
+TDTB-6/20,TEA BAG 6/20CT,Tea Bag 6/20ct,CASE,Tea Bag 6/20ct,Tea Bag 6/20ct,,Product-level forecast total cases
+TDTB-9/20,TEA BAG 9/20CT,Tea Bag 9/20ct,CASE,Tea Bag 9/20ct,Tea Bag 9/20ct,,Product-level forecast total cases

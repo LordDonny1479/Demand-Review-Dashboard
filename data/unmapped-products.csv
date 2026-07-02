@@ -1,0 +1,199 @@
+source_sheet,source_row,retailer,product_id,product,forecast_total_cases,promo_id,promotion_type,description,unmapped_reason
+2025,11,BT-SOBEYS QC MONTREAL,TDL,TDL CAN,23158.0,000J2ZD28,Special,TD*Unrecoverable < $100.00,Product ID not found in product list or no pack size
+2025,35,CG-SDM,TDL,TDL CAN,32915.0,000IL6284,Contract,TD SDM P4-P6 2025 Coffee Partnership JBP Lumpsum,Product ID not found in product list or no pack size
+2025,100,CG-SDM,TDL,TDL CAN,179.0,000ILE1ON,Contract,TD SDM NON-PRODUCT COMMITMENT,Product ID not found in product list or no pack size
+2025,102,CG-SDM,TDL,TDL CAN,179.0,000ILE1OC,Contract,TD SDM Q2 2025 TLS BILLING - TDL CLIENT 2.75% OUTBOUND,Product ID not found in product list or no pack size
+2025,409,CG-SOBEY'S QUEBEC,TDL,TDL CAN,157810.0,000I4HAYQ,Display,TD SBYQ  Flap Up Beverage AD MAP WE March 5,Product ID not found in product list or no pack size
+2025,411,CG-SOBEY'S QUEBEC,TDL,TDL CAN,157810.0,000HLTFU8,Special,TD IGA Side Panel,Product ID not found in product list or no pack size
+2025,413,CG-SOBEY'S QUEBEC,TDL,TDL CAN,202274.0,000HLTCNI,Display,TD SBYQ  Scene points $25k,Product ID not found in product list or no pack size
+2025,415,CG-SOBEY'S QUEBEC,TDL,TDL CAN,202274.0,000HLTARL,Display,TD SBYQ  Flap UpBeverage,Product ID not found in product list or no pack size
+2025,417,CG-SOBEY'S QUEBEC,TDL,TDL CAN,202274.0,000HLTCHU,Special,TD IGA Marche communautaire,Product ID not found in product list or no pack size
+2025,419,CG-SOBEY'S QUEBEC,TDL,TDL CAN,9292.0,000HLTE1J,Flyer,TD IGA AD March 13-19   Tassimo,Product ID not found in product list or no pack size
+2025,474,CG-SOBEY'S QUEBEC,TDL,TDL CAN,7672.0,000HLTAQW,Display,TD IGA AD Apr 17-23  HC & encart,Product ID not found in product list or no pack size
+2025,555,CG-SOBEY'S QUEBEC,TDL,TDL CAN,21841.0,000HLTARG,Display,TD IGA Social activity 2025,Product ID not found in product list or no pack size
+2025,557,CG-SOBEY'S QUEBEC,TDL,TDL CAN,85777.0,000HLTFTY,Special,TD IGA Buying Show 2025,Product ID not found in product list or no pack size
+2025,714,CG-SOBEY'S QUEBEC,TDL,TDL CAN,20499.0,000HOYKKH,Special,TD IGA POG Fees,Product ID not found in product list or no pack size
+2025,1032,CG-SOBEY'S ROC,TDL,TDL CAN,106407.0,000HM8IG7,Ad Fee,TD Sobeys C7F25 Hot Beverage,Product ID not found in product list or no pack size
+2025,1236,CG-SOBEY'S ROC,TDL,TDL CAN,136048.0,000HN143O,Customer Event,TD Sob National Golf,Product ID not found in product list or no pack size
+2025,1238,CG-SOBEY'S ROC,TDL,TDL CAN,136048.0,000HN143T,Customer Event,TD Sobeys MFA Golf Tournament,Product ID not found in product list or no pack size
+2025,1344,CG-SOBEY'S ROC,TDL,TDL CAN,6373.0,000HMDC0E,Contract,TD FRESHCO Golf Tournament,Product ID not found in product list or no pack size
+2025,1453,CG-SOBEY'S ROC,TDL,TDL CAN,105333.0,000HMCVAS,Customer Event,TD Sob ATL Gift Gala Sponsor,Product ID not found in product list or no pack size
+2025,1520,NA-AMAZON CANADA,TDL,TDL CAN,418350.0,000J3Y6IP,Contract,TD Amazon Returns to Vendor,Product ID not found in product list or no pack size
+2025,1522,NA-AMAZON CANADA,TDL,TDL CAN,418350.0,000IK0N14,Special,TD 2025 Amzn Marketing Co-Op $100k annual,Product ID not found in product list or no pack size
+2025,1528,NA-AMAZON CANADA,TDL,TDL CAN,29580.0,000IK0N19,Special,TD 2025 Amzn B2B $50k Accrual - monthly payment June,Product ID not found in product list or no pack size
+2025,1534,NA-AMAZON CANADA,TDL,TDL CAN,23795.0,000IK0N1E,Special,TD 2025 Amzn B2B $50k Accrual - monthly payment July,Product ID not found in product list or no pack size
+2025,1536,NA-AMAZON CANADA,TDL,TDL CAN,26379.0,000IK0N1J,Special,TD 2025 Amzn B2B $50k Accrual - monthly payment August,Product ID not found in product list or no pack size
+2025,1538,NA-AMAZON CANADA,TDL,TDL CAN,35514.0,000IK0N1O,Special,TD 2025 Amzn B2B $50k Accrual - monthly payment September,Product ID not found in product list or no pack size
+2025,1542,NA-AMAZON CANADA,TDL,TDL CAN,70572.0,000IK0N1T,Special,TD 2025 Amzn B2B $50k Accrual - monthly payment October,Product ID not found in product list or no pack size
+2025,1560,NA-AMAZON CANADA,TDL,TDL CAN,41951.0,000IK0N1Y,Special,TD 2025 Amzn B2B $50k Accrual - monthly payment November,Product ID not found in product list or no pack size
+2025,1606,NA-AMAZON CANADA,TDL,TDL CAN,3617.0,000HS9EFF,Special,TD 2025 Amzn Business Discount 2,Product ID not found in product list or no pack size
+2025,1608,NA-AMAZON CANADA,TDL,TDL CAN,64632.0,000IK0N23,Special,TD 2025 Amzn B2B $50k Accrual - monthly payment December,Product ID not found in product list or no pack size
+2025,1765,NA-ASSOCIATED GROCERS,TDL,TDL CAN,259.0,000HJEAO7,Customer Event,TD - AG FOODS FAIRMONT CONFERENCE,Product ID not found in product list or no pack size
+2025,1817,NA-ASSOCIATED GROCERS,TDL,TDL CAN,114.0,000HJEAMN,Customer Event,TD - AG FOODS Golf Tournament,Product ID not found in product list or no pack size
+2025,2049,NA-CANADIAN TIRE,TDL,TDL CAN,12029.0,000HUX2EK,Trade Show,TD CTC PRODUCT PARADE,Product ID not found in product list or no pack size
+2025,2152,NA-COLABOR,TDL,TDL CAN,566.0,000HRSFFB,Ad Fee,TD Colabor Focus Dec 30 to Jan 17 2025 Pt. #2,Product ID not found in product list or no pack size
+2025,2160,NA-COLABOR,TDL,TDL CAN,2409.0,000HQ5WRL,Ad Fee,TD Colabor Focus March 3 -21 2025 RUTW,Product ID not found in product list or no pack size
+2025,2167,NA-COLABOR,TDL,TDL CAN,3850.0,000HQ5X5Q,Ad Fee,TD Colabor Sommet des partenaires 11 mars 2024,Product ID not found in product list or no pack size
+2025,2173,NA-COLABOR,TDL,TDL CAN,2402.0,000HQ5WOT,Ad Fee,TD Colabor Focus March 24- April 11 2025,Product ID not found in product list or no pack size
+2025,2181,NA-COLABOR,TDL,TDL CAN,2290.0,000HQ5543,Ad Fee,TD Colabor Sealift Bateau 1  Mar 10-May 9,Product ID not found in product list or no pack size
+2025,2192,NA-COLABOR,TDL,TDL CAN,1778.0,000HQ5X1V,Ad Fee,TD Colabor Focus April 14- May 2 2025,Product ID not found in product list or no pack size
+2025,2200,NA-COLABOR,TDL,TDL CAN,1230.0,000HQ5XLV,Ad Fee,TD Colabor Focus May 5 - 23 2025,Product ID not found in product list or no pack size
+2025,2208,NA-COLABOR,TDL,TDL CAN,2864.0,000HQ5X0P,Ad Fee,TD Colabor Focus June 16,Product ID not found in product list or no pack size
+2025,2215,NA-COLABOR,TDL,TDL CAN,4125.0,000HQ550X,Ad Fee,TD Colabor Sealift Bateau 2  June 9 -Aug 8 2025,Product ID not found in product list or no pack size
+2025,2225,NA-COLABOR,TDL,TDL CAN,2964.0,000HQ5X4G,Ad Fee,TD Colabor Focus July 28,Product ID not found in product list or no pack size
+2025,2239,NA-COLABOR,TDL,TDL CAN,1474.0,000HQ5WSS,Ad Fee,TD Colabor Focus August 25,Product ID not found in product list or no pack size
+2025,2246,NA-COLABOR,TDL,TDL CAN,1661.0,000HQ5XPR,Ad Fee,TD Colabor Focus Sept 15 - Oct 3 2025,Product ID not found in product list or no pack size
+2025,2253,NA-COLABOR,TDL,TDL CAN,2041.0,000HQ5WQ9,Ad Fee,TD Colabor Focus October 6 2025 Impact 1 Page,Product ID not found in product list or no pack size
+2025,2261,NA-COLABOR,TDL,TDL CAN,2486.0,000HQ5X31,Ad Fee,TD Colabor Salon de Restauration -Pannier mixte 30 Sept 2025,Product ID not found in product list or no pack size
+2025,2269,NA-COLABOR,TDL,TDL CAN,1533.0,000HQ5XNB,Ad Fee,TD Colabor Focus October 27 -Nov 21,Product ID not found in product list or no pack size
+2025,2748,NA-GIANT TIGER,TDL,TDL CAN,153789.0,000HJE7G6,Special,TD - PLANO MTNCE FEES,Product ID not found in product list or no pack size
+2025,2812,NA-GIANT TIGER,TDL,TDL CAN,3195.0,000HMGM83,Ad Fee,TD GT Roll up the Rim Digital Flyer,Product ID not found in product list or no pack size
+2025,3008,NA-ISLAND IND BG,TDL,TDL CAN,839.0,000HJE60A,Special,TD IIBG Anniversary Flyer - Oct 18 - Nov 15,Product ID not found in product list or no pack size
+2025,3100,NA-LOBLAWS,TDL,TDL CAN,4181.0,000IEOOGW,Write Off,"TD 2025 Unrecoverable Cancelled deals HB CAP/HC @0.95,KCOMP",Product ID not found in product list or no pack size
+2025,3145,NA-LOBLAWS,TDL,TDL CAN,303142.0,000HRCL0I,Points,TD - LCL PC PLUS POINTS - Mass Q1,Product ID not found in product list or no pack size
+2025,3147,NA-LOBLAWS,TDL,TDL CAN,460143.0,000IQQ3OL,Write Off,TD Unrecoverable 2025 Wrong Rate - Feb,Product ID not found in product list or no pack size
+2025,3149,NA-LOBLAWS,TDL,TDL CAN,976638.0,000HRCL3F,Points,TD - LCL PC PLUS POINTS - Targeted,Product ID not found in product list or no pack size
+2025,3299,NA-LOBLAWS,TDL,TDL CAN,25419.0,000I5D4UJ,Contract,TD LCL RCSS WK 11 PCO APP EXCLUSIVE OFFER,Product ID not found in product list or no pack size
+2025,3371,NA-LOBLAWS,TDL,TDL CAN,233932.0,000HRCHPN,Points,TD - LCL PC PLUS POINTS - Mass Q2,Product ID not found in product list or no pack size
+2025,3386,NA-LOBLAWS,TDL,TDL CAN,117140.0,000I3IE5R,Flyer,"TD MRKT WK 17 FLYER NCC/100G/LRG/SML CAN,KCUP 24/30CT/454g",Product ID not found in product list or no pack size
+2025,3462,NA-LOBLAWS,TDL,TDL CAN,409328.0,000IT6311,Write Off,TD 2025 Invalid 2025 Wrong Rate - Jun,Product ID not found in product list or no pack size
+2025,3491,NA-LOBLAWS,TDL,TDL CAN,14745.0,000IHUUOP,Display,TD RCSS WK 26 DMAP Tims,Product ID not found in product list or no pack size
+2025,3512,NA-LOBLAWS,TDL,TDL CAN,265452.0,000IC97B1,Points,TD - LCL PC PLUS POINTS - Mass Q3,Product ID not found in product list or no pack size
+2025,3551,NA-LOBLAWS,TDL,TDL CAN,65118.0,000IIH718,Display,TD MRKT WK 30 DMAP Tims,Product ID not found in product list or no pack size
+2025,3590,NA-LOBLAWS,TDL,TDL CAN,73310.0,000ILIQAT,Display Allowance,TD Market Profit Panel - WK 34 - 37,Product ID not found in product list or no pack size
+2025,3675,NA-LOBLAWS,TDL,TDL CAN,83325.0,000IPI432,Display,TD NF WK 50-53 Profit Gap (Front End),Product ID not found in product list or no pack size
+2025,3677,NA-LOBLAWS,TDL,TDL CAN,80763.0,000IOHCQH,Display,TD Market Profit Panel - WK 38 - 41,Product ID not found in product list or no pack size
+2025,3679,NA-LOBLAWS,TDL,TDL CAN,80763.0,000IOHCQC,Display,TD Market Tims IT,Product ID not found in product list or no pack size
+2025,3742,NA-LOBLAWS,TDL,TDL CAN,82735.0,000IC97B6,Points,TD - LCL PC PLUS POINTS - Mass Q4,Product ID not found in product list or no pack size
+2025,3751,NA-LOBLAWS,TDL,TDL CAN,70583.0,000IK09Q0,Display,TD LCL MRKT WK 42 Omni Placement IW RTS Soup,Product ID not found in product list or no pack size
+2025,3757,NA-LOBLAWS,TDL,TDL CAN,65216.0,000IR3KEI,Display,TD MRKT Profit Panel - WK 42 - 45,Product ID not found in product list or no pack size
+2025,3838,NA-LOBLAWS,TDL,TDL CAN,94623.0,000IUB5T7,Display,TD MRKT Profit Panel - WK 46 - 49,Product ID not found in product list or no pack size
+2025,3840,NA-LOBLAWS,TDL,TDL CAN,94623.0,000IUB5TL,Display,TD SST Tim Hortons Hot Choc 45-52 W83 O36,Product ID not found in product list or no pack size
+2025,3842,NA-LOBLAWS,TDL,TDL CAN,94162.0,000IV8JO8,Display,TD MRKT WK 47-49 COFFEE- BigBrand,Product ID not found in product list or no pack size
+2025,3892,NA-LOBLAWS,TDL,TDL CAN,80412.0,000IO59ZB,Display,TD MRKT WK 47-49 SOUP- BigBrand,Product ID not found in product list or no pack size
+2025,3995,NA-LOBLAWS,TDL,TDL CAN,6099.0,000IUL0TI,TPR/ISF,TD JBP - LCL Buffer - $300k,Product ID not found in product list or no pack size
+2025,4014,NA-LONDON DRUGS,TDL,TDL CAN,3689.0,000HJDAC0,Ad Fee,TD - 300G DISPLAYERS - JAN 15,Product ID not found in product list or no pack size
+2025,4019,NA-LONDON DRUGS,TDL,TDL CAN,2540.0,000HJEAPJ,Ad Fee,TD - FEB MANAGERS SPECIAL,Product ID not found in product list or no pack size
+2025,4025,NA-LONDON DRUGS,TDL,TDL CAN,1681.0,000HJEA6M,Ad Fee,TD - FEB SOUPS MANAGERS SPECIAL,Product ID not found in product list or no pack size
+2025,4030,NA-LONDON DRUGS,TDL,TDL CAN,420.0,000HJE4ZH,Ad Fee,TD - FEB 9 FLYER,Product ID not found in product list or no pack size
+2025,4033,NA-LONDON DRUGS,TDL,TDL CAN,878.0,000HUQ9IF,Ad Fee,TD - FEB 13 FLYER,Product ID not found in product list or no pack size
+2025,4037,NA-LONDON DRUGS,TDL,TDL CAN,3122.0,000HJDGXE,Ad Fee,TD - MARCH MANAGERS SPECIAL,Product ID not found in product list or no pack size
+2025,4049,NA-LONDON DRUGS,TDL,TDL CAN,1690.0,000HJDDX3,Ad Fee,TD MARCH 15 IN STORE,Product ID not found in product list or no pack size
+2025,4062,NA-LONDON DRUGS,TDL,TDL CAN,476.0,000HJDD8J,Ad Fee,TD - MARCH 22 FLYER,Product ID not found in product list or no pack size
+2025,4066,NA-LONDON DRUGS,TDL,TDL CAN,1161.0,000HUQ9JF,Ad Fee,TD - MARCH 28 FLYER,Product ID not found in product list or no pack size
+2025,4075,NA-LONDON DRUGS,TDL,TDL CAN,1554.0,000HJE6QV,Ad Fee,TD - APRIL 4 ISF,Product ID not found in product list or no pack size
+2025,4083,NA-LONDON DRUGS,TDL,TDL CAN,2723.0,000HJDH0B,Ad Fee,TD - APRIL POWER END,Product ID not found in product list or no pack size
+2025,4091,NA-LONDON DRUGS,TDL,TDL CAN,726.0,000HJDODQ,Ad Fee,TD - APRIL 19 FLYER,Product ID not found in product list or no pack size
+2025,4095,NA-LONDON DRUGS,TDL,TDL CAN,1336.0,000HJEDGA,Ad Fee,TD - MAY 10 INSTORE FLYER SOUPS/CHILI,Product ID not found in product list or no pack size
+2025,4101,NA-LONDON DRUGS,TDL,TDL CAN,1444.0,000HJDRPZ,Ad Fee,TD - MAY 8 FLYER,Product ID not found in product list or no pack size
+2025,4105,NA-LONDON DRUGS,TDL,TDL CAN,1607.0,000HJE3ZU,Ad Fee,TD MAY MANAGERS SPECIAL,Product ID not found in product list or no pack size
+2025,4140,NA-LONDON DRUGS,TDL,TDL CAN,1568.0,000HJEFUI,Ad Fee,TD JULY MANAGERS SPECIAL,Product ID not found in product list or no pack size
+2025,4151,NA-LONDON DRUGS,TDL,TDL CAN,1752.0,000HJDY7S,Ad Fee,TD AUGUST MANAGERS SPECIAL,Product ID not found in product list or no pack size
+2025,4165,NA-LONDON DRUGS,TDL,TDL CAN,2208.0,000HJDROX,Ad Fee,TD SEPTEMBER MANAGERS SPECIAL,Product ID not found in product list or no pack size
+2025,4174,NA-LONDON DRUGS,TDL,TDL CAN,1570.0,000HJE3YD,Ad Fee,TD - SEPTEMBER DISPLAY,Product ID not found in product list or no pack size
+2025,4183,NA-LONDON DRUGS,TDL,TDL CAN,964.0,000HJDHO6,Ad Fee,TD - SEPTEMBER 20 FLYER,Product ID not found in product list or no pack size
+2025,4187,NA-LONDON DRUGS,TDL,TDL CAN,2323.0,000HJDMR1,Admin Fee,TD - OCTOBER MANAGERS SPECIAL,Product ID not found in product list or no pack size
+2025,4198,NA-LONDON DRUGS,TDL,TDL CAN,643.0,000HJDRS1,Ad Fee,TD - OCTOBER 4 FLYER,Product ID not found in product list or no pack size
+2025,4208,NA-LONDON DRUGS,TDL,TDL CAN,2579.0,000HJEAOC,Ad Fee,TD NOV MANAGERS SPECIAL,Product ID not found in product list or no pack size
+2025,4226,NA-LONDON DRUGS,TDL,TDL CAN,1309.0,000HJEDEI,Ad Fee,TD NOV 15 FLYER,Product ID not found in product list or no pack size
+2025,4235,NA-LONDON DRUGS,TDL,TDL CAN,4050.0,000HJDLTA,Ad Fee,TD DECEMBER MANAGERS SPECIAL,Product ID not found in product list or no pack size
+2025,4248,NA-LONDON DRUGS,TDL,TDL CAN,4093.0,000HJE3Z1,Ad Fee,TD DECEMBER POWER END,Product ID not found in product list or no pack size
+2025,4254,NA-LONDON DRUGS,TDL,TDL CAN,2181.0,000HJDH12,Ad Fee,TD DECEMBER 13 FLYER,Product ID not found in product list or no pack size
+2025,4327,NA-MCKESSON,TDL,TDL CAN,144.0,000I6JILQ,Special,TD Rexall Wing Rack Markdown,Product ID not found in product list or no pack size
+2025,4329,NA-MCKESSON,TDL,TDL CAN,268.0,000HJDZLW,Trade Show,TD - PHARMACHOICE TRADE SHOW,Product ID not found in product list or no pack size
+2025,4346,NA-MCKESSON,TDL,TDL CAN,902.0,000ICSS46,Special,McKesson Wholesale Admin Fee Price Increase,Product ID not found in product list or no pack size
+2025,4375,NA-MCKESSON,TDL,TDL CAN,4418.0,000HJEFXN,TPR/ISF,TD 6 Retail Banner trade Show,Product ID not found in product list or no pack size
+2025,4539,NA-METRO ONTARIO,TDL,TDL CAN,257994.0,000HJEE9A,Display Allowance,TD Metro Bnr 1.77% Rate (58% of total) Harm/LS,Product ID not found in product list or no pack size
+2025,4541,NA-METRO ONTARIO,TDL,TDL CAN,259626.0,000J595Z7,Special,TD Metro Late Fines,Product ID not found in product list or no pack size
+2025,4657,NA-METRO ONTARIO,TDL,TDL CAN,18439.0,000HJD9UM,Special,TD MO Golf Tournament 2025 $5k,Product ID not found in product list or no pack size
+2025,4809,NA-METRO QUEBEC,TDL,TDL CAN,175341.0,000HJE1WA,Discd,TD Metro Soups delist cost,Product ID not found in product list or no pack size
+2025,4965,NA-METRO QUEBEC,TDL,TDL CAN,66341.0,000HJDHSA,Special,TD Metro Corporate Events 2025 Lobster Event,Product ID not found in product list or no pack size
+2025,4967,NA-METRO QUEBEC,TDL,TDL CAN,66341.0,000HJE5KE,Special,TD Metro Corporate Events 2025 Golf Tournament,Product ID not found in product list or no pack size
+2025,5046,NA-NORTHWEST COMPANY,TDL,TDL CAN,68521.0,000HJE3C1,Special,TD - NWCo Item MAINTENANCE FEES,Product ID not found in product list or no pack size
+2025,5241,NA-NORTHWEST COMPANY,TDL,TDL CAN,5461.0,000IXIIHS,Customer Event,TD NCR Quarterly Endcap payment,Product ID not found in product list or no pack size
+2025,5312,NA-NORTHWEST COMPANY,TDL,TDL CAN,6761.0,000IXIII1,Customer Event,TD NCR Quarterly Endcap payment,Product ID not found in product list or no pack size
+2025,6208,NA-SHOPPER'S DRUG,TDL,TDL CAN,47850.0,000IDSW44,Contract,TD SDM P1-P3 2025 Coffee Partnership JBP Lumpsum,Product ID not found in product list or no pack size
+2025,6210,NA-SHOPPER'S DRUG,TDL,TDL CAN,54220.0,000HRCODT,Points,TD - SDM PC PLUS POINTS - Mass Q1,Product ID not found in product list or no pack size
+2025,6260,NA-SHOPPER'S DRUG,TDL,TDL CAN,20538.0,000HRCGRW,Points,"TD SDM FEB CANS, LRG AND SM",Product ID not found in product list or no pack size
+2025,6298,NA-SHOPPER'S DRUG,TDL,TDL CAN,33716.0,000HRCKYJ,Points,TD - SDM PC PLUS POINTS - Mass Q2,Product ID not found in product list or no pack size
+2025,6326,NA-SHOPPER'S DRUG,TDL,TDL CAN,36412.0,000HRCIYS,Points,TD - SDM PC PLUS POINTS - Mass Q3,Product ID not found in product list or no pack size
+2025,6328,NA-SHOPPER'S DRUG,TDL,TDL CAN,13652.0,000HRCGTX,Points,TD - SDM PC PLUS POINTS - Mass Q4,Product ID not found in product list or no pack size
+2025,6330,NA-SOBEYS,TDL,TDL CAN,44745.0,000IK03Y3,Write Off,TD Sobeys 2023 Invalid 600+ days aging write-off,Product ID not found in product list or no pack size
+2026,292,CG-SOBEY'S QUEBEC,TDL,TDL CAN,18729.0,000ITIX4J,Special,TD IGA  Flap Up Beverage AD 5 to 11 feb   HC Event Breakfast,Product ID not found in product list or no pack size
+2026,338,CG-SOBEY'S QUEBEC,TDL,TDL CAN,34171.0,000J34387,Special,TD IGA Side Panel for Promo Feb 19-April 8,Product ID not found in product list or no pack size
+2026,348,CG-SOBEY'S QUEBEC,TDL,TDL CAN,7256.0,000J5H5H4,Special,TD IGA AD  Mar 19-25  Scene points (price increase Agreement,Product ID not found in product list or no pack size
+2026,388,CG-SOBEY'S QUEBEC,TDL,TDL CAN,42955.0,000J7SVIL,Special,TD IGA Side Panel for Promo April 9- May 13 Kcup 12,Product ID not found in product list or no pack size
+2026,393,CG-SOBEY'S QUEBEC,TDL,TDL CAN,8105.0,000J5H5HE,Special,TD IGA AD  April 16-22 Scene points(price increase Agreement,Product ID not found in product list or no pack size
+2026,414,CG-SOBEY'S QUEBEC,TDL,TDL CAN,28322.0,000ITIUBV,Special,TD SBYQ  Flap Up Beverage AD MAP WE March 5,Product ID not found in product list or no pack size
+2026,445,CG-SOBEY'S QUEBEC,TDL,TDL CAN,45956.0,000ITIY69,Special,TD IGA Side Panel  2026 Promo May 14-July 8 300g  Org $29K,Product ID not found in product list or no pack size
+2026,530,CG-SOBEY'S QUEBEC,TDL,TDL CAN,9018.0,000ITIV2V,Special,TD IGA AD July 9-15  HC 10ct 12ct - Scene Points (price incr,Product ID not found in product list or no pack size
+2026,560,CG-SOBEY'S QUEBEC,TDL,TDL CAN,9076.0,000ITISDH,Special,TD IGA AD  July 23-29  300gr Bags ( Scene points price incre,Product ID not found in product list or no pack size
+2026,670,CG-SOBEY'S QUEBEC,TDL,TDL CAN,90098.0,000ITISL2,Special,TD IGA Marche communautaire,Product ID not found in product list or no pack size
+2026,672,CG-SOBEY'S QUEBEC,TDL,TDL CAN,90098.0,000ITIUEA,Special,TD SBYQ  Flap UpBeverage Original budget 26K,Product ID not found in product list or no pack size
+2026,674,CG-SOBEY'S QUEBEC,TDL,TDL CAN,90098.0,000ITIV6O,Special,TD SBYQ  Scene points $25k Promo spend,Product ID not found in product list or no pack size
+2026,1025,CG-SOBEY'S ROC,TDL,TDL CAN,82431.0,000J3T3HP,Ad Fee,TD Sobeys C9F25 Regular Ad Fee Lumpsum,Product ID not found in product list or no pack size
+2026,1027,CG-SOBEY'S ROC,TDL,TDL CAN,82431.0,000J3T3HK,Ad Fee,TD Sobeys C9F25 Gold Tribute Coffee Lumpsum,Product ID not found in product list or no pack size
+2026,1217,CG-SOBEY'S ROC,TDL,TDL CAN,98704.0,000J6XSFY,Ad Fee,TD Sobeys C3F26 SILVER PACKAGE 75k IN LIEU OF 2025 LT CRC,Product ID not found in product list or no pack size
+2026,1219,CG-SOBEY'S ROC,TDL,TDL CAN,98704.0,000JE6AHT,Ad Fee,TD Sobeys C3F26 SILVER PACKAGE 60K IN LIEU OF 2025 LT CRC,Product ID not found in product list or no pack size
+2026,1232,CG-SOBEY'S ROC,TDL,TDL CAN,76991.0,000J732EE,Ad Fee,TD Sobeys C3F26 TRIBUTE AD FEES,Product ID not found in product list or no pack size
+2026,1245,CG-SOBEY'S ROC,TDL,TDL CAN,70230.0,000ISF5SB,Customer Event,TD Sob National Golf,Product ID not found in product list or no pack size
+2026,1297,CG-SOBEY'S ROC,TDL,TDL CAN,5112.0,000ISF1WA,Contract,TD FRESHCO Golf Tournament,Product ID not found in product list or no pack size
+2026,1400,CG-SOBEY'S ROC,TDL,TDL CAN,119142.0,000ISEZF3,Customer Event,TD Sob ATL Gift Gala Sponsor,Product ID not found in product list or no pack size
+2026,1461,NA-AMAZON CANADA,TDL,TDL CAN,158853.0,000ITPLYK,Special,TD 2025 Amzn Business Discount,Product ID not found in product list or no pack size
+2026,1463,NA-AMAZON CANADA,TDL,TDL CAN,350000.0,000ITPMUK,Special,TD 2026 Amzn Marketing Co-Op $100k annual,Product ID not found in product list or no pack size
+2026,1595,NA-AMAZON CANADA,TDL,TDL CAN,31368.0,000ITPMZ2,Special,TD 2025 Amzn B2B $50k Accrual - monthly payment June,Product ID not found in product list or no pack size
+2026,1603,NA-AMAZON CANADA,TDL,TDL CAN,25980.0,000ITPMZ7,Special,TD 2025 Amzn B2B $50k Accrual - monthly payment July,Product ID not found in product list or no pack size
+2026,1607,NA-AMAZON CANADA,TDL,TDL CAN,25192.0,000ITPMZC,Special,TD 2025 Amzn B2B $50k Accrual - monthly payment August,Product ID not found in product list or no pack size
+2026,1609,NA-AMAZON CANADA,TDL,TDL CAN,25975.0,000ITPLZN,Special,TD 2025 Amzn B2B $50k Accrual - monthly payment September,Product ID not found in product list or no pack size
+2026,1613,NA-AMAZON CANADA,TDL,TDL CAN,27506.0,000ITPLVT,Special,TD 2025 Amzn B2B $50k Accrual - monthly payment October,Product ID not found in product list or no pack size
+2026,1615,NA-AMAZON CANADA,TDL,TDL CAN,27836.0,000ITPNHX,Special,TD 2025 Amzn B2B $50k Accrual - monthly payment November,Product ID not found in product list or no pack size
+2026,1629,NA-AMAZON CANADA,TDL,TDL CAN,27290.0,000ITPMY5,Special,TD 2025 Amzn B2B $50k Accrual - monthly payment December,Product ID not found in product list or no pack size
+2026,2576,NA-HIGHLAND FARMS,TDL,TDL CAN,300.0,000ITZ10Y,Flyer,"TD - Aug - Sept R&G 30ct & 300g, 930g",Product ID not found in product list or no pack size
+2026,2752,NA-LOBLAWS,TDSSKC,SS K COMP,323369.0,000J7OJYZ,TPR/ISF,TD LCL & SDM - R&G & SS 25% Flowback from Cancelled Promos,Product ID not found in product list or no pack size
+2026,2753,NA-LOBLAWS,TDRG,ROAST & GROUND,224166.0,000J7OJYZ,TPR/ISF,TD LCL & SDM - R&G & SS 25% Flowback from Cancelled Promos,Product ID not found in product list or no pack size
+2026,2866,NA-LOBLAWS,TDL,TDL CAN,67039.0,000ISOJWM,Display,TD MRKT WK 30 DMAP Tims,Product ID not found in product list or no pack size
+2026,2880,NA-LOBLAWS,TDL,TDL CAN,82464.0,000ISONFA,Display Allowance,TD Market Profit Panel - WK 34 - 37,Product ID not found in product list or no pack size
+2026,2883,NA-LOBLAWS,TUSSKC-4/24,SS KCOMP 4/24CT,19.0,000JE7SHU,TPR/ISF,TD LCL AI Wk 33 R&G Large Can + SS 24Ct/30Ct FP,Product ID not found in product list or no pack size
+2026,2927,NA-LOBLAWS,TDL,TDL CAN,71481.0,000ISOPM2,Display,TD Market Profit Panel - WK 38 - 41,Product ID not found in product list or no pack size
+2026,2929,NA-LOBLAWS,TDL,TDL CAN,71481.0,000ISOQEY,Display,TD Market Tims IT,Product ID not found in product list or no pack size
+2026,2972,NA-LOBLAWS,TDL,TDL CAN,80313.0,000ISOQEQ,Display,TD LCL MRKT WK 42 Omni Placement IW RTS Soup,Product ID not found in product list or no pack size
+2026,3011,NA-LOBLAWS,TDL,TDL CAN,100030.0,000IUB10J,Display,TD MRKT Profit Panel - WK 46 - 49,Product ID not found in product list or no pack size
+2026,3015,NA-LOBLAWS,TDL,TDL CAN,100030.0,000IVXC2X,Display,TD MRKT WK 47-49 COFFEE- BigBrand,Product ID not found in product list or no pack size
+2026,3054,NA-LOBLAWS,TDL,TDL CAN,75657.0,000IUB0ZR,Display,TD MRKT WK 47-49 SOUP - BigBrand,Product ID not found in product list or no pack size
+2026,3117,NA-LONDON DRUGS,TDL,TDL CAN,1781.0,000ITZPYW,Ad Fee,TD - FEB MANAGERS SPECIAL,Product ID not found in product list or no pack size
+2026,3120,NA-LONDON DRUGS,TDL,TDL CAN,1781.0,000ITZETS,Ad Fee,TD - FEB SOUPS MANAGERS SPECIAL,Product ID not found in product list or no pack size
+2026,3124,NA-LONDON DRUGS,TDL,TDL CAN,702.0,000ITYY7J,Ad Fee,TD - FEB 6 FLYER,Product ID not found in product list or no pack size
+2026,3127,NA-LONDON DRUGS,TDL,TDL CAN,1129.0,000ITZAZ9,Ad Fee,TD - FEB 20 FLYER,Product ID not found in product list or no pack size
+2026,3133,NA-LONDON DRUGS,TDL,TDL CAN,1596.0,000ITZCBY,Ad Fee,TD - MARCH MANAGERS SPECIAL,Product ID not found in product list or no pack size
+2026,3141,NA-LONDON DRUGS,TDL,TDL CAN,1036.0,000ITZCBJ,Ad Fee,TD MARCH 13 FLYER,Product ID not found in product list or no pack size
+2026,3148,NA-LONDON DRUGS,TDL,TDL CAN,1045.0,000ITZ453,Ad Fee,TD - MARCH POWER END,Product ID not found in product list or no pack size
+2026,3152,NA-LONDON DRUGS,TDL,TDL CAN,270.0,000ITYZM1,Ad Fee,TD - MARCH 20 FLYER,Product ID not found in product list or no pack size
+2026,3163,NA-LONDON DRUGS,TDL,TDL CAN,231.0,000ITZPKR,Ad Fee,TD - APRIL 3 FLYER,Product ID not found in product list or no pack size
+2026,3166,NA-LONDON DRUGS,TDL,TDL CAN,1069.0,000ITZ0AX,Ad Fee,TD - MAY 1  FLYER,Product ID not found in product list or no pack size
+2026,3169,NA-LONDON DRUGS,TDL,TDL CAN,1071.0,000ITZ9NK,Ad Fee,TD MAY MANAGERS SPECIAL,Product ID not found in product list or no pack size
+2026,3176,NA-LONDON DRUGS,TDL,TDL CAN,733.0,000ITZHEE,Ad Fee,TD - MAY 15 FLYER SOUPS/CHILI,Product ID not found in product list or no pack size
+2026,3180,NA-LONDON DRUGS,TDL,TDL CAN,1103.0,000IVQZEN,Ad Fee,TD - MAY POWER END,Product ID not found in product list or no pack size
+2026,3184,NA-LONDON DRUGS,TDL,TDL CAN,1103.0,000IVQZFC,Ad Fee,TD JUNE 5 FLYER,Product ID not found in product list or no pack size
+2026,3204,NA-LONDON DRUGS,TDL,TDL CAN,1618.0,000ITZHF1,Ad Fee,TD JULY MANAGERS SPECIAL,Product ID not found in product list or no pack size
+2026,3217,NA-LONDON DRUGS,TDL,TDL CAN,1386.0,000ITZDN3,Ad Fee,TD AUGUST MANAGERS SPECIAL,Product ID not found in product list or no pack size
+2026,3231,NA-LONDON DRUGS,TDL,TDL CAN,1665.0,000ITZOGI,Ad Fee,TD SEPTEMBER MANAGERS SPECIAL,Product ID not found in product list or no pack size
+2026,3239,NA-LONDON DRUGS,TDL,TDL CAN,1247.0,000ITYY6V,Ad Fee,TD - SEPTEMBER DISPLAY,Product ID not found in product list or no pack size
+2026,3243,NA-LONDON DRUGS,TDL,TDL CAN,989.0,000ITZ0Y7,Ad Fee,TD SEPT 18 FLYER,Product ID not found in product list or no pack size
+2026,3246,NA-LONDON DRUGS,TDL,TDL CAN,401.0,000ITZFTR,Ad Fee,TD - SEPTEMBER 11 FLYER,Product ID not found in product list or no pack size
+2026,3281,NA-LONDON DRUGS,TDL,TDL CAN,882.0,000ITZQEM,Ad Fee,TD NOV 13 FLYER,Product ID not found in product list or no pack size
+2026,3286,NA-LONDON DRUGS,TDL,TDL CAN,2629.0,000ITZ88A,Ad Fee,TD DECEMBER MANAGERS SPECIAL,Product ID not found in product list or no pack size
+2026,3295,NA-LONDON DRUGS,TDL,TDL CAN,2586.0,000ITZDQQ,Ad Fee,TD DECEMBER POWER END,Product ID not found in product list or no pack size
+2026,3302,NA-LONDON DRUGS,TDL,TDL CAN,1256.0,000IXOHN7,Ad Fee,TD DECEMBER 18 FLYER,Product ID not found in product list or no pack size
+2026,3316,NA-LONGOS,TDL,TDL CAN,1188.0,000ITZ7M2,Flyer,TD -LONGOS TPR BAGS & 12ct & NCC +End Cap Display/Flyer,Product ID not found in product list or no pack size
+2026,3332,NA-LONGOS,TDL,TDL CAN,2370.0,000ITZ75H,Flyer,"TD -LONGOS TPR Lrg Tin & 30ct, HC & FVC +End Cap Display/Fly",Product ID not found in product list or no pack size
+2026,3370,NA-MCKESSON,TDL,TDL CAN,106.0,000ITZ0FI,Trade Show,TD PHARMACHOICE TRADE SHOW,Product ID not found in product list or no pack size
+2026,3419,NA-MCKESSON,TDL,TDL CAN,1511.0,000ITZQHS,TPR/ISF,TD 6 Retail Banner Digital Promo,Product ID not found in product list or no pack size
+2026,3565,NA-METRO ONTARIO,TDL,TDL CAN,247974.0,000ITO3D9,Display Allowance,TD Metro Bnr 1.77% Rate (58% of total) Harm/LS,Product ID not found in product list or no pack size
+2026,3725,NA-METRO ONTARIO,TDL,TDL CAN,21883.0,000ITO0X8,Special,TD MO Golf Tournament 2025 $5k,Product ID not found in product list or no pack size
+2026,3727,NA-METRO ONTARIO,TDL,TDL CAN,62252.0,000JCN51W,Special,TD MO LS FEE PLACEHOLDER FOR TDL CAN,Product ID not found in product list or no pack size
+2026,4095,NA-METRO QUEBEC,TDL,TDL CAN,29683.0,000ITOOLK,Display,TD Super C Kcup 10-12ct  Nov 6-12 Lumpsum Display Support,Product ID not found in product list or no pack size
+2026,4173,NA-NORTHWEST COMPANY,TDL,TDL CAN,5298.0,000IXIII8,Customer Event,TD-NCR Quarterly Endcap Payment,Product ID not found in product list or no pack size
+2026,4217,NA-NORTHWEST COMPANY,TDL,TDL CAN,3509.0,000IXIIIF,Customer Event,TD-NCR Quarterly Endcap Payment,Product ID not found in product list or no pack size
+2026,4233,NA-NORTHWEST COMPANY,TDL,TDL CAN,11455.0,000JDU0J4,Customer Event,TD-NCR Quarterly Endcap Payment,Product ID not found in product list or no pack size
+2026,4269,NA-NORTHWEST COMPANY,TDL,TDL CAN,12957.0,000JDU0JA,Customer Event,TD-NCR Quarterly Endcap Payment,Product ID not found in product list or no pack size
+2026,4822,NA-SOBEYS,TDL,TDL CAN,49604.0,000ITISJN,Write Off,TD Sobeys 2023 Invalid 600+ days aging write-off,Product ID not found in product list or no pack size

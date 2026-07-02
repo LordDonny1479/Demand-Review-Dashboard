@@ -25,12 +25,12 @@ export default function DemandDashboard() {
   const [status, setStatus] = useState("Loading sample demand review data.");
 
   useEffect(() => {
-    fetch("/data/demand-review-sample.csv")
+    fetch("/data/demand-review.csv")
       .then((response) => response.text())
       .then((text) => loadCsv(text))
       .catch(() => {
         setStatus(
-          "Upload a CSV to begin. Expected columns: retailer, year, month, mpg, product, unit_type, quantity, cases_per_drp.",
+          "Upload a CSV to begin. Expected columns: retailer, year, month, mpg, unit_type, quantity, cases_per_drp, and cases.",
         );
       });
   }, []);
@@ -41,7 +41,7 @@ export default function DemandDashboard() {
     setRetailerFilter("all");
     setMpgFilter("all");
     setStatus(
-      `Loaded ${rawRows.length} source rows. DRP displays converted to cases before totals are calculated.`,
+      `Loaded ${rawRows.length} source rows. DRP displays converted to regular cases before totals are calculated.`,
     );
   }
 

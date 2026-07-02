@@ -1,0 +1,14 @@
+{
+  "generated_from": {
+    "demand_workbook": "DR 06 June - 2025 vs 2026.xlsx",
+    "product_workbook": "Product List 20260629.xlsx"
+  },
+  "output_rows": 7940,
+  "unique_retailers": 43,
+  "unique_mpgs": 57,
+  "display_rows_converted": 506,
+  "unmapped_rows": 198,
+  "unconverted_display_rows": 22,
+  "total_cases_2025": 10656998.3,
+  "total_cases_2026": 14165245.28
+}

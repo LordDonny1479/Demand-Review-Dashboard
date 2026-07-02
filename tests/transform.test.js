@@ -1,4 +1,5 @@
 import assert from "node:assert";
+import fs from "node:fs";
 import {
   buildDemandReview,
   parseCsv,
@@ -19,4 +20,25 @@ assert.strictEqual(review[0].comparisonCases, 3024);
 assert.strictEqual(review[0].difference, 524);
 const pivot = pivotByRetailerAndMpg(review);
 assert.strictEqual(pivot[0].months.June.difference, 524);
+
+const quoted = parseCsv('retailer,product,quantity\n"Retailer, A","Coffee ""Display""",5');
+assert.strictEqual(quoted[0].retailer, "Retailer, A");
+assert.strictEqual(quoted[0].product, 'Coffee "Display"');
+
+assert.strictEqual(toCases({ unit_type: "DRP", quantity: "2", cases_per_drp: "12", cases: "99" }), 99);
+
+const realRows = parseCsv(fs.readFileSync("data/demand-review.csv", "utf8"));
+assert.ok(realRows.length > 7000);
+
+const instantDisplay = realRows.find((row) => row.product_id === "TDIC-288/100");
+assert.ok(instantDisplay);
+assert.strictEqual(instantDisplay.mpg, "Instant Coffee 12/100g");
+assert.strictEqual(instantDisplay.unit_type, "DRP");
+assert.strictEqual(Number(instantDisplay.cases_per_drp), 24);
+
+const singleServeDisplay = realRows.find((row) => row.product_id === "TDSSKC-48/12");
+assert.ok(singleServeDisplay);
+assert.strictEqual(singleServeDisplay.mpg, "SS KComp 6/12ct");
+assert.strictEqual(Number(singleServeDisplay.cases_per_drp), 8);
+
 console.log("transform tests passed");
