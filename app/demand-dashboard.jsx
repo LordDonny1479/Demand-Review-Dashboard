@@ -136,6 +136,29 @@ function sumMonthValues(values = [], visibleMonths = []) {
   return visibleMonths.reduce((total, month) => total + (values?.[month.index] || 0), 0);
 }
 
+function monthDelta(row, monthIndex) {
+  return (row.m26?.[monthIndex] || 0) - (row.m25?.[monthIndex] || 0);
+}
+
+function rowPeriodDelta(row, visibleMonths) {
+  const base =
+    visibleMonths.length === 12
+      ? row.fy25 || 0
+      : sumMonthValues(row.m25, visibleMonths);
+  const comparison =
+    visibleMonths.length === 12
+      ? row.fy26 || 0
+      : sumMonthValues(row.m26, visibleMonths);
+  return comparison - base;
+}
+
+function rowHasChange(row, visibleMonths) {
+  return (
+    visibleMonths.some((month) => monthDelta(row, month.index) !== 0) ||
+    rowPeriodDelta(row, visibleMonths) !== 0
+  );
+}
+
 function tabTitle(activeTab, raw) {
   if (activeTab === YOY_RETAILER_TAB) return "All Retailers Roll-Up - by Retailer - YoY";
   if (activeTab === YOY_GROUP_TAB) return "All Retailers Roll-Up - by Product Group / MPG - YoY";
@@ -176,6 +199,7 @@ export default function DemandDashboard() {
   const [monthEnd, setMonthEnd] = useState(11);
   const [quarterSelection, setQuarterSelection] = useState("all");
   const [productDrilldownLevel, setProductDrilldownLevel] = useState("mpg");
+  const [hideZeroChanges, setHideZeroChanges] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState(() => new Set());
   const { META, MONTHS, RAW } = dashboardData || EMPTY_DASHBOARD;
   const dataMode = blendDisplays ? "blended" : "separate";
@@ -371,6 +395,8 @@ export default function DemandDashboard() {
             setExpandedGroups(new Set());
           }}
           onQuarterChange={applyQuarter}
+          onZeroToggle={setHideZeroChanges}
+          hideZeroChanges={hideZeroChanges}
           productDrilldownLevel={productDrilldownLevel}
           quarterSelection={quarterSelection}
           showProductDrilldown={isProductGroupRollup(activeTab)}
@@ -389,6 +415,7 @@ export default function DemandDashboard() {
           }
           months={MONTHS}
           periodLabels={periodLabels}
+          hideZeroChanges={hideZeroChanges}
           rows={activeRows}
           summaryLabel={summaryLabel}
           tabId={`${activeComparisonKey}-${dataMode}-${productDrilldownLevel}-${activeTab}`}
@@ -407,6 +434,7 @@ export default function DemandDashboard() {
 }
 
 function TableControls({
+  hideZeroChanges,
   monthEnd,
   months,
   monthStart,
@@ -414,12 +442,15 @@ function TableControls({
   onMonthStartChange,
   onProductDrilldownChange,
   onQuarterChange,
+  onZeroToggle,
   productDrilldownLevel,
   quarterSelection,
   showProductDrilldown,
 }) {
   const maxMonth = Math.max(0, months.length - 1);
   const selectedRange = `${months[monthStart] || "Jan"} - ${months[monthEnd] || "Dec"}`;
+  const startPct = maxMonth ? (monthStart / maxMonth) * 100 : 0;
+  const endPct = maxMonth ? (monthEnd / maxMonth) * 100 : 100;
 
   return (
     <div className="table-controls" aria-label="Table filters">
@@ -436,9 +467,15 @@ function TableControls({
 
       <div className="month-slider" aria-label="Month range">
         <span className="range-label">{selectedRange}</span>
-        <label>
-          <span>Start</span>
+        <div className="range-slider">
+          <span className="range-track" aria-hidden="true" />
+          <span
+            className="range-selection"
+            style={{ left: `${startPct}%`, right: `${100 - endPct}%` }}
+            aria-hidden="true"
+          />
           <input
+            aria-label="Start month"
             max={maxMonth}
             min="0"
             onChange={(event) => onMonthStartChange(event.target.value)}
@@ -446,10 +483,8 @@ function TableControls({
             type="range"
             value={monthStart}
           />
-        </label>
-        <label>
-          <span>End</span>
           <input
+            aria-label="End month"
             max={maxMonth}
             min="0"
             onChange={(event) => onMonthEndChange(event.target.value)}
@@ -457,8 +492,20 @@ function TableControls({
             type="range"
             value={monthEnd}
           />
-        </label>
+        </div>
       </div>
+
+      <label className="switch-row compact-switch">
+        <span>Hide 0s</span>
+        <input
+          checked={hideZeroChanges}
+          onChange={(event) => onZeroToggle(event.target.checked)}
+          type="checkbox"
+        />
+        <span className="switch-track" aria-hidden="true">
+          <span className="switch-thumb" />
+        </span>
+      </label>
 
       {showProductDrilldown ? (
         <div className="segmented-control" aria-label="Product drilldown level">
@@ -567,6 +614,70 @@ function Legend({ periodLabels }) {
   );
 }
 
+function rowLevel(row) {
+  if (row.is_total) return 0;
+  if (row.is_group) return 1;
+  if (row.is_mpg) return 2;
+  return 3;
+}
+
+function filterRowsForChange(rows, visibleMonths, hideZeroChanges) {
+  if (!hideZeroChanges) return rows;
+
+  const keep = rows.map((row) => row.is_total || rowHasChange(row, visibleMonths));
+
+  for (let index = rows.length - 1; index >= 0; index -= 1) {
+    const level = rowLevel(rows[index]);
+    if (level !== 1 && level !== 2) continue;
+
+    for (let childIndex = index + 1; childIndex < rows.length; childIndex += 1) {
+      const childLevel = rowLevel(rows[childIndex]);
+      if (childLevel <= level) break;
+      if (keep[childIndex]) {
+        keep[index] = true;
+        break;
+      }
+    }
+  }
+
+  const filteredRows = rows.filter((_, index) => keep[index]);
+  let displayDividerSeen = false;
+
+  return filteredRows.map((row, index) => {
+    let hasVisibleChild = false;
+    if (row.has_children) {
+      const level = rowLevel(row);
+      for (let childIndex = index + 1; childIndex < filteredRows.length; childIndex += 1) {
+        const childLevel = rowLevel(filteredRows[childIndex]);
+        if (childLevel <= level) break;
+        hasVisibleChild = true;
+        break;
+      }
+    }
+
+    let nextRow = row.has_children !== hasVisibleChild ? { ...row, has_children: hasVisibleChild } : row;
+
+    if (nextRow.is_display_group) {
+      const shouldStartDisplaySection = !displayDividerSeen;
+      if (nextRow === row || nextRow.display_section_start !== shouldStartDisplaySection) {
+        nextRow = { ...nextRow, display_section_start: shouldStartDisplaySection };
+      }
+      displayDividerSeen = true;
+    } else if (nextRow.display_section_start) {
+      nextRow = { ...nextRow, display_section_start: false };
+    }
+
+    return nextRow;
+  });
+}
+
+function visibleMonthColumns(rows, visibleMonths, hideZeroChanges) {
+  if (!hideZeroChanges) return visibleMonths;
+  return visibleMonths.filter((month) =>
+    rows.some((row) => !row.is_total && monthDelta(row, month.index) !== 0),
+  );
+}
+
 function prepareVisibleRows(rows, expandedGroups, tabId) {
   let currentGroup = null;
   let currentGroupOpen = true;
@@ -632,6 +743,7 @@ function prepareVisibleRows(rows, expandedGroups, tabId) {
 
 function DataTable({
   expandedGroups,
+  hideZeroChanges,
   labelHeader,
   months,
   periodLabels,
@@ -641,7 +753,9 @@ function DataTable({
   toggleGroup,
   visibleMonths,
 }) {
-  const visibleRows = prepareVisibleRows(rows, expandedGroups, tabId);
+  const filteredRows = filterRowsForChange(rows, visibleMonths, hideZeroChanges);
+  const monthColumns = visibleMonthColumns(filteredRows, visibleMonths, hideZeroChanges);
+  const visibleRows = prepareVisibleRows(filteredRows, expandedGroups, tabId);
 
   return (
     <div className="tbl-wrap">
@@ -649,14 +763,14 @@ function DataTable({
         <thead>
           <tr className="hdr1">
             <th className="lhdr" rowSpan="2">{labelHeader}</th>
-            {visibleMonths.map((month) => (
+            {monthColumns.map((month) => (
               <th className="month-head" colSpan="3" key={month.label}>{month.label}</th>
             ))}
             <th className="month-head fy-head" colSpan="3">{summaryLabel}</th>
           </tr>
           <tr className="hdr2">
-            {Array.from({ length: visibleMonths.length + 1 }, (_, index) => (
-              <MonthSubhead index={index} key={index} monthCount={visibleMonths.length} periodLabels={periodLabels} />
+            {Array.from({ length: monthColumns.length + 1 }, (_, index) => (
+              <MonthSubhead index={index} key={index} monthCount={monthColumns.length} periodLabels={periodLabels} />
             ))}
           </tr>
         </thead>
@@ -669,7 +783,7 @@ function DataTable({
                   row={row}
                   toggleGroup={toggleGroup}
                 />
-                {visibleMonths.map((month) => (
+                {monthColumns.map((month) => (
                   <MonthCells
                     base={row.m25?.[month.index] || 0}
                     comparison={row.m26?.[month.index] || 0}

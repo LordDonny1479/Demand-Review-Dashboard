@@ -308,8 +308,16 @@ assert.ok(dashboardSource.includes("By Product Group - MoM"));
 assert.ok(dashboardSource.includes("Quarter"));
 assert.ok(dashboardSource.includes("Drilldown"));
 assert.ok(dashboardSource.includes("Segment"));
+assert.ok(dashboardSource.includes("Hide 0s"));
+assert.ok(dashboardSource.includes("hideZeroChanges"));
+assert.ok(dashboardSource.includes("filterRowsForChange"));
+assert.ok(dashboardSource.includes("visibleMonthColumns"));
 assert.ok(dashboardSource.includes("visibleMonths"));
 assert.ok(dashboardSource.includes("row.is_mpg"));
 assert.ok(dashboardSource.includes("row.is_retailer"));
+
+const dashboardStyles = fs.readFileSync("app/globals.css", "utf8");
+assert.ok(dashboardStyles.includes(".range-slider"));
+assert.ok(dashboardStyles.includes(".range-selection"));
 
 console.log("dashboard data tests passed");

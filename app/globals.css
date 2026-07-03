@@ -190,7 +190,7 @@ button {
 
 .control-field,
 .month-slider,
-.month-slider label,
+.range-slider,
 .segmented-control {
   display: inline-flex;
   align-items: center;
@@ -198,7 +198,6 @@ button {
 }
 
 .control-field span,
-.month-slider label span,
 .segmented-control span {
   color: var(--muted);
   font-weight: 650;
@@ -224,9 +223,77 @@ button {
   font-weight: 700;
 }
 
-.month-slider input[type="range"] {
-  width: 108px;
-  accent-color: var(--brand-red);
+.range-slider {
+  position: relative;
+  width: 220px;
+  height: 22px;
+}
+
+.range-track,
+.range-selection {
+  position: absolute;
+  top: 9px;
+  right: 0;
+  left: 0;
+  height: 4px;
+  pointer-events: none;
+  border-radius: 999px;
+}
+
+.range-track {
+  background: #d8e0e8;
+}
+
+.range-selection {
+  background: var(--brand-red);
+}
+
+.range-slider input[type="range"] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 22px;
+  margin: 0;
+  pointer-events: none;
+  appearance: none;
+  background: transparent;
+}
+
+.range-slider input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px;
+  background: transparent;
+}
+
+.range-slider input[type="range"]::-moz-range-track {
+  height: 4px;
+  background: transparent;
+}
+
+.range-slider input[type="range"]::-webkit-slider-thumb {
+  width: 12px;
+  height: 12px;
+  cursor: pointer;
+  pointer-events: auto;
+  appearance: none;
+  background: #fff;
+  border: 2px solid var(--brand-red);
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.28);
+}
+
+.range-slider input[type="range"]::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  cursor: pointer;
+  pointer-events: auto;
+  background: #fff;
+  border: 2px solid var(--brand-red);
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.28);
+}
+
+.compact-switch {
+  gap: 6px;
 }
 
 .segmented-control button {
