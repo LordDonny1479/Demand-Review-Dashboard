@@ -20,15 +20,34 @@ assert.deepStrictEqual(MONTHS, [
   "Dec",
 ]);
 
-assert.strictEqual(RAW.banner_order.length, 33);
-assert.deepStrictEqual(RAW.banner_order.slice(0, 5), [
+assert.strictEqual(RAW.all_banner_order.length, 33);
+assert.deepStrictEqual(RAW.all_banner_order.slice(0, 5), [
   "Amazon",
   "Associated Grocers",
   "Atlantic Grocers",
   "Canadian Tire",
   "Chens",
 ]);
+assert.deepStrictEqual(RAW.banner_order, [
+  "Amazon",
+  "Canadian Tire",
+  "Colabor",
+  "Costco",
+  "Fed Coop",
+  "Giant Tiger",
+  "Loblaw",
+  "Metro Ontario",
+  "Metro Quebec",
+  "Northwest Company",
+  "PFG",
+  "SDM",
+  "Sobeys Quebec",
+  "Sobeys ROC",
+  "Walmart",
+]);
 assert.strictEqual(RAW.banner_order.includes("Canada"), false);
+assert.strictEqual(RAW.banner_order.includes("Associated Grocers"), false);
+assert.strictEqual(RAW.banner_order.includes("Pratts Wholesale"), false);
 assert.strictEqual(RAW.default_mode, "blended");
 assert.ok(RAW.comparisons.yoy);
 assert.ok(RAW.comparisons.mom);
@@ -67,6 +86,8 @@ assert.strictEqual(grandTotal.fy26, RAW.modes.blended.stats.fy26);
 assert.strictEqual(RAW.modes.blended.rollup_ret.find((row) => row.label === "Amazon"), undefined);
 assert.strictEqual(RAW.modes.blended.rollup_ret.find((row) => row.label === "Costco"), undefined);
 assert.strictEqual(RAW.modes.blended.rollup_ret.find((row) => row.label === "Canada"), undefined);
+assert.strictEqual(RAW.modes.blended.rollup_ret.find((row) => row.label === "Associated Grocers"), undefined);
+assert.strictEqual(RAW.modes.blended.rollup_ret.find((row) => row.label === "Pratts Wholesale"), undefined);
 assert.strictEqual(RAW.comparisons.mom.modes.blended.rollup_ret.find((row) => row.label === "Amazon"), undefined);
 assert.strictEqual(RAW.comparisons.mom.modes.blended.rollup_ret.find((row) => row.label === "Costco"), undefined);
 assert.strictEqual(RAW.comparisons.mom.modes.blended.rollup_ret.find((row) => row.label === "Canada"), undefined);
@@ -222,7 +243,7 @@ assert.strictEqual(segmentRetailers[0].fy26, 65410);
 assert.ok(segmentRetailers.every((row) => row.parent_level === "group"));
 assertSortedByDeltaDesc(segmentRetailers);
 
-const visibleDrilldownRetailers = new Set([
+assert.deepStrictEqual(RAW.modes.blended.visible_retailer_banners, [
   "Canadian Tire",
   "Fed Coop",
   "Giant Tiger",
@@ -230,23 +251,51 @@ const visibleDrilldownRetailers = new Set([
   "Metro Ontario",
   "Metro Quebec",
   "PFG",
-  "Pratts Wholesale",
+  "SDM",
+  "Sobeys Quebec",
+  "Sobeys ROC",
+  "Walmart",
+]);
+assert.deepStrictEqual(RAW.modes.separate.visible_retailer_banners, [
+  "Canadian Tire",
+  "Colabor",
+  "Fed Coop",
+  "Giant Tiger",
+  "Loblaw",
+  "Metro Ontario",
+  "Metro Quebec",
+  "PFG",
+  "SDM",
+  "Sobeys Quebec",
+  "Sobeys ROC",
+  "Walmart",
+]);
+assert.deepStrictEqual(RAW.comparisons.mom.modes.blended.visible_retailer_banners, [
+  "Canadian Tire",
+  "Fed Coop",
+  "Giant Tiger",
+  "Loblaw",
+  "Metro Ontario",
+  "Metro Quebec",
+  "Northwest Company",
+  "PFG",
   "SDM",
   "Sobeys Quebec",
   "Sobeys ROC",
   "Walmart",
 ]);
 
-for (const [label, rows] of [
-  ["YoY blended", RAW.modes.blended.rollup_grp],
-  ["YoY separate", RAW.modes.separate.rollup_grp],
-  ["YoY blended segment", RAW.modes.blended.rollup_segment],
-  ["YoY separate segment", RAW.modes.separate.rollup_segment],
-  ["MoM blended", RAW.comparisons.mom.modes.blended.rollup_grp],
-  ["MoM separate", RAW.comparisons.mom.modes.separate.rollup_grp],
-  ["MoM blended segment", RAW.comparisons.mom.modes.blended.rollup_segment],
-  ["MoM separate segment", RAW.comparisons.mom.modes.separate.rollup_segment],
+for (const [label, data, rows] of [
+  ["YoY blended", RAW.modes.blended, RAW.modes.blended.rollup_grp],
+  ["YoY separate", RAW.modes.separate, RAW.modes.separate.rollup_grp],
+  ["YoY blended segment", RAW.modes.blended, RAW.modes.blended.rollup_segment],
+  ["YoY separate segment", RAW.modes.separate, RAW.modes.separate.rollup_segment],
+  ["MoM blended", RAW.comparisons.mom.modes.blended, RAW.comparisons.mom.modes.blended.rollup_grp],
+  ["MoM separate", RAW.comparisons.mom.modes.separate, RAW.comparisons.mom.modes.separate.rollup_grp],
+  ["MoM blended segment", RAW.comparisons.mom.modes.blended, RAW.comparisons.mom.modes.blended.rollup_segment],
+  ["MoM separate segment", RAW.comparisons.mom.modes.separate, RAW.comparisons.mom.modes.separate.rollup_segment],
 ]) {
+  const visibleDrilldownRetailers = new Set(data.visible_retailer_banners);
   const hiddenRows = rows.filter((row) => row.is_retailer && !visibleDrilldownRetailers.has(row.label));
   assert.deepStrictEqual(hiddenRows, [], `${label} has non-visible drilldown retailers`);
 }
@@ -272,7 +321,7 @@ assert.deepStrictEqual(META.methodology.year_status_filter["2026"], [
 ]);
 assert.deepStrictEqual(META.methodology.site_excluded_banners, ["Canada"]);
 assert.deepStrictEqual(META.methodology.rollup_excluded_banners, ["Amazon", "Costco"]);
-assert.deepStrictEqual(META.methodology.product_drilldown_visible_banners, [
+assert.deepStrictEqual(META.methodology.focus_retailer_banners, [
   "Canadian Tire",
   "Fed Coop",
   "Giant Tiger",
@@ -280,12 +329,17 @@ assert.deepStrictEqual(META.methodology.product_drilldown_visible_banners, [
   "Metro Ontario",
   "Metro Quebec",
   "PFG",
-  "Pratts Wholesale",
   "SDM",
   "Sobeys Quebec",
   "Sobeys ROC",
   "Walmart",
 ]);
+assert.deepStrictEqual(META.methodology.special_retailer_tabs, ["Amazon", "Costco"]);
+assert.strictEqual(
+  META.methodology.retailer_visibility_rule,
+  "Show focus retailers plus retailers whose absolute change is greater than 5% of the total absolute change for the active comparison and display mode",
+);
+assert.deepStrictEqual(META.methodology.visible_banner_tabs, RAW.banner_order);
 assert.strictEqual(META.mode_totals.blended.fy25, 1516066);
 assert.strictEqual(META.mode_totals.separate.fy25, 1199848);
 assert.strictEqual(META.mode_totals.blended.fy26, 1300641);
@@ -319,5 +373,8 @@ assert.ok(dashboardSource.includes("row.is_retailer"));
 const dashboardStyles = fs.readFileSync("app/globals.css", "utf8");
 assert.ok(dashboardStyles.includes(".range-slider"));
 assert.ok(dashboardStyles.includes(".range-selection"));
+assert.ok(dashboardStyles.includes("margin-top: -4px"));
+assert.ok(dashboardStyles.includes("tr.tot-row td.delta-pos"));
+assert.ok(dashboardStyles.includes("tr.tot-row td.delta-neg"));
 
 console.log("dashboard data tests passed");

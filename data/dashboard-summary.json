@@ -58,6 +58,23 @@
       "Walmart",
       "Western Wholesale"
     ],
+    "visible_banner_tabs": [
+      "Amazon",
+      "Canadian Tire",
+      "Colabor",
+      "Costco",
+      "Fed Coop",
+      "Giant Tiger",
+      "Loblaw",
+      "Metro Ontario",
+      "Metro Quebec",
+      "Northwest Company",
+      "PFG",
+      "SDM",
+      "Sobeys Quebec",
+      "Sobeys ROC",
+      "Walmart"
+    ],
     "market_mapping": "Retailer/customer names are mapped from Market List.xlsx",
     "mom_comparison": "MoM compares the July pull against the June pull from DR 07 July - MoM.xlsx using the same product, market, status, date, and display-conversion methodology",
     "site_excluded_banners": [
@@ -67,7 +84,8 @@
       "Amazon",
       "Costco"
     ],
-    "product_drilldown_visible_banners": [
+    "retailer_visibility_rule": "Show focus retailers plus retailers whose absolute change is greater than 5% of the total absolute change for the active comparison and display mode",
+    "focus_retailer_banners": [
       "Canadian Tire",
       "Fed Coop",
       "Giant Tiger",
@@ -75,11 +93,14 @@
       "Metro Ontario",
       "Metro Quebec",
       "PFG",
-      "Pratts Wholesale",
       "SDM",
       "Sobeys Quebec",
       "Sobeys ROC",
       "Walmart"
+    ],
+    "special_retailer_tabs": [
+      "Amazon",
+      "Costco"
     ]
   },
   "comparisons": {

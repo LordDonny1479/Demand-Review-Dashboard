@@ -272,6 +272,7 @@ button {
 .range-slider input[type="range"]::-webkit-slider-thumb {
   width: 12px;
   height: 12px;
+  margin-top: -4px;
   cursor: pointer;
   pointer-events: auto;
   appearance: none;
@@ -579,6 +580,14 @@ tr.tot-row td {
   color: #fff !important;
   font-weight: 700;
   background: var(--coffee) !important;
+}
+
+tr.tot-row td.delta-pos {
+  color: var(--pos) !important;
+}
+
+tr.tot-row td.delta-neg {
+  color: var(--neg) !important;
 }
 
 td.glbl,

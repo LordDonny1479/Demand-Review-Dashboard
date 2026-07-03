@@ -111,20 +111,21 @@ DATA_MODES = {
 ROLLUP_EXCLUDED_BANNERS = {"Amazon", "Costco"}
 SITE_EXCLUDED_BANNERS = {"Canada"}
 
-VISIBLE_PRODUCT_DRILLDOWN_BANNERS = {
+FOCUS_RETAILER_BANNERS = {
     "Canadian Tire",
     "Fed Coop",
     "Giant Tiger",
     "Loblaw",
     "Metro Ontario",
-    "Pratts Wholesale",
-    "SDM",
-    "Sobeys ROC",
-    "Sobeys Quebec",
     "Metro Quebec",
     "PFG",
+    "SDM",
+    "Sobeys Quebec",
+    "Sobeys ROC",
     "Walmart",
 }
+SPECIAL_RETAILER_TAB_BANNERS = {"Amazon", "Costco"}
+CHANGE_VISIBILITY_THRESHOLD = 0.05
 
 DISPLAY_RE = re.compile(
     r"DISPLAY|DISPLAYER|\bDISP\b|\bDRP\b|1/2\s*DRP|HALF\s*DRP|PDQ|DISPLY",
@@ -254,6 +255,10 @@ def active_banner_order(rows: list[dict], configured_order: list[str]) -> list[s
     ordered = [banner for banner in configured_order if banner in active]
     ordered.extend(sorted(active - set(ordered)))
     return ordered
+
+
+def ordered_banner_subset(banners: set[str]) -> list[str]:
+    return [banner for banner in BANNER_ORDER if banner in banners]
 
 
 def map_banner(market: str, description: str, market_map: dict | None = None) -> str | None:
@@ -766,7 +771,37 @@ def build_segment_table(rows, include_retailer_drilldown: bool = False, visible_
     return table_rows
 
 
-def build_retailer_rollup(rows):
+def values_delta(values: dict) -> float:
+    return sum(values["comparison"]) - sum(values["base"])
+
+
+def retailer_change_visibility(rows: list[dict]) -> dict:
+    retailer_values = defaultdict(empty_years)
+    total_values = empty_years()
+
+    for row in rows:
+        add_month(retailer_values[row["banner"]], row["period_key"], row["month_index"], row["cases"])
+        add_month(total_values, row["period_key"], row["month_index"], row["cases"])
+
+    total_delta = values_delta(total_values)
+    threshold = abs(total_delta) * CHANGE_VISIBILITY_THRESHOLD
+    active_banners = set(retailer_values)
+    significant_banners = {
+        banner
+        for banner, values in retailer_values.items()
+        if threshold > 0 and abs(values_delta(values)) > threshold
+    }
+    visible_banners = (FOCUS_RETAILER_BANNERS | significant_banners) & active_banners
+
+    return {
+        "visible_banners": visible_banners,
+        "significant_banners": significant_banners & active_banners,
+        "threshold": threshold,
+        "total_delta": total_delta,
+    }
+
+
+def build_retailer_rollup(rows, visible_retailer_banners: set[str] | None = None):
     retailer_values = {banner: empty_years() for banner in BANNER_ORDER}
     total_values = empty_years()
 
@@ -777,6 +812,7 @@ def build_retailer_rollup(rows):
     table_rows = [
         row_from_values(banner, retailer_values[banner], is_group=True)
         for banner in BANNER_ORDER
+        if visible_retailer_banners is None or banner in visible_retailer_banners
         if sum(retailer_values[banner]["base"]) or sum(retailer_values[banner]["comparison"])
     ]
     table_rows.append(row_from_values("GRAND TOTAL", total_values, is_total=True))
@@ -835,7 +871,9 @@ def build_dashboard_from_rows(rows: list[dict]):
         for row in rows
         if row["banner"] not in ROLLUP_EXCLUDED_BANNERS
     ]
-    rollup_ret, total_values = build_retailer_rollup(rollup_rows)
+    visibility = retailer_change_visibility(rollup_rows)
+    visible_rollup_banners = visibility["visible_banners"]
+    rollup_ret, total_values = build_retailer_rollup(rollup_rows, visible_rollup_banners)
     all_retailer_totals, _ = build_retailer_rollup(rows)
     stats = build_stats(total_values)
     stats["banners"] = len({row["banner"] for row in rollup_rows})
@@ -844,12 +882,12 @@ def build_dashboard_from_rows(rows: list[dict]):
         "rollup_grp": build_product_table(
             rollup_rows,
             include_retailer_drilldown=True,
-            visible_retailer_banners=VISIBLE_PRODUCT_DRILLDOWN_BANNERS,
+            visible_retailer_banners=visible_rollup_banners,
         ),
         "rollup_segment": build_segment_table(
             rollup_rows,
             include_retailer_drilldown=True,
-            visible_retailer_banners=VISIBLE_PRODUCT_DRILLDOWN_BANNERS,
+            visible_retailer_banners=visible_rollup_banners,
         ),
         "retailer_totals": [
             row
@@ -860,6 +898,10 @@ def build_dashboard_from_rows(rows: list[dict]):
             banner: build_product_table([row for row in rows if row["banner"] == banner])
             for banner in BANNER_ORDER
         },
+        "visible_retailer_banners": ordered_banner_subset(visible_rollup_banners),
+        "significant_retailer_banners": ordered_banner_subset(visibility["significant_banners"]),
+        "change_visibility_threshold_cases": round_cases(visibility["threshold"]),
+        "change_visibility_total_delta_cases": round_cases(visibility["total_delta"]),
         "stats": stats,
     }
 
@@ -1063,10 +1105,14 @@ def build_outputs():
             mode: build_dashboard_from_rows(rows)
             for mode, rows in transformed[key]["mode_rows"].items()
         }
+        comparison_visible_banners = set(SPECIAL_RETAILER_TAB_BANNERS) & set(BANNER_ORDER)
+        for data in dashboard_modes.values():
+            comparison_visible_banners.update(data["visible_retailer_banners"])
         comparison_dashboards[key] = {
             "label": config["label"],
             "period_labels": config["period_labels"],
             "mode_labels": DATA_MODES,
+            "banner_order": ordered_banner_subset(comparison_visible_banners),
             "modes": dashboard_modes,
             **dashboard_modes["blended"],
         }
@@ -1074,8 +1120,13 @@ def build_outputs():
 
     yoy_dashboard = comparison_dashboards["yoy"]
     yoy_summary = comparison_summaries["yoy"]
+    visible_tab_banners = set(SPECIAL_RETAILER_TAB_BANNERS) & set(BANNER_ORDER)
+    for comparison in comparison_dashboards.values():
+        visible_tab_banners.update(comparison["banner_order"])
+    visible_banner_order = ordered_banner_subset(visible_tab_banners)
     dashboard = {
-        "banner_order": BANNER_ORDER,
+        "banner_order": visible_banner_order,
+        "all_banner_order": BANNER_ORDER,
         "default_mode": "blended",
         "mode_labels": DATA_MODES,
         "comparisons": comparison_dashboards,
@@ -1102,11 +1153,14 @@ def build_outputs():
             "display_method": "Toggleable: blended mode converts display/DRP/PDQ pack sizes to equivalent regular cases; separate mode keeps display/DRP rows separate and counts each as 1 case",
             "product_level": "Product group is sourced from Product List column Q (Demand Review Planner); MPG pack-size level combines individual flavours",
             "banner_scope": BANNER_ORDER,
+            "visible_banner_tabs": visible_banner_order,
             "market_mapping": "Retailer/customer names are mapped from Market List.xlsx",
             "mom_comparison": "MoM compares the July pull against the June pull from DR 07 July - MoM.xlsx using the same product, market, status, date, and display-conversion methodology",
             "site_excluded_banners": sorted(SITE_EXCLUDED_BANNERS),
             "rollup_excluded_banners": sorted(ROLLUP_EXCLUDED_BANNERS),
-            "product_drilldown_visible_banners": sorted(VISIBLE_PRODUCT_DRILLDOWN_BANNERS),
+            "retailer_visibility_rule": f"Show focus retailers plus retailers whose absolute change is greater than {CHANGE_VISIBILITY_THRESHOLD:.0%} of the total absolute change for the active comparison and display mode",
+            "focus_retailer_banners": sorted(FOCUS_RETAILER_BANNERS),
+            "special_retailer_tabs": sorted(SPECIAL_RETAILER_TAB_BANNERS),
         },
         "comparisons": comparison_summaries,
         "source_rows_read": yoy_summary["source_rows_read"],
