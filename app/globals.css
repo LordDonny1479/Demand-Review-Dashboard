@@ -349,8 +349,15 @@ table.dt th {
 }
 
 th.lhdr {
+  position: sticky;
+  left: 0;
+  z-index: 5;
+  width: 205px;
   min-width: 205px;
+  max-width: 205px;
   text-align: left;
+  background: var(--brand-red) !important;
+  border-right: 2px solid var(--line-strong) !important;
 }
 
 table.dt tr.hdr1 th {
@@ -431,9 +438,12 @@ td.slbl,
 td.totlbl {
   position: sticky;
   left: 0;
-  z-index: 2;
+  z-index: 3;
+  width: 205px;
   min-width: 205px;
+  max-width: 205px;
   border-right: 2px solid var(--line-strong);
+  background-clip: padding-box;
 }
 
 td.glbl {
