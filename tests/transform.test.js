@@ -369,6 +369,8 @@ assert.ok(dashboardSource.includes("visibleMonthColumns"));
 assert.ok(dashboardSource.includes("visibleMonths"));
 assert.ok(dashboardSource.includes("row.is_mpg"));
 assert.ok(dashboardSource.includes("row.is_retailer"));
+assert.ok(dashboardSource.includes("month-end"));
+assert.ok(dashboardSource.includes("fy-end"));
 
 const dashboardStyles = fs.readFileSync("app/globals.css", "utf8");
 assert.ok(dashboardStyles.includes(".range-slider"));
@@ -376,5 +378,8 @@ assert.ok(dashboardStyles.includes(".range-selection"));
 assert.ok(dashboardStyles.includes("margin-top: -4px"));
 assert.ok(dashboardStyles.includes("tr.tot-row td.delta-pos"));
 assert.ok(dashboardStyles.includes("tr.tot-row td.delta-neg"));
+assert.ok(dashboardStyles.includes("--month-divider-soft"));
+assert.ok(dashboardStyles.includes("table.dt .month-end"));
+assert.ok(dashboardStyles.includes("table.dt .fy-end"));
 
 console.log("dashboard data tests passed");

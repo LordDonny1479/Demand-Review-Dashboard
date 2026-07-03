@@ -11,7 +11,8 @@
   --surface-soft: #f7f9fc;
   --line: #dddddd;
   --line-strong: #9aa9ba;
-  --month-divider: #d8e0e8;
+  --month-divider: #b9c7d6;
+  --month-divider-soft: rgba(26, 58, 92, 0.14);
   --text: #001f3f;
   --muted: #555555;
   --pos: #008000;
@@ -525,19 +526,37 @@ table.dt tr.hdr2 th {
 
 table.dt .month-head {
   border-left: 2px solid var(--month-divider);
+  box-shadow:
+    inset 2px 0 0 var(--month-divider-soft),
+    inset -1px 0 0 rgba(255, 255, 255, 0.22);
 }
 
 table.dt .fy-head {
   background: var(--brand-red-dark);
-  border-left: 3px solid var(--coffee);
+  border-left: 3px solid var(--line-strong);
+  box-shadow:
+    inset 3px 0 0 rgba(255, 255, 255, 0.14),
+    inset -1px 0 0 rgba(255, 255, 255, 0.22);
 }
 
 table.dt .month-boundary {
   border-left: 2px solid var(--month-divider) !important;
+  box-shadow: inset 2px 0 0 var(--month-divider-soft);
+}
+
+table.dt .month-end {
+  border-right: 1px solid var(--month-divider) !important;
+  box-shadow: inset -1px 0 0 var(--month-divider-soft);
 }
 
 table.dt .fy-boundary {
-  border-left: 3px solid var(--coffee) !important;
+  border-left: 3px solid var(--line-strong) !important;
+  box-shadow: inset 3px 0 0 rgba(26, 58, 92, 0.16);
+}
+
+table.dt .fy-end {
+  border-right: 2px solid var(--line-strong) !important;
+  box-shadow: inset -1px 0 0 rgba(26, 58, 92, 0.16);
 }
 
 tr.grp-hdr td {

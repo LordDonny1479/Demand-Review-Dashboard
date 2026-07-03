@@ -814,12 +814,13 @@ function DataTable({
 
 function MonthSubhead({ index, monthCount, periodLabels }) {
   const boundaryClass = index === monthCount ? " fy-boundary" : " month-boundary";
+  const endClass = index === monthCount ? "fy-end" : "month-end";
 
   return (
     <>
       <th className={`subhead-cell${boundaryClass}`}>{periodLabels.base_short}</th>
       <th>{periodLabels.comparison_short}</th>
-      <th>{periodLabels.delta}</th>
+      <th className={endClass}>{periodLabels.delta}</th>
     </>
   );
 }
@@ -868,12 +869,13 @@ function LabelCell({ groupKey, isOpen, row, toggleGroup }) {
 
 function MonthCells({ base, comparison, fullYear = false, monthIndex = null }) {
   const boundaryClass = fullYear || monthIndex !== null ? (fullYear ? " fy-boundary" : " month-boundary") : "";
+  const endClass = fullYear ? " fy-end" : " month-end";
 
   return (
     <>
       <td className={`y25${boundaryClass}`}>{formatNumber(base)}</td>
       <td className="y26">{formatNumber(comparison)}</td>
-      <td className={deltaClass(base, comparison)}>
+      <td className={`${deltaClass(base, comparison)}${endClass}`}>
         {fullYear ? formatFullYearDelta(base, comparison) : formatDelta(base, comparison)}
       </td>
     </>
