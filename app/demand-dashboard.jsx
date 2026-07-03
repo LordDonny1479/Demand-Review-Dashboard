@@ -252,7 +252,9 @@ export default function DemandDashboard() {
             active={activeTab === bannerTabId(name)}
             name={name}
             periodLabels={yoyPeriodLabels}
-            row={yoyData.rollup_ret.find((item) => item.label === name)}
+            row={
+              (yoyData.retailer_totals || yoyData.rollup_ret).find((item) => item.label === name)
+            }
             onClick={() => setActiveTab(bannerTabId(name))}
           />
         ))}

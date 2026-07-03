@@ -101,6 +101,23 @@ DATA_MODES = {
     "separate": "Keep DRPs/displays separate and count each display as 1 case",
 }
 
+ROLLUP_EXCLUDED_BANNERS = {"Amazon", "Costco"}
+
+VISIBLE_PRODUCT_DRILLDOWN_BANNERS = {
+    "Canadian Tire",
+    "Fed Coop",
+    "Giant Tiger",
+    "Loblaw",
+    "Metro Ontario",
+    "Pratts Wholesale",
+    "SDM",
+    "Sobeys ROC",
+    "Sobeys Quebec",
+    "Metro Quebec",
+    "PFG",
+    "Walmart",
+}
+
 DISPLAY_RE = re.compile(
     r"DISPLAY|DISPLAYER|\bDISP\b|\bDRP\b|1/2\s*DRP|HALF\s*DRP|PDQ|DISPLY",
     re.IGNORECASE,
@@ -602,7 +619,7 @@ def fy_delta(row: dict) -> int:
     return (row.get("fy26") or 0) - (row.get("fy25") or 0)
 
 
-def build_product_table(rows, include_retailer_drilldown: bool = False):
+def build_product_table(rows, include_retailer_drilldown: bool = False, visible_retailer_banners: set[str] | None = None):
     group_values = defaultdict(empty_years)
     mpg_values = defaultdict(empty_years)
     retailer_values = defaultdict(empty_years)
@@ -638,6 +655,8 @@ def build_product_table(rows, include_retailer_drilldown: bool = False):
             if include_retailer_drilldown:
                 retailer_rows = []
                 for _, _, banner in (key for key in retailer_values if key[0] == group and key[1] == mpg):
+                    if visible_retailer_banners is not None and banner not in visible_retailer_banners:
+                        continue
                     retailer_row = row_from_values(banner, retailer_values[(group, mpg, banner)])
                     retailer_row["row_type"] = "retailer"
                     retailer_row["is_retailer"] = True
@@ -715,15 +734,32 @@ def conversion_for_row(row: dict, base_lookup: dict):
 
 
 def build_dashboard_from_rows(rows: list[dict]):
-    rollup_ret, total_values = build_retailer_rollup(rows)
+    rollup_rows = [
+        row
+        for row in rows
+        if row["banner"] not in ROLLUP_EXCLUDED_BANNERS
+    ]
+    rollup_ret, total_values = build_retailer_rollup(rollup_rows)
+    all_retailer_totals, _ = build_retailer_rollup(rows)
+    stats = build_stats(total_values)
+    stats["banners"] = len({row["banner"] for row in rollup_rows})
     return {
         "rollup_ret": rollup_ret,
-        "rollup_grp": build_product_table(rows, include_retailer_drilldown=True),
+        "rollup_grp": build_product_table(
+            rollup_rows,
+            include_retailer_drilldown=True,
+            visible_retailer_banners=VISIBLE_PRODUCT_DRILLDOWN_BANNERS,
+        ),
+        "retailer_totals": [
+            row
+            for row in all_retailer_totals
+            if not row.get("is_total")
+        ],
         "retailers": {
             banner: build_product_table([row for row in rows if row["banner"] == banner])
             for banner in BANNER_ORDER
         },
-        "stats": build_stats(total_values),
+        "stats": stats,
     }
 
 
@@ -965,6 +1001,8 @@ def build_outputs():
             "banner_scope": BANNER_ORDER,
             "market_mapping": "Retailer/customer names are mapped from Market List.xlsx",
             "mom_comparison": "MoM compares the July pull against the June pull from DR 07 July - MoM.xlsx using the same product, market, status, date, and display-conversion methodology",
+            "rollup_excluded_banners": sorted(ROLLUP_EXCLUDED_BANNERS),
+            "product_drilldown_visible_banners": sorted(VISIBLE_PRODUCT_DRILLDOWN_BANNERS),
         },
         "comparisons": comparison_summaries,
         "source_rows_read": yoy_summary["source_rows_read"],

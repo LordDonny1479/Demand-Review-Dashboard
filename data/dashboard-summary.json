@@ -60,7 +60,25 @@
       "Western Wholesale"
     ],
     "market_mapping": "Retailer/customer names are mapped from Market List.xlsx",
-    "mom_comparison": "MoM compares the July pull against the June pull from DR 07 July - MoM.xlsx using the same product, market, status, date, and display-conversion methodology"
+    "mom_comparison": "MoM compares the July pull against the June pull from DR 07 July - MoM.xlsx using the same product, market, status, date, and display-conversion methodology",
+    "rollup_excluded_banners": [
+      "Amazon",
+      "Costco"
+    ],
+    "product_drilldown_visible_banners": [
+      "Canadian Tire",
+      "Fed Coop",
+      "Giant Tiger",
+      "Loblaw",
+      "Metro Ontario",
+      "Metro Quebec",
+      "PFG",
+      "Pratts Wholesale",
+      "SDM",
+      "Sobeys Quebec",
+      "Sobeys ROC",
+      "Walmart"
+    ]
   },
   "comparisons": {
     "yoy": {
@@ -108,22 +126,22 @@
       "detail_rows": 18964,
       "mode_totals": {
         "blended": {
-          "fy25": 2324823,
-          "fy26": 2586883,
-          "base_total": 2324823,
-          "comparison_total": 2586883,
-          "delta": 262060,
-          "delta_pct": 11.3,
-          "banners": 34
+          "fy25": 1516066,
+          "fy26": 1349641,
+          "base_total": 1516066,
+          "comparison_total": 1349641,
+          "delta": -166425,
+          "delta_pct": -11.0,
+          "banners": 32
         },
         "separate": {
-          "fy25": 2008605,
-          "fy26": 2306380,
-          "base_total": 2008605,
-          "comparison_total": 2306380,
-          "delta": 297775,
-          "delta_pct": 14.8,
-          "banners": 34
+          "fy25": 1199848,
+          "fy26": 1069138,
+          "base_total": 1199848,
+          "comparison_total": 1069138,
+          "delta": -130710,
+          "delta_pct": -10.9,
+          "banners": 32
         }
       }
     },
@@ -173,22 +191,22 @@
       "detail_rows": 16704,
       "mode_totals": {
         "blended": {
-          "fy25": 2571167,
-          "fy26": 2586883,
-          "base_total": 2571167,
-          "comparison_total": 2586883,
-          "delta": 15716,
-          "delta_pct": 0.6,
-          "banners": 34
+          "fy25": 1379420,
+          "fy26": 1349641,
+          "base_total": 1379420,
+          "comparison_total": 1349641,
+          "delta": -29779,
+          "delta_pct": -2.2,
+          "banners": 30
         },
         "separate": {
-          "fy25": 2299576,
-          "fy26": 2306380,
-          "base_total": 2299576,
-          "comparison_total": 2306380,
-          "delta": 6804,
-          "delta_pct": 0.3,
-          "banners": 34
+          "fy25": 1107829,
+          "fy26": 1069138,
+          "base_total": 1107829,
+          "comparison_total": 1069138,
+          "delta": -38691,
+          "delta_pct": -3.5,
+          "banners": 30
         }
       }
     }
@@ -207,26 +225,26 @@
   "detail_rows": 18964,
   "mode_totals": {
     "blended": {
-      "fy25": 2324823,
-      "fy26": 2586883,
-      "base_total": 2324823,
-      "comparison_total": 2586883,
-      "delta": 262060,
-      "delta_pct": 11.3,
-      "banners": 34
+      "fy25": 1516066,
+      "fy26": 1349641,
+      "base_total": 1516066,
+      "comparison_total": 1349641,
+      "delta": -166425,
+      "delta_pct": -11.0,
+      "banners": 32
     },
     "separate": {
-      "fy25": 2008605,
-      "fy26": 2306380,
-      "base_total": 2008605,
-      "comparison_total": 2306380,
-      "delta": 297775,
-      "delta_pct": 14.8,
-      "banners": 34
+      "fy25": 1199848,
+      "fy26": 1069138,
+      "base_total": 1199848,
+      "comparison_total": 1069138,
+      "delta": -130710,
+      "delta_pct": -10.9,
+      "banners": 32
     }
   },
-  "total_cases_2025": 2324823,
-  "total_cases_2026": 2586883,
-  "delta_cases": 262060,
-  "delta_pct": 11.3
+  "total_cases_2025": 1516066,
+  "total_cases_2026": 1349641,
+  "delta_cases": -166425,
+  "delta_pct": -11.0
 }
