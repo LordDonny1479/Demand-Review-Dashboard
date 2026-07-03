@@ -607,12 +607,12 @@ def add_values(target: dict, source: dict):
 
 
 def group_sort_key(group_name: str):
-    display_rank = 1 if group_name.endswith(" Displays") else 0
+    display_section = 1 if group_name.endswith(" Displays") else 0
     base_name = group_name.removesuffix(" Displays")
     try:
-        return (GROUP_ORDER.index(base_name), display_rank, group_name)
+        return (display_section, GROUP_ORDER.index(base_name), group_name)
     except ValueError:
-        return (len(GROUP_ORDER), display_rank, group_name)
+        return (display_section, len(GROUP_ORDER), group_name)
 
 
 def fy_delta(row: dict) -> int:
@@ -634,10 +634,16 @@ def build_product_table(rows, include_retailer_drilldown: bool = False, visible_
         add_month(total_values, row["period_key"], row["month_index"], row["cases"])
 
     table_rows = []
+    display_section_started = False
     for group in sorted(group_values, key=group_sort_key):
         group_row = row_from_values(group, group_values[group], is_group=True)
         group_row["row_type"] = "group"
         group_row["has_children"] = True
+        if group.endswith(" Displays"):
+            group_row["is_display_group"] = True
+            if not display_section_started:
+                group_row["display_section_start"] = True
+                display_section_started = True
         table_rows.append(group_row)
 
         children = sorted(

@@ -401,6 +401,10 @@ tr.grp-hdr:hover td {
   background: #e7eef5 !important;
 }
 
+tr.display-section-start td {
+  border-top: 2px solid #c7d2dd !important;
+}
+
 tr.sku-row td {
   background: var(--surface-soft);
 }

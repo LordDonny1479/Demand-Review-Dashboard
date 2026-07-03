@@ -452,7 +452,7 @@ function DataTable({ expandedGroups, labelHeader, months, periodLabels, rows, ta
 
             if (!visible) return null;
 
-            const rowClass = row.is_total
+            const baseRowClass = row.is_total
               ? "tot-row"
               : row.is_group
                 ? "grp-hdr"
@@ -461,6 +461,7 @@ function DataTable({ expandedGroups, labelHeader, months, periodLabels, rows, ta
                   : row.is_retailer
                     ? "retailer-row"
                     : "sku-row";
+            const rowClass = `${baseRowClass}${row.display_section_start ? " display-section-start" : ""}`;
             return (
               <tr className={rowClass} key={`${tabId}-${index}-${row.label}`}>
                 <LabelCell

@@ -104,6 +104,45 @@ const categoryFallbackRows = [
 assert.strictEqual(categoryFallbackRows[0].fy26, 8821);
 assert.strictEqual(categoryFallbackRows[1].fy26, 14655);
 
+function groupRows(rows) {
+  return rows.filter((row) => row.is_group && !row.is_total);
+}
+
+function assertDisplayGroupsAtBottom(rows, expectedFirstDisplayGroup) {
+  const groups = groupRows(rows);
+  const firstDisplayIndex = groups.findIndex((row) => row.label.endsWith(" Displays"));
+  assert.ok(firstDisplayIndex > 0, "Missing display category block");
+  assert.strictEqual(groups[firstDisplayIndex].label, expectedFirstDisplayGroup);
+  assert.strictEqual(groups[firstDisplayIndex].display_section_start, true);
+  assert.strictEqual(
+    groups.filter((row) => row.display_section_start).length,
+    1,
+    "Expected one display-section divider marker",
+  );
+
+  for (const row of groups.slice(0, firstDisplayIndex)) {
+    assert.ok(!row.label.endsWith(" Displays"), `${row.label} should remain in the regular section`);
+  }
+  for (const row of groups.slice(firstDisplayIndex)) {
+    assert.ok(row.label.endsWith(" Displays"), `${row.label} should remain in the display section`);
+    assert.strictEqual(row.is_display_group, true);
+  }
+}
+
+function assertNoDisplayDivider(rows) {
+  assert.strictEqual(
+    groupRows(rows).filter((row) => row.display_section_start).length,
+    0,
+    "Blended tables should not have a display-section divider",
+  );
+}
+
+assertNoDisplayDivider(RAW.modes.blended.rollup_grp);
+assertNoDisplayDivider(RAW.comparisons.mom.modes.blended.rollup_grp);
+assertDisplayGroupsAtBottom(RAW.modes.separate.rollup_grp, "Granola Bar Displays");
+assertDisplayGroupsAtBottom(RAW.comparisons.mom.modes.separate.rollup_grp, "Granola Bar Displays");
+assertDisplayGroupsAtBottom(RAW.modes.separate.retailers.Walmart, "Hot Choc & Cappuccino Displays");
+
 function retailerRowsForMpg(rows, mpg) {
   const start = rows.findIndex((row) => row.label === mpg && row.is_mpg);
   assert.ok(start >= 0, `Missing MPG row for ${mpg}`);
