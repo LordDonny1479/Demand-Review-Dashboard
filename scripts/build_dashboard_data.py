@@ -29,7 +29,7 @@ MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", 
 YEARS = (2025, 2026)
 STATUS_BY_YEAR = {
     2025: {"Closed", "Committed"},
-    2026: {"Planned", "Committed"},
+    2026: {"Closed", "Planned", "Committed"},
 }
 
 BANNER_ORDER = []

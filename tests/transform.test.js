@@ -29,13 +29,13 @@ assert.strictEqual(RAW.default_mode, "blended");
 assert.ok(RAW.modes.blended);
 assert.ok(RAW.modes.separate);
 assert.strictEqual(RAW.modes.blended.stats.fy25, 2324823);
-assert.strictEqual(RAW.modes.blended.stats.fy26, 2508970);
-assert.strictEqual(RAW.modes.blended.stats.delta, 184147);
-assert.strictEqual(RAW.modes.blended.stats.delta_pct, 7.9);
+assert.strictEqual(RAW.modes.blended.stats.fy26, 2586883);
+assert.strictEqual(RAW.modes.blended.stats.delta, 262060);
+assert.strictEqual(RAW.modes.blended.stats.delta_pct, 11.3);
 assert.strictEqual(RAW.modes.separate.stats.fy25, 2008605);
-assert.strictEqual(RAW.modes.separate.stats.fy26, 2237140);
-assert.strictEqual(RAW.modes.separate.stats.delta, 228535);
-assert.strictEqual(RAW.modes.separate.stats.delta_pct, 11.4);
+assert.strictEqual(RAW.modes.separate.stats.fy26, 2306380);
+assert.strictEqual(RAW.modes.separate.stats.delta, 297775);
+assert.strictEqual(RAW.modes.separate.stats.delta_pct, 14.8);
 
 const grandTotal = RAW.modes.blended.rollup_ret.find((row) => row.label === "GRAND TOTAL");
 assert.ok(grandTotal);
@@ -55,7 +55,7 @@ assert.strictEqual(separateWalmart.fy26, 130171);
 const separateDisplayGroup = RAW.modes.separate.rollup_grp.find((row) => row.label === "Roast & Ground Displays");
 assert.ok(separateDisplayGroup);
 assert.strictEqual(separateDisplayGroup.fy25, 5906);
-assert.strictEqual(separateDisplayGroup.fy26, 4759);
+assert.strictEqual(separateDisplayGroup.fy26, 5219);
 
 const blendedDisplayGroup = RAW.modes.blended.rollup_grp.find((row) => row.label === "Roast & Ground Displays");
 assert.strictEqual(blendedDisplayGroup, undefined);
@@ -112,9 +112,16 @@ assert.strictEqual(META.methodology.row_filter, "Fcst Inc Cases > 0");
 assert.strictEqual(META.methodology.product_level, "MPG pack-size level from Product List; individual flavours are combined");
 assert.strictEqual(META.generated_from.demand_workbook, "DR 07 July - YoY.xlsx");
 assert.strictEqual(META.generated_from.market_workbook, "Market List.xlsx");
+assert.deepStrictEqual(META.methodology.year_status_filter["2026"], [
+  "Closed",
+  "Committed",
+  "Planned",
+]);
 assert.strictEqual(META.mode_totals.blended.fy25, 2324823);
 assert.strictEqual(META.mode_totals.separate.fy25, 2008605);
-assert.strictEqual(META.display_products_converted, 58);
+assert.strictEqual(META.mode_totals.blended.fy26, 2586883);
+assert.strictEqual(META.mode_totals.separate.fy26, 2306380);
+assert.strictEqual(META.display_products_converted, 59);
 assert.strictEqual(META.unconverted_display_products, 5);
 
 const dashboardSource = fs.readFileSync("app/demand-dashboard.jsx", "utf8");

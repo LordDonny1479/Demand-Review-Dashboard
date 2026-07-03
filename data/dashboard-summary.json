@@ -14,6 +14,7 @@
         "Committed"
       ],
       "2026": [
+        "Closed",
         "Committed",
         "Planned"
       ]
@@ -63,31 +64,31 @@
     "blended": "Blend DRPs/displays into regular-case equivalents",
     "separate": "Keep DRPs/displays separate and count each display as 1 case"
   },
-  "included_source_month_rows": 9234,
-  "included_source_rows": 5836,
-  "excluded_rows": 2296,
-  "display_products_reviewed": 63,
-  "display_products_converted": 58,
+  "included_source_month_rows": 9482,
+  "included_source_rows": 6037,
+  "excluded_rows": 2095,
+  "display_products_reviewed": 64,
+  "display_products_converted": 59,
   "unconverted_display_products": 5,
-  "detail_rows": 18468,
+  "detail_rows": 18964,
   "mode_totals": {
     "blended": {
       "fy25": 2324823,
-      "fy26": 2508970,
-      "delta": 184147,
-      "delta_pct": 7.9,
+      "fy26": 2586883,
+      "delta": 262060,
+      "delta_pct": 11.3,
       "banners": 34
     },
     "separate": {
       "fy25": 2008605,
-      "fy26": 2237140,
-      "delta": 228535,
-      "delta_pct": 11.4,
+      "fy26": 2306380,
+      "delta": 297775,
+      "delta_pct": 14.8,
       "banners": 34
     }
   },
   "total_cases_2025": 2324823,
-  "total_cases_2026": 2508970,
-  "delta_cases": 184147,
-  "delta_pct": 7.9
+  "total_cases_2026": 2586883,
+  "delta_cases": 262060,
+  "delta_pct": 11.3
 }

@@ -40,7 +40,7 @@ The builder:
 - uses product-level `Fcst Inc Cases`;
 - keeps only rows where `Fcst Inc Cases > 0`;
 - includes 2025 rows with `Closed` or `Committed` promo status;
-- includes 2026 rows with `Planned` or `Committed` promo status;
+- includes 2026 rows with `Closed`, `Planned`, or `Committed` promo status;
 - uses `Execution Start` through `Execution End`;
 - pro-rates cases into calendar months by inclusive execution days;
 - maps products through the product list and combines flavours at MPG pack-size

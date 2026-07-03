@@ -110,7 +110,7 @@ export default function DemandDashboard() {
         <p>
           In-market execution dates | Cases pro-rated by execution days per
           calendar month | Fcst Inc Cases &gt; 0 rows only | 2025 =
-          Closed/Committed | 2026 = Planned/Committed
+          Closed/Committed | 2026 = Closed/Planned/Committed
         </p>
       </header>
 
