@@ -144,17 +144,17 @@
       "included_source_rows": 6032,
       "excluded_rows": 2100,
       "display_products_reviewed": 64,
-      "display_products_converted": 59,
-      "unconverted_display_products": 5,
+      "display_products_converted": 62,
+      "unconverted_display_products": 2,
       "detail_rows": 18954,
       "mode_totals": {
         "blended": {
-          "fy25": 1516066,
-          "fy26": 1300641,
-          "base_total": 1516066,
-          "comparison_total": 1300641,
-          "delta": -215425,
-          "delta_pct": -14.2,
+          "fy25": 1521594,
+          "fy26": 1315533,
+          "base_total": 1521594,
+          "comparison_total": 1315533,
+          "delta": -206061,
+          "delta_pct": -13.5,
           "banners": 31
         },
         "separate": {
@@ -209,16 +209,16 @@
       "included_source_rows": 5349,
       "excluded_rows": 1531,
       "display_products_reviewed": 48,
-      "display_products_converted": 45,
-      "unconverted_display_products": 3,
+      "display_products_converted": 47,
+      "unconverted_display_products": 1,
       "detail_rows": 16684,
       "mode_totals": {
         "blended": {
-          "fy25": 1330420,
-          "fy26": 1300641,
-          "base_total": 1330420,
-          "comparison_total": 1300641,
-          "delta": -29779,
+          "fy25": 1345328,
+          "fy26": 1315533,
+          "base_total": 1345328,
+          "comparison_total": 1315533,
+          "delta": -29795,
           "delta_pct": -2.2,
           "banners": 29
         },
@@ -243,17 +243,17 @@
   "included_source_rows": 6032,
   "excluded_rows": 2100,
   "display_products_reviewed": 64,
-  "display_products_converted": 59,
-  "unconverted_display_products": 5,
+  "display_products_converted": 62,
+  "unconverted_display_products": 2,
   "detail_rows": 18954,
   "mode_totals": {
     "blended": {
-      "fy25": 1516066,
-      "fy26": 1300641,
-      "base_total": 1516066,
-      "comparison_total": 1300641,
-      "delta": -215425,
-      "delta_pct": -14.2,
+      "fy25": 1521594,
+      "fy26": 1315533,
+      "base_total": 1521594,
+      "comparison_total": 1315533,
+      "delta": -206061,
+      "delta_pct": -13.5,
       "banners": 31
     },
     "separate": {
@@ -266,8 +266,8 @@
       "banners": 31
     }
   },
-  "total_cases_2025": 1516066,
-  "total_cases_2026": 1300641,
-  "delta_cases": -215425,
-  "delta_pct": -14.2
+  "total_cases_2025": 1521594,
+  "total_cases_2026": 1315533,
+  "delta_cases": -206061,
+  "delta_pct": -13.5
 }

@@ -148,6 +148,8 @@ CATEGORY_FALLBACKS = {
         "segment": "Roast & Ground",
     },
 }
+HB_MIX_BASE_PACK_SIZE = "HB MIX 4/24EA"
+HB_MIX_BASE_PACK_QTY = 4.0
 
 
 def clean(value) -> str:
@@ -603,6 +605,47 @@ def equivalent_display_units(family: str, unit: str) -> list[str]:
     return units
 
 
+def is_hb_mix_display(row: dict, rec: dict) -> bool:
+    text = " ".join(
+        clean(value).upper()
+        for value in (
+            row.get("product_id", ""),
+            row.get("product", ""),
+            rec.get("pack_size_id", ""),
+            rec.get("pack_size", ""),
+            rec.get("item_id", ""),
+            rec.get("item", ""),
+        )
+    )
+    return bool(
+        row["is_display_product"]
+        and (
+            clean(rec.get("pack_size_id", "")).upper().startswith("TDHBMX")
+            or "HB MIX" in text
+            or "HOT BEVERAGE MIX" in text
+            or "HOT CHOC/FV" in text
+        )
+    )
+
+
+def hb_mix_display_base(row: dict, rec: dict, candidates: list[tuple[float, str]]):
+    if not is_hb_mix_display(row, rec) or not candidates:
+        return None
+
+    display_pack = next(
+        (candidate for candidate in candidates if normalize_unit(candidate[1]).endswith("EA")),
+        candidates[0],
+    )
+    return {
+        "display_pack": display_pack,
+        "base": {
+            "pack_qty": HB_MIX_BASE_PACK_QTY,
+            "pack_size": HB_MIX_BASE_PACK_SIZE,
+            "pack_unit": "24EA",
+        },
+    }
+
+
 def month_splits(start: date, end: date):
     if end < start:
         start, end = end, start
@@ -831,26 +874,32 @@ def conversion_for_row(row: dict, base_lookup: dict):
     if row["is_display_product"]:
         unit_type = "DRP"
         candidates = display_pack_candidates(row, rec)
-        for candidate in candidates:
-            family = family_key(rec)
-            for unit in equivalent_display_units(family, candidate[1]):
-                key = (family, unit)
-                if key in base_lookup:
-                    display_pack = candidate
-                    base = base_lookup[key]
+        hb_mix_base = hb_mix_display_base(row, rec, candidates)
+        if hb_mix_base:
+            display_pack = hb_mix_base["display_pack"]
+            base = hb_mix_base["base"]
+        else:
+            for candidate in candidates:
+                family = family_key(rec)
+                for unit in equivalent_display_units(family, candidate[1]):
+                    key = (family, unit)
+                    if key in base_lookup:
+                        display_pack = candidate
+                        base = base_lookup[key]
+                        break
+                if base:
                     break
-            if base:
-                break
-        if display_pack is None and candidates:
-            display_pack = candidates[0]
-            base = base_lookup.get((family_key(rec), display_pack[1]))
+            if display_pack is None and candidates:
+                display_pack = candidates[0]
+                base = base_lookup.get((family_key(rec), display_pack[1]))
 
         if display_pack and base:
             conversion = display_pack[0] / base["pack_qty"]
             base_pack_size = base["pack_size"] or rec["pack_size"]
+            base_unit = base.get("pack_unit", display_pack[1])
             conversion_note = (
                 f"Display pack {format_qty(display_pack[0])}/{display_pack[1]} "
-                f"converted to regular case pack {format_qty(base['pack_qty'])}/{display_pack[1]}"
+                f"converted to regular case pack {format_qty(base['pack_qty'])}/{base_unit}"
             )
         else:
             conversion_note = "Display product without matching regular pack; left as reported cases"

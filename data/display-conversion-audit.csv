@@ -42,9 +42,9 @@ mom,6320913827,TDL CN/COB/CR SOUP 1/2 DRP 192/540 ML,Soups and Hot Bowls,Soups 1
 mom,6320917474,TDL COB/CN/CR/PB SOUP 1/2 DRP 288/540 ML,Soups and Hot Bowls,Soups 12/540ml,Soups and Hot Bowls Displays,Soups 288/540ml,24.0,yes,Display pack 288/540ML converted to regular case pack 12/540ML
 mom,6320923630,TDL COB/CN/IW SOUP 1/2 DRP 288/540 ML,Soups and Hot Bowls,Soups 12/540ml,Soups and Hot Bowls Displays,Soups 288/540ml,24.0,yes,Display pack 288/540ML converted to regular case pack 12/540ML
 mom,TDSHSP-192/540,SOUPS 192/540ML,Soups and Hot Bowls,Soups 12/540ml,Soups and Hot Bowls Displays,Soups 192/540ml,16.0,yes,Display pack 192/540ML converted to regular case pack 12/540ML
-mom,6320920674,TDL KCUP WINTER/HC/FVC DISPLAY 48/10 CT,Sweet & Creamy,HB Hot Chocolate 6/10ct,Sweet & Creamy Displays,HB Mix Displayer 48/10ea,8.0,yes,Display pack 48/10CT converted to regular case pack 6/10CT
-mom,6320915034,TDL HOT BEVERAGE MIX DISPLAYER 36/1 EA,Sweet & Creamy,HB Mix Displayer 36/1ea,Sweet & Creamy Displays,HB Mix Displayer 36/1ea,1.0,no,Display product without matching regular pack; left as reported cases
-mom,6320924394,TDL HOT CHOC/FVC 1/2 DRP 150/1 EA,Sweet & Creamy,HB Mix Drp 150/1ea,Sweet & Creamy Displays,HB Mix Drp 150/1ea,1.0,no,Display product without matching regular pack; left as reported cases
+mom,6320915034,TDL HOT BEVERAGE MIX DISPLAYER 36/1 EA,Sweet & Creamy,HB Mix 4/24ea,Sweet & Creamy Displays,HB Mix Displayer 36/1ea,9.0,yes,Display pack 36/1EA converted to regular case pack 4/24EA
+mom,6320920674,TDL KCUP WINTER/HC/FVC DISPLAY 48/10 CT,Sweet & Creamy,HB Mix 4/24ea,Sweet & Creamy Displays,HB Mix Displayer 48/10ea,12.0,yes,Display pack 48/10EA converted to regular case pack 4/24EA
+mom,6320924394,TDL HOT CHOC/FVC 1/2 DRP 150/1 EA,Sweet & Creamy,HB Mix 4/24ea,Sweet & Creamy Displays,HB Mix Drp 150/1ea,37.5,yes,Display pack 150/1EA converted to regular case pack 4/24EA
 mom,6320925415,TDL ICECOF SYRUP CAP/MOCHA DISP 32/470ML,Syrups,Syrups 12/470ml,Syrups Displays,Syrups 32/470ml,2.666667,yes,Display pack 32/470ML converted to regular case pack 12/470ML
 mom,TDSIC-32/470,SYRUPS 32/470ML,Syrups,Syrups 12/470ml,Syrups Displays,Syrups 32/470ml,2.666667,yes,Display pack 32/470ML converted to regular case pack 12/470ML
 yoy,TDSHSP-576/284,SOUPS 576/284ML,Condensed Soup,Soups 24/284ml,Condensed Soup Displays,Soups 576/284ml,24.0,yes,Display pack 576/284ML converted to regular case pack 24/284ML
@@ -105,9 +105,9 @@ yoy,6320917474,TDL COB/CN/CR/PB SOUP 1/2 DRP 288/540 ML,Soups and Hot Bowls,Soup
 yoy,6320923630,TDL COB/CN/IW SOUP 1/2 DRP 288/540 ML,Soups and Hot Bowls,Soups 12/540ml,Soups and Hot Bowls Displays,Soups 288/540ml,24.0,yes,Display pack 288/540ML converted to regular case pack 12/540ML
 yoy,TDSHSP-192/540,SOUPS 192/540ML,Soups and Hot Bowls,Soups 12/540ml,Soups and Hot Bowls Displays,Soups 192/540ml,16.0,yes,Display pack 192/540ML converted to regular case pack 12/540ML
 yoy,TDSHSP-288/540,SOUPS 288/540ML,Soups and Hot Bowls,Soups 12/540ml,Soups and Hot Bowls Displays,Soups 288/540ml,24.0,yes,Display pack 288/540ML converted to regular case pack 12/540ML
-yoy,6320920674,TDL KCUP WINTER/HC/FVC DISPLAY 48/10 CT,Sweet & Creamy,HB Hot Chocolate 6/10ct,Sweet & Creamy Displays,HB Mix Displayer 48/10ea,8.0,yes,Display pack 48/10CT converted to regular case pack 6/10CT
-yoy,6320915034,TDL HOT BEVERAGE MIX DISPLAYER 36/1 EA,Sweet & Creamy,HB Mix Displayer 36/1ea,Sweet & Creamy Displays,HB Mix Displayer 36/1ea,1.0,no,Display product without matching regular pack; left as reported cases
-yoy,TDHBMX-36/1,HB MIX DISPLAYER 36/1EA,Sweet & Creamy,HB Mix Displayer 36/1ea,Sweet & Creamy Displays,HB Mix Displayer 36/1ea,1.0,no,Display product without matching regular pack; left as reported cases
-yoy,6320924394,TDL HOT CHOC/FVC 1/2 DRP 150/1 EA,Sweet & Creamy,HB Mix Drp 150/1ea,Sweet & Creamy Displays,HB Mix Drp 150/1ea,1.0,no,Display product without matching regular pack; left as reported cases
+yoy,6320915034,TDL HOT BEVERAGE MIX DISPLAYER 36/1 EA,Sweet & Creamy,HB Mix 4/24ea,Sweet & Creamy Displays,HB Mix Displayer 36/1ea,9.0,yes,Display pack 36/1EA converted to regular case pack 4/24EA
+yoy,6320920674,TDL KCUP WINTER/HC/FVC DISPLAY 48/10 CT,Sweet & Creamy,HB Mix 4/24ea,Sweet & Creamy Displays,HB Mix Displayer 48/10ea,12.0,yes,Display pack 48/10EA converted to regular case pack 4/24EA
+yoy,6320924394,TDL HOT CHOC/FVC 1/2 DRP 150/1 EA,Sweet & Creamy,HB Mix 4/24ea,Sweet & Creamy Displays,HB Mix Drp 150/1ea,37.5,yes,Display pack 150/1EA converted to regular case pack 4/24EA
+yoy,TDHBMX-36/1,HB MIX DISPLAYER 36/1EA,Sweet & Creamy,HB Mix 4/24ea,Sweet & Creamy Displays,HB Mix Displayer 36/1ea,9.0,yes,Display pack 36/1EA converted to regular case pack 4/24EA
 yoy,6320925415,TDL ICECOF SYRUP CAP/MOCHA DISP 32/470ML,Syrups,Syrups 12/470ml,Syrups Displays,Syrups 32/470ml,2.666667,yes,Display pack 32/470ML converted to regular case pack 12/470ML
 yoy,TDSIC-32/470,SYRUPS 32/470ML,Syrups,Syrups 12/470ml,Syrups Displays,Syrups 32/470ml,2.666667,yes,Display pack 32/470ML converted to regular case pack 12/470ML
