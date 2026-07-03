@@ -1,22 +1,17 @@
 comparison_key,product_id,product,blended_product_group,blended_mpg,separate_product_group,separate_mpg,cases_per_display,converted,conversion_note
-mom,6320917215,TDL GRANOLA BAR BC/DC/SC DISP 56/5 EA,Granola Bar,Granola Bar 12/5/30g,Granola Bar Displays,Granola Bar 56/5ea,4.666667,yes,Display pack 56/5EA converted to regular case pack 12/5EA
-mom,6320912137,TDL ORIGINAL HOT CHOC DISPLAY 36/500 GR,Hot Choc & Cappuccino,HB Hot Chocolate 12/500g,Hot Choc & Cappuccino Displays,HB Hot Chocolate 36/500g,3.0,yes,Display pack 36/500G converted to regular case pack 12/500G
-mom,6320920672,TDL ORG/CANDY HOT CHOC DISPLAY 36/500 GR,Hot Choc & Cappuccino,HB Hot Chocolate 12/500g,Hot Choc & Cappuccino Displays,HB Hot Chocolate 36/500g,3.0,yes,Display pack 36/500G converted to regular case pack 12/500G
-mom,6320924585,TDL ORG/CANDY HOT CHOC 1/2 DRP 240/500 G,Hot Choc & Cappuccino,HB Hot Chocolate 12/500g,Hot Choc & Cappuccino Displays,HB Hot Chocolate 240/500g,20.0,yes,Display pack 240/500G converted to regular case pack 12/500G
-mom,TDHBHC-36/500,HB HOT CHOCOLATE 36/500GR,Hot Choc & Cappuccino,HB Hot Chocolate 12/500g,Hot Choc & Cappuccino Displays,HB Hot Chocolate 36/500g,3.0,yes,Display pack 36/500G converted to regular case pack 12/500G
-mom,6320917577,TDL HOT CHOCOLATE 1/2 DRP 144/1.5 KG,Hot Choc & Cappuccino,HB Hot Chocolate 6/1.5kg,Hot Choc & Cappuccino Displays,HB Hot Chocolate 144/1.5kg,24.0,yes,Display pack 144/1.5KG converted to regular case pack 6/1.5KG
-mom,6320920674,TDL KCUP WINTER/HC/FVC DISPLAY 48/10 CT,Hot Choc & Cappuccino,HB Hot Chocolate 6/10ct,Hot Choc & Cappuccino Displays,HB Mix Displayer 48/10ea,8.0,yes,Display pack 48/10CT converted to regular case pack 6/10CT
-mom,6320925922,TDL INST MED/IC SYR CAP/MOC 1/2DRP 288EA,Iced Coffee & Syrups,Instant & Syrup Drp 288/1ea,Iced Coffee & Syrups Displays,Instant & Syrup Drp 288/1ea,1.0,no,Display product without matching regular pack; left as reported cases
-mom,6320925415,TDL ICECOF SYRUP CAP/MOCHA DISP 32/470ML,Iced Coffee & Syrups,Syrups 12/470ml,Iced Coffee & Syrups Displays,Syrups 32/470ml,2.666667,yes,Display pack 32/470ML converted to regular case pack 12/470ML
-mom,TDSIC-32/470,SYRUPS 32/470ML,Iced Coffee & Syrups,Syrups 12/470ml,Iced Coffee & Syrups Displays,Syrups 32/470ml,2.666667,yes,Display pack 32/470ML converted to regular case pack 12/470ML
-mom,6320912112,TDL INSTANT COFFEE MEDIUM DISPLY36/100GR,Instant Coffee,Instant Coffee 12/100g,Instant Coffee Displays,Instant Coffee 36/100g,3.0,yes,Display pack 36/100G converted to regular case pack 12/100G
-mom,6320915513,TDL INSTANT MED/DR/DCF 1/2 DRP 288/100GR,Instant Coffee,Instant Coffee 12/100g,Instant Coffee Displays,Instant Coffee 288/100g,24.0,yes,Display pack 288/100G converted to regular case pack 12/100G
-mom,6320917762,TDL INSTANT COFFEE MED FLR DISP 60/100GR,Instant Coffee,Instant Coffee 12/100g,Instant Coffee Displays,Instant Coffee 60/100g,5.0,yes,Display pack 60/100G converted to regular case pack 12/100G
-mom,TDIC-36/100,INSTANT COFFEE 36/100GR,Instant Coffee,Instant Coffee 12/100g,Instant Coffee Displays,Instant Coffee 36/100g,3.0,yes,Display pack 36/100G converted to regular case pack 12/100G
-mom,6320919390,TDL NCOMP PDQ 24/10 CT,Nespresso Compatible,NComp 10/10ct,Nespresso Compatible Displays,NComp 24/10ct,2.4,yes,Display pack 24/10CT converted to regular case pack 10/10CT
-mom,6320923323,TDL NCOMP DISPLAY 32/10 CT,Nespresso Compatible,NComp 10/10ct,Nespresso Compatible Displays,NComp 32/10ct,3.2,yes,Display pack 32/10CT converted to regular case pack 10/10CT
-mom,6320915034,TDL HOT BEVERAGE MIX DISPLAYER 36/1 EA,Other,HB Mix Displayer 36/1ea,Other Displays,HB Mix Displayer 36/1ea,1.0,no,Display product without matching regular pack; left as reported cases
-mom,6320924394,TDL HOT CHOC/FVC 1/2 DRP 150/1 EA,Other,HB Mix Drp 150/1ea,Other Displays,HB Mix Drp 150/1ea,1.0,no,Display product without matching regular pack; left as reported cases
+mom,6320917215,TDL GRANOLA BAR BC/DC/SC DISP 56/5 EA,Granola,Granola Bar 12/5/30g,Granola Displays,Granola Bar 56/5ea,4.666667,yes,Display pack 56/5EA converted to regular case pack 12/5EA
+mom,6320912137,TDL ORIGINAL HOT CHOC DISPLAY 36/500 GR,Hot Chocolate,HB Hot Chocolate 12/500g,Hot Chocolate Displays,HB Hot Chocolate 36/500g,3.0,yes,Display pack 36/500G converted to regular case pack 12/500G
+mom,6320920672,TDL ORG/CANDY HOT CHOC DISPLAY 36/500 GR,Hot Chocolate,HB Hot Chocolate 12/500g,Hot Chocolate Displays,HB Hot Chocolate 36/500g,3.0,yes,Display pack 36/500G converted to regular case pack 12/500G
+mom,6320924585,TDL ORG/CANDY HOT CHOC 1/2 DRP 240/500 G,Hot Chocolate,HB Hot Chocolate 12/500g,Hot Chocolate Displays,HB Hot Chocolate 240/500g,20.0,yes,Display pack 240/500G converted to regular case pack 12/500G
+mom,TDHBHC-36/500,HB HOT CHOCOLATE 36/500GR,Hot Chocolate,HB Hot Chocolate 12/500g,Hot Chocolate Displays,HB Hot Chocolate 36/500g,3.0,yes,Display pack 36/500G converted to regular case pack 12/500G
+mom,6320917577,TDL HOT CHOCOLATE 1/2 DRP 144/1.5 KG,Hot Chocolate,HB Hot Chocolate 6/1.5kg,Hot Chocolate Displays,HB Hot Chocolate 144/1.5kg,24.0,yes,Display pack 144/1.5KG converted to regular case pack 6/1.5KG
+mom,6320925922,TDL INST MED/IC SYR CAP/MOC 1/2DRP 288EA,Instant,Instant & Syrup Drp 288/1ea,Instant Displays,Instant & Syrup Drp 288/1ea,1.0,no,Display product without matching regular pack; left as reported cases
+mom,6320912112,TDL INSTANT COFFEE MEDIUM DISPLY36/100GR,Instant,Instant Coffee 12/100g,Instant Displays,Instant Coffee 36/100g,3.0,yes,Display pack 36/100G converted to regular case pack 12/100G
+mom,6320915513,TDL INSTANT MED/DR/DCF 1/2 DRP 288/100GR,Instant,Instant Coffee 12/100g,Instant Displays,Instant Coffee 288/100g,24.0,yes,Display pack 288/100G converted to regular case pack 12/100G
+mom,6320917762,TDL INSTANT COFFEE MED FLR DISP 60/100GR,Instant,Instant Coffee 12/100g,Instant Displays,Instant Coffee 60/100g,5.0,yes,Display pack 60/100G converted to regular case pack 12/100G
+mom,TDIC-36/100,INSTANT COFFEE 36/100GR,Instant,Instant Coffee 12/100g,Instant Displays,Instant Coffee 36/100g,3.0,yes,Display pack 36/100G converted to regular case pack 12/100G
+mom,6320919390,TDL NCOMP PDQ 24/10 CT,Nespresso,NComp 10/10ct,Nespresso Displays,NComp 24/10ct,2.4,yes,Display pack 24/10CT converted to regular case pack 10/10CT
+mom,6320923323,TDL NCOMP DISPLAY 32/10 CT,Nespresso,NComp 10/10ct,Nespresso Displays,NComp 32/10ct,3.2,yes,Display pack 32/10CT converted to regular case pack 10/10CT
 mom,6320923706,TDL COFFEE FINE GRIND 1/2 DRP 126/875 GR,Roast & Ground,R&G Large Can 6/930g,Roast & Ground Displays,R&G Large Can 126/930g,21.0,yes,Display pack 126/930G converted to regular case pack 6/930G
 mom,6320923707,TDL COFFEE FINE/DARK 1/2 DRP 126/1 EA,Roast & Ground,R&G Large Can 6/930g,Roast & Ground Displays,R&G Large Can 126/930g,21.0,yes,Display pack 126/930G converted to regular case pack 6/930G
 mom,TDRGLC-126/930,R&G LARGE CAN 126/930GR,Roast & Ground,R&G Large Can 6/930g,Roast & Ground Displays,R&G Large Can 126/930g,21.0,yes,Display pack 126/930G converted to regular case pack 6/930G
@@ -26,53 +21,53 @@ mom,6320912437,TDL ORG/DR GROUND PDQ 24/300 GR,Roast & Ground,R&G Small Bag 6/30
 mom,6320920675,TDL ORG/WINTER COFFEE DISPLAY 48/300 GR,Roast & Ground,R&G Small Bag 6/300g,Roast & Ground Displays,R&G Small Bag 48/300g,8.0,yes,Display pack 48/300G converted to regular case pack 6/300G
 mom,TDRGSB-220/300,R&G SMALL BAG 220/300GR,Roast & Ground,R&G Small Bag 6/300g,Roast & Ground Displays,R&G Small Bag 220/300g,36.666667,yes,Display pack 220/300G converted to regular case pack 6/300G
 mom,TDRGSB-48/300,R&G SMALL BAG 48/300GR,Roast & Ground,R&G Small Bag 6/300g,Roast & Ground Displays,R&G Small Bag 48/300g,8.0,yes,Display pack 48/300G converted to regular case pack 6/300G
-mom,6320912129,TDL ORIGINAL KCUP SS 1/2 DRP 145/30 CT,Single Serve (K-Cup),SS KComp 4/30ct,Single Serve (K-Cup) Displays,SS KComp 145/30ct,36.25,yes,Display pack 145/30CT converted to regular case pack 4/30CT
-mom,6320912130,TDL ORG/DR KCUP SS 1/2 DRP 145/30 CT,Single Serve (K-Cup),SS KComp 4/30ct,Single Serve (K-Cup) Displays,SS KComp 145/30ct,36.25,yes,Display pack 145/30CT converted to regular case pack 4/30CT
-mom,6320912131,TDL ORG/DR/COL KCUP SS 1/2 DRP 145/30 CT,Single Serve (K-Cup),SS KComp 4/30ct,Single Serve (K-Cup) Displays,SS KComp 145/30ct,36.25,yes,Display pack 145/30CT converted to regular case pack 4/30CT
-mom,6320918750,6320918750,Single Serve (K-Cup),SS KComp 4/30ct,Single Serve (K-Cup) Displays,SS KComp 16/30ct,4.0,yes,Display pack 16/30CT converted to regular case pack 4/30CT
-mom,6320918750,TDL ORG KCUP DISPLAY 16/30 CT,Single Serve (K-Cup),SS KComp 4/30ct,Single Serve (K-Cup) Displays,SS KComp 16/30ct,4.0,yes,Display pack 16/30CT converted to regular case pack 4/30CT
-mom,TDSSKC-145/30,SS KCOMP 145/30CT,Single Serve (K-Cup),SS KComp 4/30ct,Single Serve (K-Cup) Displays,SS KComp 145/30ct,36.25,yes,Display pack 145/30CT converted to regular case pack 4/30CT
-mom,TDSSKC-16/30,SS KCOMP 16/30CT,Single Serve (K-Cup),SS KComp 4/30ct,Single Serve (K-Cup) Displays,SS KComp 16/30ct,4.0,yes,Display pack 16/30CT converted to regular case pack 4/30CT
-mom,6320920678,TDL WINTER/HC/FVC KCUP SS PDQ 24/10 CT,Single Serve (K-Cup),SS KComp 6/10ct,Single Serve (K-Cup) Displays,SS KComp 24/10ct,4.0,yes,Display pack 24/10CT converted to regular case pack 6/10CT
-mom,6320920753,TDL KCUP WINTER/ORG/FVC DISPLAY 48/10 CT,Single Serve (K-Cup),SS KComp 6/10ct,Single Serve (K-Cup) Displays,SS KComp 48/10ct,8.0,yes,Display pack 48/10CT converted to regular case pack 6/10CT
-mom,6320912132,TDL ORIGINAL KCUP DISPLAY 48/12 CT,Single Serve (K-Cup),SS KComp 6/12ct,Single Serve (K-Cup) Displays,SS KComp 48/12ct,8.0,yes,Display pack 48/12CT converted to regular case pack 6/12CT
-mom,6320912133,TDL ORG/DR KCUP DISPLAY 48/12 CT,Single Serve (K-Cup),SS KComp 6/12ct,Single Serve (K-Cup) Displays,SS KComp 48/12ct,8.0,yes,Display pack 48/12CT converted to regular case pack 6/12CT
-mom,6320923971,TDL ORG/DR/PKS KCUP DISPLAY 48/12CT,Single Serve (K-Cup),SS KComp 6/12ct,Single Serve (K-Cup) Displays,SS KComp 48/12ct,8.0,yes,Display pack 48/12CT converted to regular case pack 6/12CT
-mom,6320925369,TDL GBR/ORG KCUP DISPLAY 48/12CT,Single Serve (K-Cup),SS KComp 6/12ct,Single Serve (K-Cup) Displays,SS KComp 48/12ct,8.0,yes,Display pack 48/12CT converted to regular case pack 6/12CT
-mom,6320926000,TDL PKS/ORG KCUP DISPLAY 48/12CT,Single Serve (K-Cup),SS KComp 6/12ct,Single Serve (K-Cup) Displays,SS KComp 48/12ct,8.0,yes,Display pack 48/12CT converted to regular case pack 6/12CT
-mom,6320926021,TDL PKS/ORG/DEC SS 1/2 DRP 240/12CT,Single Serve (K-Cup),SS KComp 6/12ct,Single Serve (K-Cup) Displays,SS KComp 240/1ea,40.0,yes,Display pack 240/12CT converted to regular case pack 6/12CT
-mom,6320926022,TDL GBR/ORG/FVC SS 1/2 DRP 240/12CT,Single Serve (K-Cup),SS KComp 6/12ct,Single Serve (K-Cup) Displays,SS KComp 240/1ea,40.0,yes,Display pack 240/12CT converted to regular case pack 6/12CT
-mom,TDSSKC-48/12,SS KCOMP 48/12CT,Single Serve (K-Cup),SS KComp 6/12ct,Single Serve (K-Cup) Displays,SS KComp 48/12ct,8.0,yes,Display pack 48/12CT converted to regular case pack 6/12CT
-mom,6320913827,TDL CN/COB/CR SOUP 1/2 DRP 192/540 ML,Soup & Chili,Soups 12/540ml,Soup & Chili Displays,Soups 192/540ml,16.0,yes,Display pack 192/540ML converted to regular case pack 12/540ML
-mom,6320917474,TDL COB/CN/CR/PB SOUP 1/2 DRP 288/540 ML,Soup & Chili,Soups 12/540ml,Soup & Chili Displays,Soups 288/540ml,24.0,yes,Display pack 288/540ML converted to regular case pack 12/540ML
-mom,6320923630,TDL COB/CN/IW SOUP 1/2 DRP 288/540 ML,Soup & Chili,Soups 12/540ml,Soup & Chili Displays,Soups 288/540ml,24.0,yes,Display pack 288/540ML converted to regular case pack 12/540ML
-mom,TDSHSP-192/540,SOUPS 192/540ML,Soup & Chili,Soups 12/540ml,Soup & Chili Displays,Soups 192/540ml,16.0,yes,Display pack 192/540ML converted to regular case pack 12/540ML
-yoy,6320914293,TDL GRANOLA BAR AF/DC/SC DISP 56/5 EA,Granola Bar,Granola Bar 12/5/30g,Granola Bar Displays,Granola Bar 56/5ea,4.666667,yes,Display pack 56/5EA converted to regular case pack 12/5EA
-yoy,6320917215,TDL GRANOLA BAR BC/DC/SC DISP 56/5 EA,Granola Bar,Granola Bar 12/5/30g,Granola Bar Displays,Granola Bar 56/5ea,4.666667,yes,Display pack 56/5EA converted to regular case pack 12/5EA
-yoy,TDGB-56/5,GRANOLA BAR 56/5EA,Granola Bar,Granola Bar 12/5/30g,Granola Bar Displays,Granola Bar 56/5ea,4.666667,yes,Display pack 56/5EA converted to regular case pack 12/5EA
-yoy,6320912137,TDL ORIGINAL HOT CHOC DISPLAY 36/500 GR,Hot Choc & Cappuccino,HB Hot Chocolate 12/500g,Hot Choc & Cappuccino Displays,HB Hot Chocolate 36/500g,3.0,yes,Display pack 36/500G converted to regular case pack 12/500G
-yoy,6320920672,TDL ORG/CANDY HOT CHOC DISPLAY 36/500 GR,Hot Choc & Cappuccino,HB Hot Chocolate 12/500g,Hot Choc & Cappuccino Displays,HB Hot Chocolate 36/500g,3.0,yes,Display pack 36/500G converted to regular case pack 12/500G
-yoy,6320924585,TDL ORG/CANDY HOT CHOC 1/2 DRP 240/500 G,Hot Choc & Cappuccino,HB Hot Chocolate 12/500g,Hot Choc & Cappuccino Displays,HB Hot Chocolate 240/500g,20.0,yes,Display pack 240/500G converted to regular case pack 12/500G
-yoy,TDHBHC-36/500,HB HOT CHOCOLATE 36/500GR,Hot Choc & Cappuccino,HB Hot Chocolate 12/500g,Hot Choc & Cappuccino Displays,HB Hot Chocolate 36/500g,3.0,yes,Display pack 36/500G converted to regular case pack 12/500G
-yoy,TDHBHC-36/1,HB HOT CHOCOLATE 36/1 EA,Hot Choc & Cappuccino,HB Hot Chocolate 36/1ea,Hot Choc & Cappuccino Displays,HB Hot Chocolate 36/1ea,1.0,no,Display product without matching regular pack; left as reported cases
-yoy,6320917577,TDL HOT CHOCOLATE 1/2 DRP 144/1.5 KG,Hot Choc & Cappuccino,HB Hot Chocolate 6/1.5kg,Hot Choc & Cappuccino Displays,HB Hot Chocolate 144/1.5kg,24.0,yes,Display pack 144/1.5KG converted to regular case pack 6/1.5KG
-yoy,6320912136,*TDL ORIG/CRML/FV HC KCUPDISPLAY 48/10CT,Hot Choc & Cappuccino,HB Hot Chocolate 6/10ct,Hot Choc & Cappuccino Displays,HB Hot Chocolate 48/10ct,8.0,yes,Display pack 48/10CT converted to regular case pack 6/10CT
-yoy,6320920674,TDL KCUP WINTER/HC/FVC DISPLAY 48/10 CT,Hot Choc & Cappuccino,HB Hot Chocolate 6/10ct,Hot Choc & Cappuccino Displays,HB Mix Displayer 48/10ea,8.0,yes,Display pack 48/10CT converted to regular case pack 6/10CT
-yoy,6320925922,TDL INST MED/IC SYR CAP/MOC 1/2DRP 288EA,Iced Coffee & Syrups,Instant & Syrup Drp 288/1ea,Iced Coffee & Syrups Displays,Instant & Syrup Drp 288/1ea,1.0,no,Display product without matching regular pack; left as reported cases
-yoy,6320925415,TDL ICECOF SYRUP CAP/MOCHA DISP 32/470ML,Iced Coffee & Syrups,Syrups 12/470ml,Iced Coffee & Syrups Displays,Syrups 32/470ml,2.666667,yes,Display pack 32/470ML converted to regular case pack 12/470ML
-yoy,TDSIC-32/470,SYRUPS 32/470ML,Iced Coffee & Syrups,Syrups 12/470ml,Iced Coffee & Syrups Displays,Syrups 32/470ml,2.666667,yes,Display pack 32/470ML converted to regular case pack 12/470ML
-yoy,6320912112,TDL INSTANT COFFEE MEDIUM DISPLY36/100GR,Instant Coffee,Instant Coffee 12/100g,Instant Coffee Displays,Instant Coffee 36/100g,3.0,yes,Display pack 36/100G converted to regular case pack 12/100G
-yoy,6320915513,TDL INSTANT MED/DR/DCF 1/2 DRP 288/100GR,Instant Coffee,Instant Coffee 12/100g,Instant Coffee Displays,Instant Coffee 288/100g,24.0,yes,Display pack 288/100G converted to regular case pack 12/100G
-yoy,6320917762,TDL INSTANT COFFEE MED FLR DISP 60/100GR,Instant Coffee,Instant Coffee 12/100g,Instant Coffee Displays,Instant Coffee 60/100g,5.0,yes,Display pack 60/100G converted to regular case pack 12/100G
-yoy,TDIC-36/100,INSTANT COFFEE 36/100GR,Instant Coffee,Instant Coffee 12/100g,Instant Coffee Displays,Instant Coffee 36/100g,3.0,yes,Display pack 36/100G converted to regular case pack 12/100G
-yoy,TDIC-60/100,INSTANT COFFEE 60/100GR,Instant Coffee,Instant Coffee 12/100g,Instant Coffee Displays,Instant Coffee 60/100g,5.0,yes,Display pack 60/100G converted to regular case pack 12/100G
-yoy,6320919390,TDL NCOMP PDQ 24/10 CT,Nespresso Compatible,NComp 10/10ct,Nespresso Compatible Displays,NComp 24/10ct,2.4,yes,Display pack 24/10CT converted to regular case pack 10/10CT
-yoy,6320919391,*TDL NCOMP DISPLAY 32/10 CT,Nespresso Compatible,NComp 10/10ct,Nespresso Compatible Displays,NComp 32/10ct,3.2,yes,Display pack 32/10CT converted to regular case pack 10/10CT
-yoy,6320923323,TDL NCOMP DISPLAY 32/10 CT,Nespresso Compatible,NComp 10/10ct,Nespresso Compatible Displays,NComp 32/10ct,3.2,yes,Display pack 32/10CT converted to regular case pack 10/10CT
-yoy,TDNC-32/10,NCOMP 32/10CT,Nespresso Compatible,NComp 10/10ct,Nespresso Compatible Displays,NComp 32/10ct,3.2,yes,Display pack 32/10CT converted to regular case pack 10/10CT
-yoy,6320915034,TDL HOT BEVERAGE MIX DISPLAYER 36/1 EA,Other,HB Mix Displayer 36/1ea,Other Displays,HB Mix Displayer 36/1ea,1.0,no,Display product without matching regular pack; left as reported cases
-yoy,TDHBMX-36/1,HB MIX DISPLAYER 36/1EA,Other,HB Mix Displayer 36/1ea,Other Displays,HB Mix Displayer 36/1ea,1.0,no,Display product without matching regular pack; left as reported cases
-yoy,6320924394,TDL HOT CHOC/FVC 1/2 DRP 150/1 EA,Other,HB Mix Drp 150/1ea,Other Displays,HB Mix Drp 150/1ea,1.0,no,Display product without matching regular pack; left as reported cases
+mom,6320912129,TDL ORIGINAL KCUP SS 1/2 DRP 145/30 CT,Single Serve,SS KComp 4/30ct,Single Serve Displays,SS KComp 145/30ct,36.25,yes,Display pack 145/30CT converted to regular case pack 4/30CT
+mom,6320912130,TDL ORG/DR KCUP SS 1/2 DRP 145/30 CT,Single Serve,SS KComp 4/30ct,Single Serve Displays,SS KComp 145/30ct,36.25,yes,Display pack 145/30CT converted to regular case pack 4/30CT
+mom,6320912131,TDL ORG/DR/COL KCUP SS 1/2 DRP 145/30 CT,Single Serve,SS KComp 4/30ct,Single Serve Displays,SS KComp 145/30ct,36.25,yes,Display pack 145/30CT converted to regular case pack 4/30CT
+mom,6320918750,6320918750,Single Serve,SS KComp 4/30ct,Single Serve Displays,SS KComp 16/30ct,4.0,yes,Display pack 16/30CT converted to regular case pack 4/30CT
+mom,6320918750,TDL ORG KCUP DISPLAY 16/30 CT,Single Serve,SS KComp 4/30ct,Single Serve Displays,SS KComp 16/30ct,4.0,yes,Display pack 16/30CT converted to regular case pack 4/30CT
+mom,TDSSKC-145/30,SS KCOMP 145/30CT,Single Serve,SS KComp 4/30ct,Single Serve Displays,SS KComp 145/30ct,36.25,yes,Display pack 145/30CT converted to regular case pack 4/30CT
+mom,TDSSKC-16/30,SS KCOMP 16/30CT,Single Serve,SS KComp 4/30ct,Single Serve Displays,SS KComp 16/30ct,4.0,yes,Display pack 16/30CT converted to regular case pack 4/30CT
+mom,6320920678,TDL WINTER/HC/FVC KCUP SS PDQ 24/10 CT,Single Serve,SS KComp 6/10ct,Single Serve Displays,SS KComp 24/10ct,4.0,yes,Display pack 24/10CT converted to regular case pack 6/10CT
+mom,6320920753,TDL KCUP WINTER/ORG/FVC DISPLAY 48/10 CT,Single Serve,SS KComp 6/10ct,Single Serve Displays,SS KComp 48/10ct,8.0,yes,Display pack 48/10CT converted to regular case pack 6/10CT
+mom,6320912132,TDL ORIGINAL KCUP DISPLAY 48/12 CT,Single Serve,SS KComp 6/12ct,Single Serve Displays,SS KComp 48/12ct,8.0,yes,Display pack 48/12CT converted to regular case pack 6/12CT
+mom,6320912133,TDL ORG/DR KCUP DISPLAY 48/12 CT,Single Serve,SS KComp 6/12ct,Single Serve Displays,SS KComp 48/12ct,8.0,yes,Display pack 48/12CT converted to regular case pack 6/12CT
+mom,6320923971,TDL ORG/DR/PKS KCUP DISPLAY 48/12CT,Single Serve,SS KComp 6/12ct,Single Serve Displays,SS KComp 48/12ct,8.0,yes,Display pack 48/12CT converted to regular case pack 6/12CT
+mom,6320925369,TDL GBR/ORG KCUP DISPLAY 48/12CT,Single Serve,SS KComp 6/12ct,Single Serve Displays,SS KComp 48/12ct,8.0,yes,Display pack 48/12CT converted to regular case pack 6/12CT
+mom,6320926000,TDL PKS/ORG KCUP DISPLAY 48/12CT,Single Serve,SS KComp 6/12ct,Single Serve Displays,SS KComp 48/12ct,8.0,yes,Display pack 48/12CT converted to regular case pack 6/12CT
+mom,6320926021,TDL PKS/ORG/DEC SS 1/2 DRP 240/12CT,Single Serve,SS KComp 6/12ct,Single Serve Displays,SS KComp 240/1ea,40.0,yes,Display pack 240/12CT converted to regular case pack 6/12CT
+mom,6320926022,TDL GBR/ORG/FVC SS 1/2 DRP 240/12CT,Single Serve,SS KComp 6/12ct,Single Serve Displays,SS KComp 240/1ea,40.0,yes,Display pack 240/12CT converted to regular case pack 6/12CT
+mom,TDSSKC-48/12,SS KCOMP 48/12CT,Single Serve,SS KComp 6/12ct,Single Serve Displays,SS KComp 48/12ct,8.0,yes,Display pack 48/12CT converted to regular case pack 6/12CT
+mom,6320913827,TDL CN/COB/CR SOUP 1/2 DRP 192/540 ML,Soups and Hot Bowls,Soups 12/540ml,Soups and Hot Bowls Displays,Soups 192/540ml,16.0,yes,Display pack 192/540ML converted to regular case pack 12/540ML
+mom,6320917474,TDL COB/CN/CR/PB SOUP 1/2 DRP 288/540 ML,Soups and Hot Bowls,Soups 12/540ml,Soups and Hot Bowls Displays,Soups 288/540ml,24.0,yes,Display pack 288/540ML converted to regular case pack 12/540ML
+mom,6320923630,TDL COB/CN/IW SOUP 1/2 DRP 288/540 ML,Soups and Hot Bowls,Soups 12/540ml,Soups and Hot Bowls Displays,Soups 288/540ml,24.0,yes,Display pack 288/540ML converted to regular case pack 12/540ML
+mom,TDSHSP-192/540,SOUPS 192/540ML,Soups and Hot Bowls,Soups 12/540ml,Soups and Hot Bowls Displays,Soups 192/540ml,16.0,yes,Display pack 192/540ML converted to regular case pack 12/540ML
+mom,6320920674,TDL KCUP WINTER/HC/FVC DISPLAY 48/10 CT,Sweet & Creamy,HB Hot Chocolate 6/10ct,Sweet & Creamy Displays,HB Mix Displayer 48/10ea,8.0,yes,Display pack 48/10CT converted to regular case pack 6/10CT
+mom,6320915034,TDL HOT BEVERAGE MIX DISPLAYER 36/1 EA,Sweet & Creamy,HB Mix Displayer 36/1ea,Sweet & Creamy Displays,HB Mix Displayer 36/1ea,1.0,no,Display product without matching regular pack; left as reported cases
+mom,6320924394,TDL HOT CHOC/FVC 1/2 DRP 150/1 EA,Sweet & Creamy,HB Mix Drp 150/1ea,Sweet & Creamy Displays,HB Mix Drp 150/1ea,1.0,no,Display product without matching regular pack; left as reported cases
+mom,6320925415,TDL ICECOF SYRUP CAP/MOCHA DISP 32/470ML,Syrups,Syrups 12/470ml,Syrups Displays,Syrups 32/470ml,2.666667,yes,Display pack 32/470ML converted to regular case pack 12/470ML
+mom,TDSIC-32/470,SYRUPS 32/470ML,Syrups,Syrups 12/470ml,Syrups Displays,Syrups 32/470ml,2.666667,yes,Display pack 32/470ML converted to regular case pack 12/470ML
+yoy,TDSHSP-576/284,SOUPS 576/284ML,Condensed Soup,Soups 24/284ml,Condensed Soup Displays,Soups 576/284ml,24.0,yes,Display pack 576/284ML converted to regular case pack 24/284ML
+yoy,6320914293,TDL GRANOLA BAR AF/DC/SC DISP 56/5 EA,Granola,Granola Bar 12/5/30g,Granola Displays,Granola Bar 56/5ea,4.666667,yes,Display pack 56/5EA converted to regular case pack 12/5EA
+yoy,6320917215,TDL GRANOLA BAR BC/DC/SC DISP 56/5 EA,Granola,Granola Bar 12/5/30g,Granola Displays,Granola Bar 56/5ea,4.666667,yes,Display pack 56/5EA converted to regular case pack 12/5EA
+yoy,TDGB-56/5,GRANOLA BAR 56/5EA,Granola,Granola Bar 12/5/30g,Granola Displays,Granola Bar 56/5ea,4.666667,yes,Display pack 56/5EA converted to regular case pack 12/5EA
+yoy,6320912137,TDL ORIGINAL HOT CHOC DISPLAY 36/500 GR,Hot Chocolate,HB Hot Chocolate 12/500g,Hot Chocolate Displays,HB Hot Chocolate 36/500g,3.0,yes,Display pack 36/500G converted to regular case pack 12/500G
+yoy,6320920672,TDL ORG/CANDY HOT CHOC DISPLAY 36/500 GR,Hot Chocolate,HB Hot Chocolate 12/500g,Hot Chocolate Displays,HB Hot Chocolate 36/500g,3.0,yes,Display pack 36/500G converted to regular case pack 12/500G
+yoy,6320924585,TDL ORG/CANDY HOT CHOC 1/2 DRP 240/500 G,Hot Chocolate,HB Hot Chocolate 12/500g,Hot Chocolate Displays,HB Hot Chocolate 240/500g,20.0,yes,Display pack 240/500G converted to regular case pack 12/500G
+yoy,TDHBHC-36/500,HB HOT CHOCOLATE 36/500GR,Hot Chocolate,HB Hot Chocolate 12/500g,Hot Chocolate Displays,HB Hot Chocolate 36/500g,3.0,yes,Display pack 36/500G converted to regular case pack 12/500G
+yoy,TDHBHC-36/1,HB HOT CHOCOLATE 36/1 EA,Hot Chocolate,HB Hot Chocolate 36/1ea,Hot Chocolate Displays,HB Hot Chocolate 36/1ea,1.0,no,Display product without matching regular pack; left as reported cases
+yoy,6320917577,TDL HOT CHOCOLATE 1/2 DRP 144/1.5 KG,Hot Chocolate,HB Hot Chocolate 6/1.5kg,Hot Chocolate Displays,HB Hot Chocolate 144/1.5kg,24.0,yes,Display pack 144/1.5KG converted to regular case pack 6/1.5KG
+yoy,6320912136,*TDL ORIG/CRML/FV HC KCUPDISPLAY 48/10CT,Hot Chocolate,HB Hot Chocolate 6/10ct,Hot Chocolate Displays,HB Hot Chocolate 48/10ct,8.0,yes,Display pack 48/10CT converted to regular case pack 6/10CT
+yoy,6320925922,TDL INST MED/IC SYR CAP/MOC 1/2DRP 288EA,Instant,Instant & Syrup Drp 288/1ea,Instant Displays,Instant & Syrup Drp 288/1ea,1.0,no,Display product without matching regular pack; left as reported cases
+yoy,6320912112,TDL INSTANT COFFEE MEDIUM DISPLY36/100GR,Instant,Instant Coffee 12/100g,Instant Displays,Instant Coffee 36/100g,3.0,yes,Display pack 36/100G converted to regular case pack 12/100G
+yoy,6320915513,TDL INSTANT MED/DR/DCF 1/2 DRP 288/100GR,Instant,Instant Coffee 12/100g,Instant Displays,Instant Coffee 288/100g,24.0,yes,Display pack 288/100G converted to regular case pack 12/100G
+yoy,6320917762,TDL INSTANT COFFEE MED FLR DISP 60/100GR,Instant,Instant Coffee 12/100g,Instant Displays,Instant Coffee 60/100g,5.0,yes,Display pack 60/100G converted to regular case pack 12/100G
+yoy,TDIC-36/100,INSTANT COFFEE 36/100GR,Instant,Instant Coffee 12/100g,Instant Displays,Instant Coffee 36/100g,3.0,yes,Display pack 36/100G converted to regular case pack 12/100G
+yoy,TDIC-60/100,INSTANT COFFEE 60/100GR,Instant,Instant Coffee 12/100g,Instant Displays,Instant Coffee 60/100g,5.0,yes,Display pack 60/100G converted to regular case pack 12/100G
+yoy,6320919390,TDL NCOMP PDQ 24/10 CT,Nespresso,NComp 10/10ct,Nespresso Displays,NComp 24/10ct,2.4,yes,Display pack 24/10CT converted to regular case pack 10/10CT
+yoy,6320919391,*TDL NCOMP DISPLAY 32/10 CT,Nespresso,NComp 10/10ct,Nespresso Displays,NComp 32/10ct,3.2,yes,Display pack 32/10CT converted to regular case pack 10/10CT
+yoy,6320923323,TDL NCOMP DISPLAY 32/10 CT,Nespresso,NComp 10/10ct,Nespresso Displays,NComp 32/10ct,3.2,yes,Display pack 32/10CT converted to regular case pack 10/10CT
+yoy,TDNC-32/10,NCOMP 32/10CT,Nespresso,NComp 10/10ct,Nespresso Displays,NComp 32/10ct,3.2,yes,Display pack 32/10CT converted to regular case pack 10/10CT
 yoy,6320909464,TDL COFFEE FINE/DARK HALF DRP 126/930GR,Roast & Ground,R&G Large Can 6/930g,Roast & Ground Displays,R&G Large Can 126/930g,21.0,yes,Display pack 126/930G converted to regular case pack 6/930G
 yoy,6320923706,TDL COFFEE FINE GRIND 1/2 DRP 126/875 GR,Roast & Ground,R&G Large Can 6/930g,Roast & Ground Displays,R&G Large Can 126/930g,21.0,yes,Display pack 126/930G converted to regular case pack 6/930G
 yoy,6320923707,TDL COFFEE FINE/DARK 1/2 DRP 126/1 EA,Roast & Ground,R&G Large Can 6/930g,Roast & Ground Displays,R&G Large Can 126/930g,21.0,yes,Display pack 126/930G converted to regular case pack 6/930G
@@ -84,30 +79,35 @@ yoy,6320912437,TDL ORG/DR GROUND PDQ 24/300 GR,Roast & Ground,R&G Small Bag 6/30
 yoy,6320920675,TDL ORG/WINTER COFFEE DISPLAY 48/300 GR,Roast & Ground,R&G Small Bag 6/300g,Roast & Ground Displays,R&G Small Bag 48/300g,8.0,yes,Display pack 48/300G converted to regular case pack 6/300G
 yoy,TDRGSB-220/300,R&G SMALL BAG 220/300GR,Roast & Ground,R&G Small Bag 6/300g,Roast & Ground Displays,R&G Small Bag 220/300g,36.666667,yes,Display pack 220/300G converted to regular case pack 6/300G
 yoy,TDRGSB-48/300,R&G SMALL BAG 48/300GR,Roast & Ground,R&G Small Bag 6/300g,Roast & Ground Displays,R&G Small Bag 48/300g,8.0,yes,Display pack 48/300G converted to regular case pack 6/300G
-yoy,6320912129,TDL ORIGINAL KCUP SS 1/2 DRP 145/30 CT,Single Serve (K-Cup),SS KComp 4/30ct,Single Serve (K-Cup) Displays,SS KComp 145/30ct,36.25,yes,Display pack 145/30CT converted to regular case pack 4/30CT
-yoy,6320912130,TDL ORG/DR KCUP SS 1/2 DRP 145/30 CT,Single Serve (K-Cup),SS KComp 4/30ct,Single Serve (K-Cup) Displays,SS KComp 145/30ct,36.25,yes,Display pack 145/30CT converted to regular case pack 4/30CT
-yoy,6320912131,TDL ORG/DR/COL KCUP SS 1/2 DRP 145/30 CT,Single Serve (K-Cup),SS KComp 4/30ct,Single Serve (K-Cup) Displays,SS KComp 145/30ct,36.25,yes,Display pack 145/30CT converted to regular case pack 4/30CT
-yoy,6320918750,TDL ORG KCUP DISPLAY 16/30 CT,Single Serve (K-Cup),SS KComp 4/30ct,Single Serve (K-Cup) Displays,SS KComp 16/30ct,4.0,yes,Display pack 16/30CT converted to regular case pack 4/30CT
-yoy,6320918750,6320918750,Single Serve (K-Cup),SS KComp 4/30ct,Single Serve (K-Cup) Displays,SS KComp 16/30ct,4.0,yes,Display pack 16/30CT converted to regular case pack 4/30CT
-yoy,TDSSKC-145/30,SS KCOMP 145/30CT,Single Serve (K-Cup),SS KComp 4/30ct,Single Serve (K-Cup) Displays,SS KComp 145/30ct,36.25,yes,Display pack 145/30CT converted to regular case pack 4/30CT
-yoy,TDSSKC-16/30,SS KCOMP 16/30CT,Single Serve (K-Cup),SS KComp 4/30ct,Single Serve (K-Cup) Displays,SS KComp 16/30ct,4.0,yes,Display pack 16/30CT converted to regular case pack 4/30CT
-yoy,6320920678,TDL WINTER/HC/FVC KCUP SS PDQ 24/10 CT,Single Serve (K-Cup),SS KComp 6/10ct,Single Serve (K-Cup) Displays,SS KComp 24/10ct,4.0,yes,Display pack 24/10CT converted to regular case pack 6/10CT
-yoy,6320920753,TDL KCUP WINTER/ORG/FVC DISPLAY 48/10 CT,Single Serve (K-Cup),SS KComp 6/10ct,Single Serve (K-Cup) Displays,SS KComp 48/10ct,8.0,yes,Display pack 48/10CT converted to regular case pack 6/10CT
-yoy,TDSSKC-48/10,SS KCOMP 48/10CT,Single Serve (K-Cup),SS KComp 6/10ct,Single Serve (K-Cup) Displays,SS KComp 48/10ct,8.0,yes,Display pack 48/10CT converted to regular case pack 6/10CT
-yoy,6320912132,TDL ORIGINAL KCUP DISPLAY 48/12 CT,Single Serve (K-Cup),SS KComp 6/12ct,Single Serve (K-Cup) Displays,SS KComp 48/12ct,8.0,yes,Display pack 48/12CT converted to regular case pack 6/12CT
-yoy,6320912133,TDL ORG/DR KCUP DISPLAY 48/12 CT,Single Serve (K-Cup),SS KComp 6/12ct,Single Serve (K-Cup) Displays,SS KComp 48/12ct,8.0,yes,Display pack 48/12CT converted to regular case pack 6/12CT
-yoy,6320923958,TDL AFR/DR/ORG SS 1/2 DRP 240/12CT,Single Serve (K-Cup),SS KComp 6/12ct,Single Serve (K-Cup) Displays,SS KComp 240/1ea,40.0,yes,Display pack 240/12CT converted to regular case pack 6/12CT
-yoy,6320923959,*TDL AFR/ORG KCUP DISPLAY 48/12CT,Single Serve (K-Cup),SS KComp 6/12ct,Single Serve (K-Cup) Displays,SS KComp 48/12ct,8.0,yes,Display pack 48/12CT converted to regular case pack 6/12CT
-yoy,6320923971,TDL ORG/DR/PKS KCUP DISPLAY 48/12CT,Single Serve (K-Cup),SS KComp 6/12ct,Single Serve (K-Cup) Displays,SS KComp 48/12ct,8.0,yes,Display pack 48/12CT converted to regular case pack 6/12CT
-yoy,6320925369,TDL GBR/ORG KCUP DISPLAY 48/12CT,Single Serve (K-Cup),SS KComp 6/12ct,Single Serve (K-Cup) Displays,SS KComp 48/12ct,8.0,yes,Display pack 48/12CT converted to regular case pack 6/12CT
-yoy,6320926000,TDL PKS/ORG KCUP DISPLAY 48/12CT,Single Serve (K-Cup),SS KComp 6/12ct,Single Serve (K-Cup) Displays,SS KComp 48/12ct,8.0,yes,Display pack 48/12CT converted to regular case pack 6/12CT
-yoy,6320926021,TDL PKS/ORG/DEC SS 1/2 DRP 240/12CT,Single Serve (K-Cup),SS KComp 6/12ct,Single Serve (K-Cup) Displays,SS KComp 240/1ea,40.0,yes,Display pack 240/12CT converted to regular case pack 6/12CT
-yoy,6320926022,TDL GBR/ORG/FVC SS 1/2 DRP 240/12CT,Single Serve (K-Cup),SS KComp 6/12ct,Single Serve (K-Cup) Displays,SS KComp 240/1ea,40.0,yes,Display pack 240/12CT converted to regular case pack 6/12CT
-yoy,TDSSKC-24/12,SS KCOMP 24/12CT,Single Serve (K-Cup),SS KComp 6/12ct,Single Serve (K-Cup) Displays,SS KComp 24/12ct,4.0,yes,Display pack 24/12CT converted to regular case pack 6/12CT
-yoy,TDSSKC-48/12,SS KCOMP 48/12CT,Single Serve (K-Cup),SS KComp 6/12ct,Single Serve (K-Cup) Displays,SS KComp 48/12ct,8.0,yes,Display pack 48/12CT converted to regular case pack 6/12CT
-yoy,6320913827,TDL CN/COB/CR SOUP 1/2 DRP 192/540 ML,Soup & Chili,Soups 12/540ml,Soup & Chili Displays,Soups 192/540ml,16.0,yes,Display pack 192/540ML converted to regular case pack 12/540ML
-yoy,6320917474,TDL COB/CN/CR/PB SOUP 1/2 DRP 288/540 ML,Soup & Chili,Soups 12/540ml,Soup & Chili Displays,Soups 288/540ml,24.0,yes,Display pack 288/540ML converted to regular case pack 12/540ML
-yoy,6320923630,TDL COB/CN/IW SOUP 1/2 DRP 288/540 ML,Soup & Chili,Soups 12/540ml,Soup & Chili Displays,Soups 288/540ml,24.0,yes,Display pack 288/540ML converted to regular case pack 12/540ML
-yoy,TDSHSP-192/540,SOUPS 192/540ML,Soup & Chili,Soups 12/540ml,Soup & Chili Displays,Soups 192/540ml,16.0,yes,Display pack 192/540ML converted to regular case pack 12/540ML
-yoy,TDSHSP-288/540,SOUPS 288/540ML,Soup & Chili,Soups 12/540ml,Soup & Chili Displays,Soups 288/540ml,24.0,yes,Display pack 288/540ML converted to regular case pack 12/540ML
-yoy,TDSHSP-576/284,SOUPS 576/284ML,Soup & Chili,Soups 24/284ml,Soup & Chili Displays,Soups 576/284ml,24.0,yes,Display pack 576/284ML converted to regular case pack 24/284ML
+yoy,6320912129,TDL ORIGINAL KCUP SS 1/2 DRP 145/30 CT,Single Serve,SS KComp 4/30ct,Single Serve Displays,SS KComp 145/30ct,36.25,yes,Display pack 145/30CT converted to regular case pack 4/30CT
+yoy,6320912130,TDL ORG/DR KCUP SS 1/2 DRP 145/30 CT,Single Serve,SS KComp 4/30ct,Single Serve Displays,SS KComp 145/30ct,36.25,yes,Display pack 145/30CT converted to regular case pack 4/30CT
+yoy,6320912131,TDL ORG/DR/COL KCUP SS 1/2 DRP 145/30 CT,Single Serve,SS KComp 4/30ct,Single Serve Displays,SS KComp 145/30ct,36.25,yes,Display pack 145/30CT converted to regular case pack 4/30CT
+yoy,6320918750,TDL ORG KCUP DISPLAY 16/30 CT,Single Serve,SS KComp 4/30ct,Single Serve Displays,SS KComp 16/30ct,4.0,yes,Display pack 16/30CT converted to regular case pack 4/30CT
+yoy,6320918750,6320918750,Single Serve,SS KComp 4/30ct,Single Serve Displays,SS KComp 16/30ct,4.0,yes,Display pack 16/30CT converted to regular case pack 4/30CT
+yoy,TDSSKC-145/30,SS KCOMP 145/30CT,Single Serve,SS KComp 4/30ct,Single Serve Displays,SS KComp 145/30ct,36.25,yes,Display pack 145/30CT converted to regular case pack 4/30CT
+yoy,TDSSKC-16/30,SS KCOMP 16/30CT,Single Serve,SS KComp 4/30ct,Single Serve Displays,SS KComp 16/30ct,4.0,yes,Display pack 16/30CT converted to regular case pack 4/30CT
+yoy,6320920678,TDL WINTER/HC/FVC KCUP SS PDQ 24/10 CT,Single Serve,SS KComp 6/10ct,Single Serve Displays,SS KComp 24/10ct,4.0,yes,Display pack 24/10CT converted to regular case pack 6/10CT
+yoy,6320920753,TDL KCUP WINTER/ORG/FVC DISPLAY 48/10 CT,Single Serve,SS KComp 6/10ct,Single Serve Displays,SS KComp 48/10ct,8.0,yes,Display pack 48/10CT converted to regular case pack 6/10CT
+yoy,TDSSKC-48/10,SS KCOMP 48/10CT,Single Serve,SS KComp 6/10ct,Single Serve Displays,SS KComp 48/10ct,8.0,yes,Display pack 48/10CT converted to regular case pack 6/10CT
+yoy,6320912132,TDL ORIGINAL KCUP DISPLAY 48/12 CT,Single Serve,SS KComp 6/12ct,Single Serve Displays,SS KComp 48/12ct,8.0,yes,Display pack 48/12CT converted to regular case pack 6/12CT
+yoy,6320912133,TDL ORG/DR KCUP DISPLAY 48/12 CT,Single Serve,SS KComp 6/12ct,Single Serve Displays,SS KComp 48/12ct,8.0,yes,Display pack 48/12CT converted to regular case pack 6/12CT
+yoy,6320923958,TDL AFR/DR/ORG SS 1/2 DRP 240/12CT,Single Serve,SS KComp 6/12ct,Single Serve Displays,SS KComp 240/1ea,40.0,yes,Display pack 240/12CT converted to regular case pack 6/12CT
+yoy,6320923959,*TDL AFR/ORG KCUP DISPLAY 48/12CT,Single Serve,SS KComp 6/12ct,Single Serve Displays,SS KComp 48/12ct,8.0,yes,Display pack 48/12CT converted to regular case pack 6/12CT
+yoy,6320923971,TDL ORG/DR/PKS KCUP DISPLAY 48/12CT,Single Serve,SS KComp 6/12ct,Single Serve Displays,SS KComp 48/12ct,8.0,yes,Display pack 48/12CT converted to regular case pack 6/12CT
+yoy,6320925369,TDL GBR/ORG KCUP DISPLAY 48/12CT,Single Serve,SS KComp 6/12ct,Single Serve Displays,SS KComp 48/12ct,8.0,yes,Display pack 48/12CT converted to regular case pack 6/12CT
+yoy,6320926000,TDL PKS/ORG KCUP DISPLAY 48/12CT,Single Serve,SS KComp 6/12ct,Single Serve Displays,SS KComp 48/12ct,8.0,yes,Display pack 48/12CT converted to regular case pack 6/12CT
+yoy,6320926021,TDL PKS/ORG/DEC SS 1/2 DRP 240/12CT,Single Serve,SS KComp 6/12ct,Single Serve Displays,SS KComp 240/1ea,40.0,yes,Display pack 240/12CT converted to regular case pack 6/12CT
+yoy,6320926022,TDL GBR/ORG/FVC SS 1/2 DRP 240/12CT,Single Serve,SS KComp 6/12ct,Single Serve Displays,SS KComp 240/1ea,40.0,yes,Display pack 240/12CT converted to regular case pack 6/12CT
+yoy,TDSSKC-24/12,SS KCOMP 24/12CT,Single Serve,SS KComp 6/12ct,Single Serve Displays,SS KComp 24/12ct,4.0,yes,Display pack 24/12CT converted to regular case pack 6/12CT
+yoy,TDSSKC-48/12,SS KCOMP 48/12CT,Single Serve,SS KComp 6/12ct,Single Serve Displays,SS KComp 48/12ct,8.0,yes,Display pack 48/12CT converted to regular case pack 6/12CT
+yoy,6320913827,TDL CN/COB/CR SOUP 1/2 DRP 192/540 ML,Soups and Hot Bowls,Soups 12/540ml,Soups and Hot Bowls Displays,Soups 192/540ml,16.0,yes,Display pack 192/540ML converted to regular case pack 12/540ML
+yoy,6320917474,TDL COB/CN/CR/PB SOUP 1/2 DRP 288/540 ML,Soups and Hot Bowls,Soups 12/540ml,Soups and Hot Bowls Displays,Soups 288/540ml,24.0,yes,Display pack 288/540ML converted to regular case pack 12/540ML
+yoy,6320923630,TDL COB/CN/IW SOUP 1/2 DRP 288/540 ML,Soups and Hot Bowls,Soups 12/540ml,Soups and Hot Bowls Displays,Soups 288/540ml,24.0,yes,Display pack 288/540ML converted to regular case pack 12/540ML
+yoy,TDSHSP-192/540,SOUPS 192/540ML,Soups and Hot Bowls,Soups 12/540ml,Soups and Hot Bowls Displays,Soups 192/540ml,16.0,yes,Display pack 192/540ML converted to regular case pack 12/540ML
+yoy,TDSHSP-288/540,SOUPS 288/540ML,Soups and Hot Bowls,Soups 12/540ml,Soups and Hot Bowls Displays,Soups 288/540ml,24.0,yes,Display pack 288/540ML converted to regular case pack 12/540ML
+yoy,6320920674,TDL KCUP WINTER/HC/FVC DISPLAY 48/10 CT,Sweet & Creamy,HB Hot Chocolate 6/10ct,Sweet & Creamy Displays,HB Mix Displayer 48/10ea,8.0,yes,Display pack 48/10CT converted to regular case pack 6/10CT
+yoy,6320915034,TDL HOT BEVERAGE MIX DISPLAYER 36/1 EA,Sweet & Creamy,HB Mix Displayer 36/1ea,Sweet & Creamy Displays,HB Mix Displayer 36/1ea,1.0,no,Display product without matching regular pack; left as reported cases
+yoy,TDHBMX-36/1,HB MIX DISPLAYER 36/1EA,Sweet & Creamy,HB Mix Displayer 36/1ea,Sweet & Creamy Displays,HB Mix Displayer 36/1ea,1.0,no,Display product without matching regular pack; left as reported cases
+yoy,6320924394,TDL HOT CHOC/FVC 1/2 DRP 150/1 EA,Sweet & Creamy,HB Mix Drp 150/1ea,Sweet & Creamy Displays,HB Mix Drp 150/1ea,1.0,no,Display product without matching regular pack; left as reported cases
+yoy,6320925415,TDL ICECOF SYRUP CAP/MOCHA DISP 32/470ML,Syrups,Syrups 12/470ml,Syrups Displays,Syrups 32/470ml,2.666667,yes,Display pack 32/470ML converted to regular case pack 12/470ML
+yoy,TDSIC-32/470,SYRUPS 32/470ML,Syrups,Syrups 12/470ml,Syrups Displays,Syrups 32/470ml,2.666667,yes,Display pack 32/470ML converted to regular case pack 12/470ML

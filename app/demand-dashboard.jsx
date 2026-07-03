@@ -21,6 +21,15 @@ const DEFAULT_PERIOD_LABELS = {
   legend: "Grey = 2025 | Bold = 2026 | Full Year delta includes %",
 };
 
+const QUARTER_OPTIONS = [
+  { value: "all", label: "All Months", start: 0, end: 11 },
+  { value: "q1", label: "Q1", start: 0, end: 2 },
+  { value: "q2", label: "Q2", start: 3, end: 5 },
+  { value: "q3", label: "Q3", start: 6, end: 8 },
+  { value: "q4", label: "Q4", start: 9, end: 11 },
+  { value: "custom", label: "Custom", start: 0, end: 11 },
+];
+
 const EMPTY_STATS = {
   fy25: 0,
   fy26: 0,
@@ -33,6 +42,7 @@ const EMPTY_MODE = {
   stats: EMPTY_STATS,
   rollup_ret: [],
   rollup_grp: [],
+  rollup_segment: [],
   retailers: {},
 };
 
@@ -107,6 +117,25 @@ function isProductGroupRollup(activeTab) {
   return activeTab === YOY_GROUP_TAB || activeTab === MOM_GROUP_TAB;
 }
 
+function quarterForRange(start, end) {
+  const match = QUARTER_OPTIONS.find(
+    (option) => option.value !== "custom" && option.start === start && option.end === end,
+  );
+  return match?.value || "custom";
+}
+
+function selectedPeriodLabel(months, start, end, quarterSelection) {
+  if (quarterSelection === "all") return "FULL YEAR";
+  if (["q1", "q2", "q3", "q4"].includes(quarterSelection)) return quarterSelection.toUpperCase();
+  const startLabel = months[start] || "Jan";
+  const endLabel = months[end] || "Dec";
+  return start === end ? startLabel.toUpperCase() : `${startLabel}-${endLabel}`.toUpperCase();
+}
+
+function sumMonthValues(values = [], visibleMonths = []) {
+  return visibleMonths.reduce((total, month) => total + (values?.[month.index] || 0), 0);
+}
+
 function tabTitle(activeTab, raw) {
   if (activeTab === YOY_RETAILER_TAB) return "All Retailers Roll-Up - by Retailer - YoY";
   if (activeTab === YOY_GROUP_TAB) return "All Retailers Roll-Up - by Product Group / MPG - YoY";
@@ -143,6 +172,10 @@ export default function DemandDashboard() {
   const [loadError, setLoadError] = useState(null);
   const [activeTab, setActiveTab] = useState(YOY_RETAILER_TAB);
   const [blendDisplays, setBlendDisplays] = useState(true);
+  const [monthStart, setMonthStart] = useState(0);
+  const [monthEnd, setMonthEnd] = useState(11);
+  const [quarterSelection, setQuarterSelection] = useState("all");
+  const [productDrilldownLevel, setProductDrilldownLevel] = useState("mpg");
   const [expandedGroups, setExpandedGroups] = useState(() => new Set());
   const { META, MONTHS, RAW } = dashboardData || EMPTY_DASHBOARD;
   const dataMode = blendDisplays ? "blended" : "separate";
@@ -151,8 +184,19 @@ export default function DemandDashboard() {
   const yoyComparison = RAW.comparisons?.yoy || RAW;
   const activeData = activeComparison.modes?.[dataMode] || EMPTY_MODE;
   const yoyData = yoyComparison.modes?.[dataMode] || EMPTY_MODE;
+  const retailerCardComparisonKey = activeTab === MOM_RETAILER_TAB || activeTab === MOM_GROUP_TAB ? "mom" : "yoy";
+  const retailerCardComparison = RAW.comparisons?.[retailerCardComparisonKey] || RAW;
+  const retailerCardData = retailerCardComparison.modes?.[dataMode] || EMPTY_MODE;
+  const retailerCardPeriodLabels = retailerCardComparison.period_labels || DEFAULT_PERIOD_LABELS;
   const periodLabels = activeComparison.period_labels || DEFAULT_PERIOD_LABELS;
-  const yoyPeriodLabels = yoyComparison.period_labels || DEFAULT_PERIOD_LABELS;
+  const visibleMonths = useMemo(
+    () =>
+      MONTHS.map((label, index) => ({ label, index })).filter(
+        (month) => month.index >= monthStart && month.index <= monthEnd,
+      ),
+    [MONTHS, monthEnd, monthStart],
+  );
+  const summaryLabel = selectedPeriodLabel(MONTHS, monthStart, monthEnd, quarterSelection);
 
   useEffect(() => {
     let alive = true;
@@ -187,10 +231,47 @@ export default function DemandDashboard() {
 
   const activeRows = useMemo(() => {
     if (activeTab === YOY_RETAILER_TAB || activeTab === MOM_RETAILER_TAB) return activeData.rollup_ret;
-    if (activeTab === YOY_GROUP_TAB || activeTab === MOM_GROUP_TAB) return activeData.rollup_grp;
+    if (activeTab === YOY_GROUP_TAB || activeTab === MOM_GROUP_TAB) {
+      return productDrilldownLevel === "segment"
+        ? activeData.rollup_segment || activeData.rollup_grp
+        : activeData.rollup_grp;
+    }
     const banner = RAW.banner_order.find((name) => bannerTabId(name) === activeTab);
     return yoyData.retailers[banner] || [];
-  }, [activeData, activeTab, RAW.banner_order, yoyData]);
+  }, [activeData, activeTab, productDrilldownLevel, RAW.banner_order, yoyData]);
+
+  function applyQuarter(value) {
+    const option = QUARTER_OPTIONS.find((quarter) => quarter.value === value) || QUARTER_OPTIONS[0];
+    if (option.value === "custom") {
+      setQuarterSelection("custom");
+      return;
+    }
+
+    const maxMonth = Math.max(0, MONTHS.length - 1);
+    const nextStart = Math.min(option.start, maxMonth);
+    const nextEnd = Math.min(option.end, maxMonth);
+    setMonthStart(nextStart);
+    setMonthEnd(nextEnd);
+    setQuarterSelection(option.value);
+  }
+
+  function updateMonthStart(value) {
+    const maxMonth = Math.max(0, MONTHS.length - 1);
+    const nextStart = Math.max(0, Math.min(Number(value), maxMonth));
+    const nextEnd = Math.max(nextStart, monthEnd);
+    setMonthStart(nextStart);
+    setMonthEnd(nextEnd);
+    setQuarterSelection(quarterForRange(nextStart, nextEnd));
+  }
+
+  function updateMonthEnd(value) {
+    const maxMonth = Math.max(0, MONTHS.length - 1);
+    const nextEnd = Math.max(0, Math.min(Number(value), maxMonth));
+    const nextStart = Math.min(monthStart, nextEnd);
+    setMonthStart(nextStart);
+    setMonthEnd(nextEnd);
+    setQuarterSelection(quarterForRange(nextStart, nextEnd));
+  }
 
   function toggleGroup(groupKey) {
     setExpandedGroups((current) => {
@@ -251,9 +332,11 @@ export default function DemandDashboard() {
             key={name}
             active={activeTab === bannerTabId(name)}
             name={name}
-            periodLabels={yoyPeriodLabels}
+            periodLabels={retailerCardPeriodLabels}
             row={
-              (yoyData.retailer_totals || yoyData.rollup_ret).find((item) => item.label === name)
+              (retailerCardData.retailer_totals || retailerCardData.rollup_ret).find(
+                (item) => item.label === name,
+              )
             }
             onClick={() => setActiveTab(bannerTabId(name))}
           />
@@ -277,6 +360,21 @@ export default function DemandDashboard() {
       <section className="tab-pane active">
         <h2>{tabTitle(activeTab, RAW)}</h2>
         <div className="sub">{tabSubtitle(activeTab, blendDisplays)}</div>
+        <TableControls
+          monthEnd={monthEnd}
+          months={MONTHS}
+          monthStart={monthStart}
+          onMonthEndChange={updateMonthEnd}
+          onMonthStartChange={updateMonthStart}
+          onProductDrilldownChange={(level) => {
+            setProductDrilldownLevel(level);
+            setExpandedGroups(new Set());
+          }}
+          onQuarterChange={applyQuarter}
+          productDrilldownLevel={productDrilldownLevel}
+          quarterSelection={quarterSelection}
+          showProductDrilldown={isProductGroupRollup(activeTab)}
+        />
         <Legend periodLabels={periodLabels} />
         <DataTable
           expandedGroups={expandedGroups}
@@ -284,14 +382,18 @@ export default function DemandDashboard() {
             isRetailerRollup(activeTab)
               ? "Retailer"
               : isProductGroupRollup(activeTab)
-                ? "Product Group / MPG / Retailer"
+                ? productDrilldownLevel === "segment"
+                  ? "Segment / Retailer"
+                  : "Product Group / MPG / Retailer"
                 : "Product Group / MPG"
           }
           months={MONTHS}
           periodLabels={periodLabels}
           rows={activeRows}
-          tabId={`${activeComparisonKey}-${dataMode}-${activeTab}`}
+          summaryLabel={summaryLabel}
+          tabId={`${activeComparisonKey}-${dataMode}-${productDrilldownLevel}-${activeTab}`}
           toggleGroup={toggleGroup}
+          visibleMonths={visibleMonths}
         />
       </section>
 
@@ -301,6 +403,83 @@ export default function DemandDashboard() {
         {META.generated_from.product_workbook} and {META.generated_from.market_workbook}
       </footer>
     </main>
+  );
+}
+
+function TableControls({
+  monthEnd,
+  months,
+  monthStart,
+  onMonthEndChange,
+  onMonthStartChange,
+  onProductDrilldownChange,
+  onQuarterChange,
+  productDrilldownLevel,
+  quarterSelection,
+  showProductDrilldown,
+}) {
+  const maxMonth = Math.max(0, months.length - 1);
+  const selectedRange = `${months[monthStart] || "Jan"} - ${months[monthEnd] || "Dec"}`;
+
+  return (
+    <div className="table-controls" aria-label="Table filters">
+      <label className="control-field">
+        <span>Quarter</span>
+        <select value={quarterSelection} onChange={(event) => onQuarterChange(event.target.value)}>
+          {QUARTER_OPTIONS.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </label>
+
+      <div className="month-slider" aria-label="Month range">
+        <span className="range-label">{selectedRange}</span>
+        <label>
+          <span>Start</span>
+          <input
+            max={maxMonth}
+            min="0"
+            onChange={(event) => onMonthStartChange(event.target.value)}
+            step="1"
+            type="range"
+            value={monthStart}
+          />
+        </label>
+        <label>
+          <span>End</span>
+          <input
+            max={maxMonth}
+            min="0"
+            onChange={(event) => onMonthEndChange(event.target.value)}
+            step="1"
+            type="range"
+            value={monthEnd}
+          />
+        </label>
+      </div>
+
+      {showProductDrilldown ? (
+        <div className="segmented-control" aria-label="Product drilldown level">
+          <span>Drilldown</span>
+          <button
+            className={productDrilldownLevel === "mpg" ? "active" : ""}
+            onClick={() => onProductDrilldownChange("mpg")}
+            type="button"
+          >
+            MPG
+          </button>
+          <button
+            className={productDrilldownLevel === "segment" ? "active" : ""}
+            onClick={() => onProductDrilldownChange("segment")}
+            type="button"
+          >
+            Segment
+          </button>
+        </div>
+      ) : null}
+    </div>
   );
 }
 
@@ -388,13 +567,81 @@ function Legend({ periodLabels }) {
   );
 }
 
-function DataTable({ expandedGroups, labelHeader, months, periodLabels, rows, tabId, toggleGroup }) {
+function prepareVisibleRows(rows, expandedGroups, tabId) {
   let currentGroup = null;
   let currentGroupOpen = true;
   let currentMpg = null;
   let currentMpgOpen = true;
   let groupIndex = 0;
   let mpgIndex = 0;
+  const visibleRows = [];
+
+  rows.forEach((row, index) => {
+    let groupKey = currentGroup;
+    let mpgKey = currentMpg;
+    let rowKey = null;
+    let visible = currentGroupOpen;
+    let isOpen = false;
+
+    if (row.is_group && !row.is_total) {
+      groupKey = `${tabId}-${groupIndex}-${row.label}`;
+      currentGroup = groupKey;
+      currentMpg = null;
+      currentMpgOpen = false;
+      groupIndex += 1;
+      mpgIndex = 0;
+      currentGroupOpen = row.has_children ? expandedGroups.has(groupKey) : true;
+      visible = true;
+      rowKey = row.has_children ? groupKey : null;
+      isOpen = currentGroupOpen;
+    } else if (row.is_mpg) {
+      mpgKey = `${groupKey}-${mpgIndex}-${row.label}`;
+      currentMpg = mpgKey;
+      mpgIndex += 1;
+      currentMpgOpen = row.has_children ? expandedGroups.has(mpgKey) : true;
+      visible = currentGroupOpen;
+      rowKey = row.has_children ? mpgKey : null;
+      isOpen = currentMpgOpen;
+    } else if (row.is_retailer) {
+      visible = row.parent_level === "group" ? currentGroupOpen : currentGroupOpen && currentMpgOpen;
+    } else if (row.is_total) {
+      groupKey = null;
+      mpgKey = null;
+      visible = true;
+    } else {
+      visible = currentGroupOpen;
+    }
+
+    if (!visible) return;
+
+    const baseRowClass = row.is_total
+      ? "tot-row"
+      : row.is_group
+        ? "grp-hdr"
+        : row.is_mpg
+          ? "mpg-row"
+          : row.is_retailer
+            ? "retailer-row"
+            : "sku-row";
+    const rowClass = `${baseRowClass}${row.display_section_start ? " display-section-start" : ""}`;
+    visibleRows.push({ index, isOpen, row, rowClass, rowKey });
+  });
+
+  return visibleRows;
+}
+
+function DataTable({
+  expandedGroups,
+  labelHeader,
+  months,
+  periodLabels,
+  rows,
+  summaryLabel,
+  tabId,
+  toggleGroup,
+  visibleMonths,
+}) {
+  const visibleRows = prepareVisibleRows(rows, expandedGroups, tabId);
 
   return (
     <div className="tbl-wrap">
@@ -402,67 +649,19 @@ function DataTable({ expandedGroups, labelHeader, months, periodLabels, rows, ta
         <thead>
           <tr className="hdr1">
             <th className="lhdr" rowSpan="2">{labelHeader}</th>
-            {months.map((month) => (
-              <th className="month-head" colSpan="3" key={month}>{month}</th>
+            {visibleMonths.map((month) => (
+              <th className="month-head" colSpan="3" key={month.label}>{month.label}</th>
             ))}
-            <th className="month-head fy-head" colSpan="3">FULL YEAR</th>
+            <th className="month-head fy-head" colSpan="3">{summaryLabel}</th>
           </tr>
           <tr className="hdr2">
-            {Array.from({ length: months.length + 1 }, (_, index) => (
-              <MonthSubhead index={index} key={index} monthCount={months.length} periodLabels={periodLabels} />
+            {Array.from({ length: visibleMonths.length + 1 }, (_, index) => (
+              <MonthSubhead index={index} key={index} monthCount={visibleMonths.length} periodLabels={periodLabels} />
             ))}
           </tr>
         </thead>
         <tbody>
-          {rows.map((row, index) => {
-            let groupKey = currentGroup;
-            let mpgKey = currentMpg;
-            let rowKey = null;
-            let visible = currentGroupOpen;
-            let isOpen = false;
-
-            if (row.is_group && !row.is_total) {
-              groupKey = `${tabId}-${groupIndex}-${row.label}`;
-              currentGroup = groupKey;
-              currentMpg = null;
-              currentMpgOpen = false;
-              groupIndex += 1;
-              mpgIndex = 0;
-              currentGroupOpen = row.has_children ? expandedGroups.has(groupKey) : true;
-              visible = true;
-              rowKey = row.has_children ? groupKey : null;
-              isOpen = currentGroupOpen;
-            } else if (row.is_mpg) {
-              mpgKey = `${groupKey}-${mpgIndex}-${row.label}`;
-              currentMpg = mpgKey;
-              mpgIndex += 1;
-              currentMpgOpen = row.has_children ? expandedGroups.has(mpgKey) : true;
-              visible = currentGroupOpen;
-              rowKey = row.has_children ? mpgKey : null;
-              isOpen = currentMpgOpen;
-            } else if (row.is_retailer) {
-              visible = currentGroupOpen && currentMpgOpen;
-            } else if (row.is_total) {
-              groupKey = null;
-              mpgKey = null;
-              visible = true;
-            } else {
-              visible = currentGroupOpen;
-            }
-
-            if (!visible) return null;
-
-            const baseRowClass = row.is_total
-              ? "tot-row"
-              : row.is_group
-                ? "grp-hdr"
-                : row.is_mpg
-                  ? "mpg-row"
-                  : row.is_retailer
-                    ? "retailer-row"
-                    : "sku-row";
-            const rowClass = `${baseRowClass}${row.display_section_start ? " display-section-start" : ""}`;
-            return (
+          {visibleRows.map(({ index, isOpen, row, rowClass, rowKey }) => (
               <tr className={rowClass} key={`${tabId}-${index}-${row.label}`}>
                 <LabelCell
                   groupKey={rowKey}
@@ -470,18 +669,29 @@ function DataTable({ expandedGroups, labelHeader, months, periodLabels, rows, ta
                   row={row}
                   toggleGroup={toggleGroup}
                 />
-                {months.map((month, monthIndex) => (
+                {visibleMonths.map((month) => (
                   <MonthCells
-                    base={row.m25?.[monthIndex] || 0}
-                    comparison={row.m26?.[monthIndex] || 0}
-                    key={month}
-                    monthIndex={monthIndex}
+                    base={row.m25?.[month.index] || 0}
+                    comparison={row.m26?.[month.index] || 0}
+                    key={month.label}
+                    monthIndex={month.index}
                   />
                 ))}
-                <MonthCells base={row.fy25 || 0} comparison={row.fy26 || 0} fullYear />
+                <MonthCells
+                  base={
+                    visibleMonths.length === months.length
+                      ? row.fy25 || 0
+                      : sumMonthValues(row.m25, visibleMonths)
+                  }
+                  comparison={
+                    visibleMonths.length === months.length
+                      ? row.fy26 || 0
+                      : sumMonthValues(row.m26, visibleMonths)
+                  }
+                  fullYear
+                />
               </tr>
-            );
-          })}
+          ))}
         </tbody>
       </table>
     </div>

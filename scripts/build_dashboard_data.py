@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 RAW_DIR = ROOT / "data" / "raw"
 YOY_XLSX = RAW_DIR / "DR 07 July - YoY.xlsx"
 MOM_XLSX = RAW_DIR / "DR 07 July - MoM.xlsx"
-PRODUCT_XLSX = RAW_DIR / "Product List 20260629.xlsx"
+PRODUCT_XLSX = RAW_DIR / "Product List 20260629 (2).xlsx"
 MARKET_XLSX = RAW_DIR / "Market List.xlsx"
 
 OUTPUT_MODULE = ROOT / "app" / "data" / "promo-yoy-data.js"
@@ -83,16 +83,23 @@ COMPARISON_CONFIGS = {
 BANNER_ORDER = []
 
 GROUP_ORDER = [
-    "Granola Bar",
-    "Hot Choc & Cappuccino",
-    "Iced Coffee & Syrups",
-    "Instant Coffee",
-    "Nespresso Compatible",
+    "Granola",
+    "Hot Chocolate",
+    "Sweet & Creamy",
+    "Cold Beverage",
+    "Syrups",
+    "Instant",
+    "Nespresso",
     "Roast & Ground",
-    "Single Serve (K-Cup)",
-    "Soup & Chili",
+    "Single Serve",
+    "Soups and Hot Bowls",
+    "Condensed Soup",
     "Tassimo",
-    "Tea",
+    "Hot Tea",
+    "Sauces",
+    "Dairy",
+    "Biscuit Mixes",
+    "Timbits",
     "Other",
 ]
 
@@ -102,6 +109,7 @@ DATA_MODES = {
 }
 
 ROLLUP_EXCLUDED_BANNERS = {"Amazon", "Costco"}
+SITE_EXCLUDED_BANNERS = {"Canada"}
 
 VISIBLE_PRODUCT_DRILLDOWN_BANNERS = {
     "Canadian Tire",
@@ -280,28 +288,67 @@ def infer_planner(*parts: str) -> str:
     return "Other"
 
 
+PRODUCT_GROUP_ALIASES = {
+    "GRANOLA": "Granola",
+    "GRANOLA BAR": "Granola",
+    "HOT CHOCOLATE": "Hot Chocolate",
+    "HOT CHOC & CAPPUCCINO": "Hot Chocolate",
+    "SWEET & CREAMY": "Sweet & Creamy",
+    "COLD BEVERAGE": "Cold Beverage",
+    "ICED COFFEE & SYRUPS": "Cold Beverage",
+    "SYRUPS": "Syrups",
+    "INSTANT": "Instant",
+    "INSTANT COFFEE": "Instant",
+    "NESPRESSO": "Nespresso",
+    "NESPRESSO COMPATIBLE": "Nespresso",
+    "ROAST & GROUND": "Roast & Ground",
+    "SINGLE SERVE": "Single Serve",
+    "SINGLE SERVE (K-CUP)": "Single Serve",
+    "SOUPS AND HOT BOWLS": "Soups and Hot Bowls",
+    "SOUP & CHILI": "Soups and Hot Bowls",
+    "CONDENSED SOUP": "Condensed Soup",
+    "TASSIMO": "Tassimo",
+    "HOT TEA": "Hot Tea",
+    "TEA": "Hot Tea",
+    "SAUCES": "Sauces",
+    "DAIRY": "Dairy",
+    "BISCUIT MIXES": "Biscuit Mixes",
+    "TIMBITS": "Timbits",
+    "OTHER": "Other",
+}
+
+
+def normalized_product_group(value: str) -> str:
+    return PRODUCT_GROUP_ALIASES.get(clean(value).upper(), "")
+
+
 def product_group_label(mpg: str, planner: str, segment: str = "") -> str:
+    for value in (planner, segment):
+        group = normalized_product_group(value)
+        if group:
+            return group
+
     text = f"{mpg} {planner} {segment}".upper()
     if "GRANOLA" in text:
-        return "Granola Bar"
+        return "Granola"
     if "HOT CHOC" in text or "CAPPUCCINO" in text or "CREAMER" in text:
-        return "Hot Choc & Cappuccino"
+        return "Hot Chocolate"
     if "SYRUP" in text or "READY TO DRINK" in text or "RTD" in text or "COLD BEVERAGE" in text:
-        return "Iced Coffee & Syrups"
+        return "Cold Beverage"
     if "INSTANT" in text:
-        return "Instant Coffee"
+        return "Instant"
     if "NCOMP" in text or "NESPRESSO" in text:
-        return "Nespresso Compatible"
+        return "Nespresso"
     if "TASSIMO" in text:
         return "Tassimo"
     if "KCOMP" in text or "K-CUP" in text or "KCUP" in text:
-        return "Single Serve (K-Cup)"
+        return "Single Serve"
     if "R&G" in text or "ROAST" in text or "GROUND" in text:
         return "Roast & Ground"
     if "SOUP" in text or "CHILI" in text or "HOT BOWL" in text or "CONDENSED" in text:
-        return "Soup & Chili"
+        return "Soups and Hot Bowls"
     if "TEA" in text:
-        return "Tea"
+        return "Hot Tea"
     return "Other"
 
 
@@ -346,16 +393,18 @@ def product_record(row) -> dict:
     pack_size = clean(row[7])
     item_id = clean(row[8])
     item = clean(row[9])
+    demand_review_segment = clean(row[16]) or clean(row[5]) or clean(row[15]) or infer_planner(pack_size, item)
     rec = {
         "line_of_business": clean(row[1]),
         "brand": clean(row[3]),
-        "segment": clean(row[5]),
+        "segment": demand_review_segment,
+        "source_segment": clean(row[5]),
         "pack_size_id": pack_size_id,
         "pack_size": pack_size,
         "item_id": item_id,
         "item": item,
         "sub_category_1": clean(row[15]),
-        "planner": clean(row[16]) or clean(row[15]) or infer_planner(pack_size, item),
+        "planner": demand_review_segment,
         "lookup_source": "product_master",
     }
     rec["pack"] = parse_pack(pack_size)
@@ -676,6 +725,47 @@ def build_product_table(rows, include_retailer_drilldown: bool = False, visible_
     return table_rows
 
 
+def build_segment_table(rows, include_retailer_drilldown: bool = False, visible_retailer_banners: set[str] | None = None):
+    group_values = defaultdict(empty_years)
+    retailer_values = defaultdict(empty_years)
+    total_values = empty_years()
+
+    for row in rows:
+        retailer_key = (row["product_group"], row["banner"])
+        add_month(group_values[row["product_group"]], row["period_key"], row["month_index"], row["cases"])
+        add_month(retailer_values[retailer_key], row["period_key"], row["month_index"], row["cases"])
+        add_month(total_values, row["period_key"], row["month_index"], row["cases"])
+
+    table_rows = []
+    display_section_started = False
+    for group in sorted(group_values, key=group_sort_key):
+        retailer_rows = []
+        if include_retailer_drilldown:
+            for _, banner in (key for key in retailer_values if key[0] == group):
+                if visible_retailer_banners is not None and banner not in visible_retailer_banners:
+                    continue
+                retailer_row = row_from_values(banner, retailer_values[(group, banner)])
+                retailer_row["row_type"] = "retailer"
+                retailer_row["is_retailer"] = True
+                retailer_row["parent_level"] = "group"
+                retailer_rows.append(retailer_row)
+
+        group_row = row_from_values(group, group_values[group], is_group=True)
+        group_row["row_type"] = "group"
+        group_row["has_children"] = bool(retailer_rows)
+        if group.endswith(" Displays"):
+            group_row["is_display_group"] = True
+            if not display_section_started:
+                group_row["display_section_start"] = True
+                display_section_started = True
+        table_rows.append(group_row)
+
+        table_rows.extend(sorted(retailer_rows, key=lambda row: (-fy_delta(row), row["label"])))
+
+    table_rows.append(row_from_values("GRAND TOTAL", total_values, is_total=True))
+    return table_rows
+
+
 def build_retailer_rollup(rows):
     retailer_values = {banner: empty_years() for banner in BANNER_ORDER}
     total_values = empty_years()
@@ -756,6 +846,11 @@ def build_dashboard_from_rows(rows: list[dict]):
             include_retailer_drilldown=True,
             visible_retailer_banners=VISIBLE_PRODUCT_DRILLDOWN_BANNERS,
         ),
+        "rollup_segment": build_segment_table(
+            rollup_rows,
+            include_retailer_drilldown=True,
+            visible_retailer_banners=VISIBLE_PRODUCT_DRILLDOWN_BANNERS,
+        ),
         "retailer_totals": [
             row
             for row in all_retailer_totals
@@ -789,6 +884,8 @@ def transform_comparison(comparison_key: str, config: dict, demand_rows: list[di
             reason = "Fcst Inc Cases is not positive"
         elif not banner:
             reason = "Market is outside the supplied market list"
+        elif banner in SITE_EXCLUDED_BANNERS:
+            reason = "Retailer is excluded from this dashboard"
         elif not rec or (not rec.get("pack") and not rec.get("is_unspecified_pack")):
             reason = "Product cannot be mapped to an MPG pack size"
         elif not row["execution_start"] or not row["execution_end"]:
@@ -1003,10 +1100,11 @@ def build_outputs():
                 "2026": sorted(STATUS_BY_YEAR[2026]),
             },
             "display_method": "Toggleable: blended mode converts display/DRP/PDQ pack sizes to equivalent regular cases; separate mode keeps display/DRP rows separate and counts each as 1 case",
-            "product_level": "MPG pack-size level from Product List; individual flavours are combined",
+            "product_level": "Product group is sourced from Product List column Q (Demand Review Planner); MPG pack-size level combines individual flavours",
             "banner_scope": BANNER_ORDER,
             "market_mapping": "Retailer/customer names are mapped from Market List.xlsx",
             "mom_comparison": "MoM compares the July pull against the June pull from DR 07 July - MoM.xlsx using the same product, market, status, date, and display-conversion methodology",
+            "site_excluded_banners": sorted(SITE_EXCLUDED_BANNERS),
             "rollup_excluded_banners": sorted(ROLLUP_EXCLUDED_BANNERS),
             "product_drilldown_visible_banners": sorted(VISIBLE_PRODUCT_DRILLDOWN_BANNERS),
         },

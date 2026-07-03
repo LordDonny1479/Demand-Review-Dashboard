@@ -3,7 +3,7 @@
     "demand_workbook": "DR 07 July - YoY.xlsx",
     "yoy_workbook": "DR 07 July - YoY.xlsx",
     "mom_workbook": "DR 07 July - MoM.xlsx",
-    "product_workbook": "Product List 20260629.xlsx",
+    "product_workbook": "Product List 20260629 (2).xlsx",
     "market_workbook": "Market List.xlsx"
   },
   "methodology": {
@@ -22,12 +22,11 @@
       ]
     },
     "display_method": "Toggleable: blended mode converts display/DRP/PDQ pack sizes to equivalent regular cases; separate mode keeps display/DRP rows separate and counts each as 1 case",
-    "product_level": "MPG pack-size level from Product List; individual flavours are combined",
+    "product_level": "Product group is sourced from Product List column Q (Demand Review Planner); MPG pack-size level combines individual flavours",
     "banner_scope": [
       "Amazon",
       "Associated Grocers",
       "Atlantic Grocers",
-      "Canada",
       "Canadian Tire",
       "Chens",
       "CJR Wholesale",
@@ -61,6 +60,9 @@
     ],
     "market_mapping": "Retailer/customer names are mapped from Market List.xlsx",
     "mom_comparison": "MoM compares the July pull against the June pull from DR 07 July - MoM.xlsx using the same product, market, status, date, and display-conversion methodology",
+    "site_excluded_banners": [
+      "Canada"
+    ],
     "rollup_excluded_banners": [
       "Amazon",
       "Costco"
@@ -117,31 +119,31 @@
         "legend": "Grey = 2025 | Bold = 2026 | Full Year delta includes %"
       },
       "source_rows_read": 8132,
-      "included_source_month_rows": 9482,
-      "included_source_rows": 6037,
-      "excluded_rows": 2095,
+      "included_source_month_rows": 9477,
+      "included_source_rows": 6032,
+      "excluded_rows": 2100,
       "display_products_reviewed": 64,
       "display_products_converted": 59,
       "unconverted_display_products": 5,
-      "detail_rows": 18964,
+      "detail_rows": 18954,
       "mode_totals": {
         "blended": {
           "fy25": 1516066,
-          "fy26": 1349641,
+          "fy26": 1300641,
           "base_total": 1516066,
-          "comparison_total": 1349641,
-          "delta": -166425,
-          "delta_pct": -11.0,
-          "banners": 32
+          "comparison_total": 1300641,
+          "delta": -215425,
+          "delta_pct": -14.2,
+          "banners": 31
         },
         "separate": {
           "fy25": 1199848,
-          "fy26": 1069138,
+          "fy26": 1020138,
           "base_total": 1199848,
-          "comparison_total": 1069138,
-          "delta": -130710,
-          "delta_pct": -10.9,
-          "banners": 32
+          "comparison_total": 1020138,
+          "delta": -179710,
+          "delta_pct": -15.0,
+          "banners": 31
         }
       }
     },
@@ -182,31 +184,31 @@
         "legend": "Grey = June pull | Bold = July pull | Full Year change includes %"
       },
       "source_rows_read": 6880,
-      "included_source_month_rows": 8352,
-      "included_source_rows": 5359,
-      "excluded_rows": 1521,
+      "included_source_month_rows": 8342,
+      "included_source_rows": 5349,
+      "excluded_rows": 1531,
       "display_products_reviewed": 48,
       "display_products_converted": 45,
       "unconverted_display_products": 3,
-      "detail_rows": 16704,
+      "detail_rows": 16684,
       "mode_totals": {
         "blended": {
-          "fy25": 1379420,
-          "fy26": 1349641,
-          "base_total": 1379420,
-          "comparison_total": 1349641,
+          "fy25": 1330420,
+          "fy26": 1300641,
+          "base_total": 1330420,
+          "comparison_total": 1300641,
           "delta": -29779,
           "delta_pct": -2.2,
-          "banners": 30
+          "banners": 29
         },
         "separate": {
-          "fy25": 1107829,
-          "fy26": 1069138,
-          "base_total": 1107829,
-          "comparison_total": 1069138,
+          "fy25": 1058829,
+          "fy26": 1020138,
+          "base_total": 1058829,
+          "comparison_total": 1020138,
           "delta": -38691,
-          "delta_pct": -3.5,
-          "banners": 30
+          "delta_pct": -3.7,
+          "banners": 29
         }
       }
     }
@@ -216,35 +218,35 @@
     "blended": "Blend DRPs/displays into regular-case equivalents",
     "separate": "Keep DRPs/displays separate and count each display as 1 case"
   },
-  "included_source_month_rows": 9482,
-  "included_source_rows": 6037,
-  "excluded_rows": 2095,
+  "included_source_month_rows": 9477,
+  "included_source_rows": 6032,
+  "excluded_rows": 2100,
   "display_products_reviewed": 64,
   "display_products_converted": 59,
   "unconverted_display_products": 5,
-  "detail_rows": 18964,
+  "detail_rows": 18954,
   "mode_totals": {
     "blended": {
       "fy25": 1516066,
-      "fy26": 1349641,
+      "fy26": 1300641,
       "base_total": 1516066,
-      "comparison_total": 1349641,
-      "delta": -166425,
-      "delta_pct": -11.0,
-      "banners": 32
+      "comparison_total": 1300641,
+      "delta": -215425,
+      "delta_pct": -14.2,
+      "banners": 31
     },
     "separate": {
       "fy25": 1199848,
-      "fy26": 1069138,
+      "fy26": 1020138,
       "base_total": 1199848,
-      "comparison_total": 1069138,
-      "delta": -130710,
-      "delta_pct": -10.9,
-      "banners": 32
+      "comparison_total": 1020138,
+      "delta": -179710,
+      "delta_pct": -15.0,
+      "banners": 31
     }
   },
   "total_cases_2025": 1516066,
-  "total_cases_2026": 1349641,
-  "delta_cases": -166425,
-  "delta_pct": -11.0
+  "total_cases_2026": 1300641,
+  "delta_cases": -215425,
+  "delta_pct": -14.2
 }

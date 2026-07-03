@@ -175,6 +175,85 @@ button {
   font-size: 10px;
 }
 
+.table-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  align-items: center;
+  margin: 6px 0 8px;
+  padding: 6px 0;
+  color: var(--coffee);
+  font-size: 10px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.control-field,
+.month-slider,
+.month-slider label,
+.segmented-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.control-field span,
+.month-slider label span,
+.segmented-control span {
+  color: var(--muted);
+  font-weight: 650;
+}
+
+.control-field select {
+  height: 22px;
+  min-width: 92px;
+  padding: 1px 22px 1px 6px;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: 3px;
+  font: inherit;
+}
+
+.month-slider {
+  flex-wrap: wrap;
+}
+
+.range-label {
+  min-width: 58px;
+  font-weight: 700;
+}
+
+.month-slider input[type="range"] {
+  width: 108px;
+  accent-color: var(--brand-red);
+}
+
+.segmented-control button {
+  min-width: 56px;
+  height: 22px;
+  padding: 1px 8px;
+  cursor: pointer;
+  color: var(--coffee);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+}
+
+.segmented-control button:first-of-type {
+  border-radius: 3px 0 0 3px;
+}
+
+.segmented-control button:last-of-type {
+  margin-left: -6px;
+  border-radius: 0 3px 3px 0;
+}
+
+.segmented-control button.active {
+  color: #fff;
+  background: var(--brand-red);
+  border-color: var(--brand-red);
+}
+
 .cards {
   display: flex;
   flex-wrap: nowrap;
