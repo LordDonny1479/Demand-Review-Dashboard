@@ -14,22 +14,70 @@ from openpyxl import load_workbook
 
 ROOT = Path(__file__).resolve().parents[1]
 RAW_DIR = ROOT / "data" / "raw"
-DEMAND_XLSX = RAW_DIR / "DR 07 July - YoY.xlsx"
+YOY_XLSX = RAW_DIR / "DR 07 July - YoY.xlsx"
+MOM_XLSX = RAW_DIR / "DR 07 July - MoM.xlsx"
 PRODUCT_XLSX = RAW_DIR / "Product List 20260629.xlsx"
 MARKET_XLSX = RAW_DIR / "Market List.xlsx"
 
 OUTPUT_MODULE = ROOT / "app" / "data" / "promo-yoy-data.js"
+PUBLIC_DASHBOARD_JSON = ROOT / "public" / "data" / "promo-dashboard-data.json"
 OUTPUT_DASHBOARD_JSON = ROOT / "data" / "promo-yoy-dashboard.json"
+OUTPUT_MOM_DASHBOARD_JSON = ROOT / "data" / "promo-mom-dashboard.json"
 OUTPUT_DETAIL = ROOT / "data" / "promo-yoy-detail.csv"
+OUTPUT_MOM_DETAIL = ROOT / "data" / "promo-mom-detail.csv"
 OUTPUT_EXCLUDED = ROOT / "data" / "promo-yoy-excluded-rows.csv"
+OUTPUT_MOM_EXCLUDED = ROOT / "data" / "promo-mom-excluded-rows.csv"
 OUTPUT_DISPLAY_AUDIT = ROOT / "data" / "display-conversion-audit.csv"
 OUTPUT_SUMMARY = ROOT / "data" / "dashboard-summary.json"
 
 MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-YEARS = (2025, 2026)
+PERIOD_KEYS = ("base", "comparison")
 STATUS_BY_YEAR = {
     2025: {"Closed", "Committed"},
     2026: {"Closed", "Planned", "Committed"},
+}
+
+COMPARISON_CONFIGS = {
+    "yoy": {
+        "label": "YoY",
+        "workbook": YOY_XLSX,
+        "sheets": [
+            {"name": "2025", "period_key": "base", "label": "2025", "short_label": "'25", "actual_year": 2025},
+            {"name": "2026", "period_key": "comparison", "label": "2026", "short_label": "'26", "actual_year": 2026},
+        ],
+        "period_labels": {
+            "base": "2025",
+            "comparison": "2026",
+            "base_short": "'25",
+            "comparison_short": "'26",
+            "base_stat": "FY 2025 Cases",
+            "comparison_stat": "FY 2026 Cases",
+            "delta": "Delta",
+            "delta_stat": "YoY Delta Cases",
+            "pct_stat": "YoY %",
+            "legend": "Grey = 2025 | Bold = 2026 | Full Year delta includes %",
+        },
+    },
+    "mom": {
+        "label": "MoM",
+        "workbook": MOM_XLSX,
+        "sheets": [
+            {"name": "June", "period_key": "base", "label": "June", "short_label": "June", "actual_year": 2026},
+            {"name": "July", "period_key": "comparison", "label": "July", "short_label": "July", "actual_year": 2026},
+        ],
+        "period_labels": {
+            "base": "June",
+            "comparison": "July",
+            "base_short": "June",
+            "comparison_short": "July",
+            "base_stat": "June Cases",
+            "comparison_stat": "July Cases",
+            "delta": "Change",
+            "delta_stat": "MoM Change Cases",
+            "pct_stat": "MoM %",
+            "legend": "Grey = June pull | Bold = July pull | Full Year change includes %",
+        },
+    },
 }
 
 BANNER_ORDER = []
@@ -365,13 +413,14 @@ def lookup_product(product_id: str, product: str, item_by_id, pack_groups):
     return fallback_product_record(product_id, product)
 
 
-def raw_demand_rows(item_by_id, pack_groups):
-    workbook = load_workbook(DEMAND_XLSX, read_only=True, data_only=True)
+def raw_demand_rows(item_by_id, pack_groups, workbook_path: Path, sheet_configs: list[dict]):
+    workbook = load_workbook(workbook_path, read_only=True, data_only=True)
     rows = []
 
-    for sheet_name in ("2025", "2026"):
+    for sheet_config in sheet_configs:
+        sheet_name = sheet_config["name"]
         sheet = workbook[sheet_name]
-        year = int(sheet_name)
+        year = sheet_config["actual_year"]
         for row_number, row in enumerate(sheet.iter_rows(min_row=7, values_only=True), start=7):
             if not any(value is not None for value in row):
                 continue
@@ -395,6 +444,8 @@ def raw_demand_rows(item_by_id, pack_groups):
                     "source_sheet": sheet_name,
                     "source_row": row_number,
                     "year": year,
+                    "period_key": sheet_config["period_key"],
+                    "period_label": sheet_config["label"],
                     "market": clean(row[0]),
                     "contract_start": as_date(row[1]),
                     "execution_start": as_date(row[2]),
@@ -416,6 +467,7 @@ def raw_demand_rows(item_by_id, pack_groups):
                 }
             )
 
+    workbook.close()
     return rows
 
 
@@ -504,31 +556,37 @@ def round_cases(value: float) -> int:
 
 
 def empty_years():
-    return {year: [0.0] * 12 for year in YEARS}
+    return {period: [0.0] * 12 for period in PERIOD_KEYS}
 
 
-def add_month(values, year: int, month_index: int, cases: float):
-    values[year][month_index] += cases
+def add_month(values, period_key: str, month_index: int, cases: float):
+    values[period_key][month_index] += cases
 
 
 def row_from_values(label: str, values: dict, is_group: bool = False, is_total: bool = False):
-    m25 = [round_cases(value) for value in values[2025]]
-    m26 = [round_cases(value) for value in values[2026]]
+    base_months = [round_cases(value) for value in values["base"]]
+    comparison_months = [round_cases(value) for value in values["comparison"]]
+    base_total = round_cases(sum(values["base"]))
+    comparison_total = round_cases(sum(values["comparison"]))
     return {
         "label": label,
         "is_group": is_group,
         "is_total": is_total,
-        "m25": m25,
-        "m26": m26,
-        "fy25": round_cases(sum(values[2025])),
-        "fy26": round_cases(sum(values[2026])),
+        "m25": base_months,
+        "m26": comparison_months,
+        "fy25": base_total,
+        "fy26": comparison_total,
+        "base_months": base_months,
+        "comparison_months": comparison_months,
+        "base_total": base_total,
+        "comparison_total": comparison_total,
     }
 
 
 def add_values(target: dict, source: dict):
-    for year in YEARS:
-        for index, value in enumerate(source[year]):
-            target[year][index] += value
+    for period in PERIOD_KEYS:
+        for index, value in enumerate(source[period]):
+            target[period][index] += value
 
 
 def group_sort_key(group_name: str):
@@ -553,10 +611,10 @@ def build_product_table(rows, include_retailer_drilldown: bool = False):
     for row in rows:
         key = (row["product_group"], row["mpg"])
         retailer_key = (row["product_group"], row["mpg"], row["banner"])
-        add_month(group_values[row["product_group"]], row["year"], row["month_index"], row["cases"])
-        add_month(mpg_values[key], row["year"], row["month_index"], row["cases"])
-        add_month(retailer_values[retailer_key], row["year"], row["month_index"], row["cases"])
-        add_month(total_values, row["year"], row["month_index"], row["cases"])
+        add_month(group_values[row["product_group"]], row["period_key"], row["month_index"], row["cases"])
+        add_month(mpg_values[key], row["period_key"], row["month_index"], row["cases"])
+        add_month(retailer_values[retailer_key], row["period_key"], row["month_index"], row["cases"])
+        add_month(total_values, row["period_key"], row["month_index"], row["cases"])
 
     table_rows = []
     for group in sorted(group_values, key=group_sort_key):
@@ -598,13 +656,13 @@ def build_retailer_rollup(rows):
     total_values = empty_years()
 
     for row in rows:
-        add_month(retailer_values[row["banner"]], row["year"], row["month_index"], row["cases"])
-        add_month(total_values, row["year"], row["month_index"], row["cases"])
+        add_month(retailer_values[row["banner"]], row["period_key"], row["month_index"], row["cases"])
+        add_month(total_values, row["period_key"], row["month_index"], row["cases"])
 
     table_rows = [
         row_from_values(banner, retailer_values[banner], is_group=True)
         for banner in BANNER_ORDER
-        if sum(retailer_values[banner][2025]) or sum(retailer_values[banner][2026])
+        if sum(retailer_values[banner]["base"]) or sum(retailer_values[banner]["comparison"])
     ]
     table_rows.append(row_from_values("GRAND TOTAL", total_values, is_total=True))
     return table_rows, total_values
@@ -669,17 +727,11 @@ def build_dashboard_from_rows(rows: list[dict]):
     }
 
 
-def build_outputs():
-    global BANNER_ORDER
-
-    market_map, configured_banner_order = load_market_map()
-    products, item_by_id, pack_groups = load_products()
-    demand_rows = raw_demand_rows(item_by_id, pack_groups)
-    base_lookup = build_base_pack_lookup(products, demand_rows)
-
+def transform_comparison(comparison_key: str, config: dict, demand_rows: list[dict], base_lookup: dict, market_map: dict):
     mode_rows = {mode: [] for mode in DATA_MODES}
     detail_rows = []
     included_split_keys = set()
+    included_source_rows = set()
     excluded_rows = []
     display_audit = {}
 
@@ -701,7 +753,7 @@ def build_outputs():
             reason = "Missing execution start or end date"
 
         if reason:
-            excluded_rows.append(excluded_row(row, banner, reason))
+            excluded_rows.append(excluded_row(row, banner, reason, comparison_key))
             continue
 
         conversion = conversion_for_row(row, base_lookup)
@@ -718,6 +770,7 @@ def build_outputs():
         if conversion["unit_type"] == "DRP":
             converted = "without matching regular pack" not in conversion["conversion_note"]
             audit_key = (
+                comparison_key,
                 row["product_id"],
                 row["product"],
                 blended_mpg,
@@ -726,6 +779,7 @@ def build_outputs():
                 conversion["conversion_note"],
             )
             display_audit[audit_key] = {
+                "comparison_key": comparison_key,
                 "product_id": row["product_id"],
                 "product": row["product"],
                 "blended_mpg": blended_mpg,
@@ -739,6 +793,7 @@ def build_outputs():
 
         for month_index, weight, split_days, total_days in month_splits(row["execution_start"], row["execution_end"]):
             included_split_keys.add((row["source_sheet"], row["source_row"], month_index))
+            included_source_rows.add((row["source_sheet"], row["source_row"]))
             mode_definitions = [
                 ("blended", blended_product_group, blended_mpg, converted_cases),
                 ("separate", separate_product_group, separate_mpg, source_cases),
@@ -750,6 +805,8 @@ def build_outputs():
                         "banner": banner,
                         "market": row["market"],
                         "year": year,
+                        "period_key": row["period_key"],
+                        "period_label": row["period_label"],
                         "month": MONTHS[month_index],
                         "month_index": month_index,
                         "product_group": product_group,
@@ -758,10 +815,12 @@ def build_outputs():
                     }
                 )
                 detail_rows.append({
+                    "comparison_key": comparison_key,
                     "data_mode": data_mode,
                     "banner": banner,
                     "market": row["market"],
                     "year": year,
+                    "period": row["period_label"],
                     "month": MONTHS[month_index],
                     "product_group": product_group,
                     "mpg": mpg,
@@ -786,25 +845,110 @@ def build_outputs():
                     "conversion_note": conversion["conversion_note"],
                 })
 
+    return {
+        "mode_rows": mode_rows,
+        "detail_rows": detail_rows,
+        "excluded_rows": excluded_rows,
+        "display_audit": display_audit,
+        "included_split_keys": included_split_keys,
+        "included_source_rows": included_source_rows,
+        "source_rows_read": len(demand_rows),
+        "workbook": config["workbook"].name,
+    }
+
+
+def comparison_summary(config: dict, transformed: dict, dashboard_modes: dict):
+    display_audit = transformed["display_audit"]
+    return {
+        "source_workbook": config["workbook"].name,
+        "periods": [
+            {
+                "sheet": sheet["name"],
+                "label": sheet["label"],
+                "actual_year": sheet["actual_year"],
+                "status_filter": sorted(STATUS_BY_YEAR[sheet["actual_year"]]),
+            }
+            for sheet in config["sheets"]
+        ],
+        "period_labels": config["period_labels"],
+        "source_rows_read": transformed["source_rows_read"],
+        "included_source_month_rows": len(transformed["included_split_keys"]),
+        "included_source_rows": len(transformed["included_source_rows"]),
+        "excluded_rows": len(transformed["excluded_rows"]),
+        "display_products_reviewed": len(display_audit),
+        "display_products_converted": sum(1 for row in display_audit.values() if row["converted"] == "yes"),
+        "unconverted_display_products": sum(1 for row in display_audit.values() if row["converted"] == "no"),
+        "detail_rows": len(transformed["detail_rows"]),
+        "mode_totals": {
+            mode: data["stats"]
+            for mode, data in dashboard_modes.items()
+        },
+    }
+
+
+def build_outputs():
+    global BANNER_ORDER
+
+    market_map, configured_banner_order = load_market_map()
+    products, item_by_id, pack_groups = load_products()
+    demand_rows_by_comparison = {
+        key: raw_demand_rows(item_by_id, pack_groups, config["workbook"], config["sheets"])
+        for key, config in COMPARISON_CONFIGS.items()
+    }
+    all_demand_rows = [
+        row
+        for demand_rows in demand_rows_by_comparison.values()
+        for row in demand_rows
+    ]
+    base_lookup = build_base_pack_lookup(products, all_demand_rows)
+
+    transformed = {
+        key: transform_comparison(key, config, demand_rows_by_comparison[key], base_lookup, market_map)
+        for key, config in COMPARISON_CONFIGS.items()
+    }
+
     BANNER_ORDER = active_banner_order(
-        [row for rows in mode_rows.values() for row in rows],
+        [
+            row
+            for result in transformed.values()
+            for rows in result["mode_rows"].values()
+            for row in rows
+        ],
         configured_banner_order,
     )
-    dashboard_modes = {
-        mode: build_dashboard_from_rows(rows)
-        for mode, rows in mode_rows.items()
-    }
+
+    comparison_dashboards = {}
+    comparison_summaries = {}
+    for key, config in COMPARISON_CONFIGS.items():
+        dashboard_modes = {
+            mode: build_dashboard_from_rows(rows)
+            for mode, rows in transformed[key]["mode_rows"].items()
+        }
+        comparison_dashboards[key] = {
+            "label": config["label"],
+            "period_labels": config["period_labels"],
+            "mode_labels": DATA_MODES,
+            "modes": dashboard_modes,
+            **dashboard_modes["blended"],
+        }
+        comparison_summaries[key] = comparison_summary(config, transformed[key], dashboard_modes)
+
+    yoy_dashboard = comparison_dashboards["yoy"]
+    yoy_summary = comparison_summaries["yoy"]
     dashboard = {
         "banner_order": BANNER_ORDER,
         "default_mode": "blended",
         "mode_labels": DATA_MODES,
-        "modes": dashboard_modes,
-        **dashboard_modes["blended"],
+        "comparisons": comparison_dashboards,
+        "modes": yoy_dashboard["modes"],
+        **yoy_dashboard["modes"]["blended"],
     }
 
     summary = {
         "generated_from": {
-            "demand_workbook": DEMAND_XLSX.name,
+            "demand_workbook": YOY_XLSX.name,
+            "yoy_workbook": YOY_XLSX.name,
+            "mom_workbook": MOM_XLSX.name,
             "product_workbook": PRODUCT_XLSX.name,
             "market_workbook": MARKET_XLSX.name,
         },
@@ -820,37 +964,50 @@ def build_outputs():
             "product_level": "MPG pack-size level from Product List; individual flavours are combined",
             "banner_scope": BANNER_ORDER,
             "market_mapping": "Retailer/customer names are mapped from Market List.xlsx",
+            "mom_comparison": "MoM compares the July pull against the June pull from DR 07 July - MoM.xlsx using the same product, market, status, date, and display-conversion methodology",
         },
-        "source_rows_read": len(demand_rows),
+        "comparisons": comparison_summaries,
+        "source_rows_read": yoy_summary["source_rows_read"],
         "data_modes": DATA_MODES,
-        "included_source_month_rows": len(included_split_keys),
-        "included_source_rows": len({(row["source_sheet"], row["source_row"]) for row in detail_rows}),
-        "excluded_rows": len(excluded_rows),
-        "display_products_reviewed": len(display_audit),
-        "display_products_converted": sum(1 for row in display_audit.values() if row["converted"] == "yes"),
-        "unconverted_display_products": sum(1 for row in display_audit.values() if row["converted"] == "no"),
-        "detail_rows": len(detail_rows),
-        "mode_totals": {
-            mode: data["stats"]
-            for mode, data in dashboard_modes.items()
-        },
-        "total_cases_2025": dashboard_modes["blended"]["stats"]["fy25"],
-        "total_cases_2026": dashboard_modes["blended"]["stats"]["fy26"],
-        "delta_cases": dashboard_modes["blended"]["stats"]["delta"],
-        "delta_pct": dashboard_modes["blended"]["stats"]["delta_pct"],
+        "included_source_month_rows": yoy_summary["included_source_month_rows"],
+        "included_source_rows": yoy_summary["included_source_rows"],
+        "excluded_rows": yoy_summary["excluded_rows"],
+        "display_products_reviewed": yoy_summary["display_products_reviewed"],
+        "display_products_converted": yoy_summary["display_products_converted"],
+        "unconverted_display_products": yoy_summary["unconverted_display_products"],
+        "detail_rows": yoy_summary["detail_rows"],
+        "mode_totals": yoy_summary["mode_totals"],
+        "total_cases_2025": yoy_dashboard["modes"]["blended"]["stats"]["fy25"],
+        "total_cases_2026": yoy_dashboard["modes"]["blended"]["stats"]["fy26"],
+        "delta_cases": yoy_dashboard["modes"]["blended"]["stats"]["delta"],
+        "delta_pct": yoy_dashboard["modes"]["blended"]["stats"]["delta_pct"],
     }
 
     OUTPUT_MODULE.parent.mkdir(parents=True, exist_ok=True)
+    PUBLIC_DASHBOARD_JSON.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT_DASHBOARD_JSON.parent.mkdir(parents=True, exist_ok=True)
+    PUBLIC_DASHBOARD_JSON.write_text(
+        json.dumps({"MONTHS": MONTHS, "RAW": dashboard, "META": summary}, separators=(",", ":")),
+        encoding="utf-8",
+    )
     OUTPUT_DASHBOARD_JSON.write_text(json.dumps(dashboard, indent=2), encoding="utf-8")
+    OUTPUT_MOM_DASHBOARD_JSON.write_text(json.dumps(comparison_dashboards["mom"], indent=2), encoding="utf-8")
     OUTPUT_SUMMARY.write_text(json.dumps(summary, indent=2), encoding="utf-8")
     OUTPUT_MODULE.write_text(module_text(dashboard, summary), encoding="utf-8")
 
-    write_csv(OUTPUT_DETAIL, detail_fieldnames(), detail_rows)
-    write_csv(OUTPUT_EXCLUDED, excluded_fieldnames(), excluded_rows)
+    write_csv(OUTPUT_DETAIL, detail_fieldnames(), transformed["yoy"]["detail_rows"])
+    write_csv(OUTPUT_MOM_DETAIL, detail_fieldnames(), transformed["mom"]["detail_rows"])
+    write_csv(OUTPUT_EXCLUDED, excluded_fieldnames(), transformed["yoy"]["excluded_rows"])
+    write_csv(OUTPUT_MOM_EXCLUDED, excluded_fieldnames(), transformed["mom"]["excluded_rows"])
+    all_display_audit = [
+        row
+        for result in transformed.values()
+        for row in result["display_audit"].values()
+    ]
     write_csv(
         OUTPUT_DISPLAY_AUDIT,
         [
+            "comparison_key",
             "product_id",
             "product",
             "blended_product_group",
@@ -861,20 +1018,22 @@ def build_outputs():
             "converted",
             "conversion_note",
         ],
-        sorted(display_audit.values(), key=lambda row: (row["blended_product_group"], row["blended_mpg"], row["product_id"])),
+        sorted(all_display_audit, key=lambda row: (row["comparison_key"], row["blended_product_group"], row["blended_mpg"], row["product_id"])),
     )
 
     return summary
 
 
 def build_stats(total_values: dict):
-    fy25 = round_cases(sum(total_values[2025]))
-    fy26 = round_cases(sum(total_values[2026]))
-    delta = fy26 - fy25
-    delta_pct = round((delta / abs(fy25)) * 100, 1) if fy25 else None
+    base_total = round_cases(sum(total_values["base"]))
+    comparison_total = round_cases(sum(total_values["comparison"]))
+    delta = comparison_total - base_total
+    delta_pct = round((delta / abs(base_total)) * 100, 1) if base_total else None
     return {
-        "fy25": fy25,
-        "fy26": fy26,
+        "fy25": base_total,
+        "fy26": comparison_total,
+        "base_total": base_total,
+        "comparison_total": comparison_total,
         "delta": delta,
         "delta_pct": delta_pct,
         "banners": len(BANNER_ORDER),
@@ -884,18 +1043,18 @@ def build_stats(total_values: dict):
 def module_text(dashboard: dict, summary: dict) -> str:
     return (
         "// Generated by scripts/build_dashboard_data.py. Do not edit by hand.\n"
-        f"export const MONTHS = {json.dumps(MONTHS)};\n"
-        f"export const RAW = {json.dumps(dashboard, separators=(',', ':'))};\n"
-        f"export const META = {json.dumps(summary, separators=(',', ':'))};\n"
+        "export const DASHBOARD_DATA_URL = \"/data/promo-dashboard-data.json\";\n"
     )
 
 
-def excluded_row(row: dict, banner: str | None, reason: str):
+def excluded_row(row: dict, banner: str | None, reason: str, comparison_key: str):
     return {
+        "comparison_key": comparison_key,
         "reason": reason,
         "banner": banner or "",
         "market": row["market"],
         "year": row["year"],
+        "period": row["period_label"],
         "product_id": row["product_id"],
         "product": row["product"],
         "promo_id": row["promo_id"],
@@ -911,10 +1070,12 @@ def excluded_row(row: dict, banner: str | None, reason: str):
 
 def detail_fieldnames():
     return [
+        "comparison_key",
         "data_mode",
         "banner",
         "market",
         "year",
+        "period",
         "month",
         "product_group",
         "mpg",
@@ -942,10 +1103,12 @@ def detail_fieldnames():
 
 def excluded_fieldnames():
     return [
+        "comparison_key",
         "reason",
         "banner",
         "market",
         "year",
+        "period",
         "product_id",
         "product",
         "promo_id",

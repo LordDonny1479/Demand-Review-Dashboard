@@ -1,10 +1,55 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { META, MONTHS, RAW } from "./data/promo-yoy-data";
+import { useEffect, useMemo, useState } from "react";
+import { DASHBOARD_DATA_URL } from "./data/promo-yoy-data";
 
-const ROLLUP_RETAILER_TAB = "tab-rollup-retailer";
-const ROLLUP_GROUP_TAB = "tab-rollup-group";
+const YOY_RETAILER_TAB = "tab-rollup-retailer-yoy";
+const YOY_GROUP_TAB = "tab-rollup-group-yoy";
+const MOM_RETAILER_TAB = "tab-rollup-retailer-mom";
+const MOM_GROUP_TAB = "tab-rollup-group-mom";
+
+const DEFAULT_PERIOD_LABELS = {
+  base: "2025",
+  comparison: "2026",
+  base_short: "'25",
+  comparison_short: "'26",
+  base_stat: "FY 2025 Cases",
+  comparison_stat: "FY 2026 Cases",
+  delta: "Delta",
+  delta_stat: "YoY Delta Cases",
+  pct_stat: "YoY %",
+  legend: "Grey = 2025 | Bold = 2026 | Full Year delta includes %",
+};
+
+const EMPTY_STATS = {
+  fy25: 0,
+  fy26: 0,
+  delta: 0,
+  delta_pct: 0,
+  banners: 0,
+};
+
+const EMPTY_MODE = {
+  stats: EMPTY_STATS,
+  rollup_ret: [],
+  rollup_grp: [],
+  retailers: {},
+};
+
+const EMPTY_DASHBOARD = {
+  MONTHS: [],
+  RAW: {
+    banner_order: [],
+    comparisons: {},
+    modes: {
+      blended: EMPTY_MODE,
+      separate: EMPTY_MODE,
+    },
+  },
+  META: {
+    generated_from: {},
+  },
+};
 
 function bannerTabId(name) {
   return `tab-${name.replace(/[^a-zA-Z0-9]/g, "_")}`;
@@ -50,18 +95,40 @@ function deltaClass(base, comparison) {
   return "delta-zero";
 }
 
-function tabTitle(activeTab) {
-  if (activeTab === ROLLUP_RETAILER_TAB) return "All Retailers Roll-Up - by Retailer";
-  if (activeTab === ROLLUP_GROUP_TAB) return "All Retailers Roll-Up - by Product Group / MPG";
-  const banner = RAW.banner_order.find((name) => bannerTabId(name) === activeTab);
+function comparisonKeyForTab(activeTab) {
+  return activeTab === MOM_RETAILER_TAB || activeTab === MOM_GROUP_TAB ? "mom" : "yoy";
+}
+
+function isRetailerRollup(activeTab) {
+  return activeTab === YOY_RETAILER_TAB || activeTab === MOM_RETAILER_TAB;
+}
+
+function isProductGroupRollup(activeTab) {
+  return activeTab === YOY_GROUP_TAB || activeTab === MOM_GROUP_TAB;
+}
+
+function tabTitle(activeTab, raw) {
+  if (activeTab === YOY_RETAILER_TAB) return "All Retailers Roll-Up - by Retailer - YoY";
+  if (activeTab === YOY_GROUP_TAB) return "All Retailers Roll-Up - by Product Group / MPG - YoY";
+  if (activeTab === MOM_RETAILER_TAB) return "All Retailers Roll-Up - by Retailer - MoM";
+  if (activeTab === MOM_GROUP_TAB) return "All Retailers Roll-Up - by Product Group / MPG - MoM";
+  const banner = raw.banner_order.find((name) => bannerTabId(name) === activeTab);
   return `${banner} - Fcst Inc Cases by Product Group / MPG`;
 }
 
 function tabSubtitle(activeTab, blendDisplays) {
-  if (activeTab === ROLLUP_RETAILER_TAB) {
+  if (activeTab === MOM_RETAILER_TAB) {
+    return "Compares the July pull against the June pull across all MPGs.";
+  }
+  if (activeTab === MOM_GROUP_TAB) {
+    return blendDisplays
+      ? "Compares July against June with display volume converted to regular cases. Retailer drilldowns are sorted by total change."
+      : "Compares July against June with displays separate and counted as 1 case each. Retailer drilldowns are sorted by total change.";
+  }
+  if (activeTab === YOY_RETAILER_TAB) {
     return "Each row is one banner/customer total across all MPGs.";
   }
-  if (activeTab === ROLLUP_GROUP_TAB) {
+  if (activeTab === YOY_GROUP_TAB) {
     return blendDisplays
       ? "MPGs include display volume converted to regular cases. Retailer drilldowns are sorted by FY delta."
       : "Displays stay separate and count as 1 case each. Retailer drilldowns are sorted by FY delta.";
@@ -72,27 +139,58 @@ function tabSubtitle(activeTab, blendDisplays) {
 }
 
 export default function DemandDashboard() {
-  const [activeTab, setActiveTab] = useState(ROLLUP_RETAILER_TAB);
+  const [dashboardData, setDashboardData] = useState(null);
+  const [loadError, setLoadError] = useState(null);
+  const [activeTab, setActiveTab] = useState(YOY_RETAILER_TAB);
   const [blendDisplays, setBlendDisplays] = useState(true);
   const [expandedGroups, setExpandedGroups] = useState(() => new Set());
+  const { META, MONTHS, RAW } = dashboardData || EMPTY_DASHBOARD;
   const dataMode = blendDisplays ? "blended" : "separate";
-  const activeData = RAW.modes[dataMode];
+  const activeComparisonKey = comparisonKeyForTab(activeTab);
+  const activeComparison = RAW.comparisons?.[activeComparisonKey] || RAW;
+  const yoyComparison = RAW.comparisons?.yoy || RAW;
+  const activeData = activeComparison.modes?.[dataMode] || EMPTY_MODE;
+  const yoyData = yoyComparison.modes?.[dataMode] || EMPTY_MODE;
+  const periodLabels = activeComparison.period_labels || DEFAULT_PERIOD_LABELS;
+  const yoyPeriodLabels = yoyComparison.period_labels || DEFAULT_PERIOD_LABELS;
+
+  useEffect(() => {
+    let alive = true;
+
+    fetch(DASHBOARD_DATA_URL)
+      .then((response) => {
+        if (!response.ok) throw new Error(`Data request failed: ${response.status}`);
+        return response.json();
+      })
+      .then((data) => {
+        if (alive) setDashboardData(data);
+      })
+      .catch((error) => {
+        if (alive) setLoadError(error);
+      });
+
+    return () => {
+      alive = false;
+    };
+  }, []);
 
   const tabs = useMemo(
     () => [
-      { id: ROLLUP_RETAILER_TAB, label: "By Retailer" },
-      { id: ROLLUP_GROUP_TAB, label: "By Product Group" },
+      { id: YOY_RETAILER_TAB, label: "By Retailer - YoY" },
+      { id: YOY_GROUP_TAB, label: "By Product Group - YoY" },
+      { id: MOM_RETAILER_TAB, label: "By Retailer - MoM" },
+      { id: MOM_GROUP_TAB, label: "By Product Group - MoM" },
       ...RAW.banner_order.map((name) => ({ id: bannerTabId(name), label: name })),
     ],
-    [],
+    [RAW.banner_order],
   );
 
   const activeRows = useMemo(() => {
-    if (activeTab === ROLLUP_RETAILER_TAB) return activeData.rollup_ret;
-    if (activeTab === ROLLUP_GROUP_TAB) return activeData.rollup_grp;
+    if (activeTab === YOY_RETAILER_TAB || activeTab === MOM_RETAILER_TAB) return activeData.rollup_ret;
+    if (activeTab === YOY_GROUP_TAB || activeTab === MOM_GROUP_TAB) return activeData.rollup_grp;
     const banner = RAW.banner_order.find((name) => bannerTabId(name) === activeTab);
-    return activeData.retailers[banner] || [];
-  }, [activeData, activeTab]);
+    return yoyData.retailers[banner] || [];
+  }, [activeData, activeTab, RAW.banner_order, yoyData]);
 
   function toggleGroup(groupKey) {
     setExpandedGroups((current) => {
@@ -103,18 +201,41 @@ export default function DemandDashboard() {
     });
   }
 
+  if (loadError) {
+    return (
+      <main className="promo-dashboard">
+        <header className="promo-header">
+          <h1>TH CPG - Promotional Fcst Inc Cases Demand Review</h1>
+          <p>Unable to load the embedded dashboard data.</p>
+        </header>
+      </main>
+    );
+  }
+
+  if (!dashboardData) {
+    return (
+      <main className="promo-dashboard">
+        <header className="promo-header">
+          <h1>TH CPG - Promotional Fcst Inc Cases Demand Review</h1>
+          <p>Loading embedded forecast data...</p>
+        </header>
+      </main>
+    );
+  }
+
   return (
     <main className="promo-dashboard">
       <header className="promo-header">
-        <h1>TH CPG - Promotional Fcst Inc Cases Year-over-Year (2025 vs 2026)</h1>
+        <h1>TH CPG - Promotional Fcst Inc Cases Demand Review</h1>
         <p>
           In-market execution dates | Cases pro-rated by execution days per
           calendar month | Fcst Inc Cases &gt; 0 rows only | 2025 =
-          Closed/Committed | 2026 = Closed/Planned/Committed
+          Closed/Committed | 2026 = Closed/Planned/Committed | MoM =
+          July pull vs June pull
         </p>
       </header>
 
-      <StatsBar stats={activeData.stats} />
+      <StatsBar periodLabels={periodLabels} stats={activeData.stats} />
 
       <ModeToggle
         blendDisplays={blendDisplays}
@@ -130,7 +251,8 @@ export default function DemandDashboard() {
             key={name}
             active={activeTab === bannerTabId(name)}
             name={name}
-            row={activeData.rollup_ret.find((item) => item.label === name)}
+            periodLabels={yoyPeriodLabels}
+            row={yoyData.rollup_ret.find((item) => item.label === name)}
             onClick={() => setActiveTab(bannerTabId(name))}
           />
         ))}
@@ -144,49 +266,52 @@ export default function DemandDashboard() {
             onClick={() => setActiveTab(tab.id)}
             type="button"
           >
-            {index === 2 ? <span className="tab-sep" aria-hidden="true">|</span> : null}
+            {index === 4 ? <span className="tab-sep" aria-hidden="true">|</span> : null}
             {tab.label}
           </button>
         ))}
       </nav>
 
       <section className="tab-pane active">
-        <h2>{tabTitle(activeTab)}</h2>
+        <h2>{tabTitle(activeTab, RAW)}</h2>
         <div className="sub">{tabSubtitle(activeTab, blendDisplays)}</div>
-        <Legend />
+        <Legend periodLabels={periodLabels} />
         <DataTable
           expandedGroups={expandedGroups}
           labelHeader={
-            activeTab === ROLLUP_RETAILER_TAB
+            isRetailerRollup(activeTab)
               ? "Retailer"
-              : activeTab === ROLLUP_GROUP_TAB
+              : isProductGroupRollup(activeTab)
                 ? "Product Group / MPG / Retailer"
                 : "Product Group / MPG"
           }
+          months={MONTHS}
+          periodLabels={periodLabels}
           rows={activeRows}
-          tabId={`${dataMode}-${activeTab}`}
+          tabId={`${activeComparisonKey}-${dataMode}-${activeTab}`}
           toggleGroup={toggleGroup}
         />
       </section>
 
       <footer className="data-footnote">
-        Source: {META.generated_from.demand_workbook}; mapping:{" "}
+        Sources: YoY {META.generated_from.yoy_workbook || META.generated_from.demand_workbook};
+        MoM {META.generated_from.mom_workbook}; mapping:{" "}
         {META.generated_from.product_workbook} and {META.generated_from.market_workbook}
       </footer>
     </main>
   );
 }
 
-function StatsBar({ stats }) {
+function StatsBar({ periodLabels, stats }) {
   const deltaTone = stats.delta >= 0 ? "pos" : "neg";
   const pct = stats.delta_pct === null ? "-" : `${stats.delta_pct >= 0 ? "+" : ""}${stats.delta_pct}%`;
 
   return (
     <section className="stats-bar" aria-label="Full-year summary">
-      <Stat label="FY 2025 Cases" value={formatNumber(stats.fy25)} />
-      <Stat label="FY 2026 Cases" value={formatNumber(stats.fy26)} />
-      <Stat className={deltaTone} label="YoY Delta Cases" value={formatSigned(stats.delta)} />
-      <Stat className={deltaTone} label="YoY %" value={pct} />
+      <Stat label={periodLabels.base_stat} value={formatNumber(stats.fy25)} />
+      <Stat label={periodLabels.comparison_stat} value={formatNumber(stats.fy26)} />
+      <Stat className={deltaTone} label={periodLabels.delta_stat} value={formatSigned(stats.delta)} />
+      <Stat className={deltaTone} label={periodLabels.pct_stat} value={pct} />
       <Stat label="Banners" value={formatNumber(stats.banners)} />
     </section>
   );
@@ -224,7 +349,7 @@ function ModeToggle({ blendDisplays, onChange }) {
   );
 }
 
-function RetailerCard({ active, name, onClick, row }) {
+function RetailerCard({ active, name, onClick, periodLabels, row }) {
   const fy25 = row?.fy25 || 0;
   const fy26 = row?.fy26 || 0;
   const delta = fy26 - fy25;
@@ -235,11 +360,11 @@ function RetailerCard({ active, name, onClick, row }) {
     <button className={`card${active ? " active-card" : ""}`} onClick={onClick} type="button">
       <div className="card-name">{name}</div>
       <div className="card-row">
-        <span>2025</span>
+        <span>{periodLabels.base}</span>
         <span>{formatNumber(fy25)}</span>
       </div>
       <div className="card-row">
-        <span>2026</span>
+        <span>{periodLabels.comparison}</span>
         <span>{formatNumber(fy26)}</span>
       </div>
       <div className={`card-delta ${cls}`}>
@@ -250,18 +375,18 @@ function RetailerCard({ active, name, onClick, row }) {
   );
 }
 
-function Legend() {
+function Legend({ periodLabels }) {
   return (
     <div className="legend" aria-label="Delta legend">
       <span className="li"><span className="sw sw-up" /> Increase</span>
       <span className="li"><span className="sw sw-dn" /> Decrease</span>
-      <span className="li"><span className="sw sw-nw" /> New in 2026</span>
-      <span className="legend-note">Grey = 2025 | Bold = 2026 | Full Year delta includes %</span>
+      <span className="li"><span className="sw sw-nw" /> New in {periodLabels.comparison}</span>
+      <span className="legend-note">{periodLabels.legend}</span>
     </div>
   );
 }
 
-function DataTable({ expandedGroups, labelHeader, rows, tabId, toggleGroup }) {
+function DataTable({ expandedGroups, labelHeader, months, periodLabels, rows, tabId, toggleGroup }) {
   let currentGroup = null;
   let currentGroupOpen = true;
   let currentMpg = null;
@@ -275,14 +400,14 @@ function DataTable({ expandedGroups, labelHeader, rows, tabId, toggleGroup }) {
         <thead>
           <tr className="hdr1">
             <th className="lhdr" rowSpan="2">{labelHeader}</th>
-            {MONTHS.map((month) => (
+            {months.map((month) => (
               <th className="month-head" colSpan="3" key={month}>{month}</th>
             ))}
             <th className="month-head fy-head" colSpan="3">FULL YEAR</th>
           </tr>
           <tr className="hdr2">
-            {Array.from({ length: 13 }, (_, index) => (
-              <MonthSubhead index={index} key={index} />
+            {Array.from({ length: months.length + 1 }, (_, index) => (
+              <MonthSubhead index={index} key={index} monthCount={months.length} periodLabels={periodLabels} />
             ))}
           </tr>
         </thead>
@@ -342,7 +467,7 @@ function DataTable({ expandedGroups, labelHeader, rows, tabId, toggleGroup }) {
                   row={row}
                   toggleGroup={toggleGroup}
                 />
-                {MONTHS.map((month, monthIndex) => (
+                {months.map((month, monthIndex) => (
                   <MonthCells
                     base={row.m25?.[monthIndex] || 0}
                     comparison={row.m26?.[monthIndex] || 0}
@@ -360,14 +485,14 @@ function DataTable({ expandedGroups, labelHeader, rows, tabId, toggleGroup }) {
   );
 }
 
-function MonthSubhead({ index }) {
-  const boundaryClass = index === 12 ? " fy-boundary" : " month-boundary";
+function MonthSubhead({ index, monthCount, periodLabels }) {
+  const boundaryClass = index === monthCount ? " fy-boundary" : " month-boundary";
 
   return (
     <>
-      <th className={`subhead-cell${boundaryClass}`}>&apos;25</th>
-      <th>&apos;26</th>
-      <th>Delta</th>
+      <th className={`subhead-cell${boundaryClass}`}>{periodLabels.base_short}</th>
+      <th>{periodLabels.comparison_short}</th>
+      <th>{periodLabels.delta}</th>
     </>
   );
 }

@@ -1,6 +1,8 @@
 {
   "generated_from": {
     "demand_workbook": "DR 07 July - YoY.xlsx",
+    "yoy_workbook": "DR 07 July - YoY.xlsx",
+    "mom_workbook": "DR 07 July - MoM.xlsx",
     "product_workbook": "Product List 20260629.xlsx",
     "market_workbook": "Market List.xlsx"
   },
@@ -57,7 +59,139 @@
       "Walmart",
       "Western Wholesale"
     ],
-    "market_mapping": "Retailer/customer names are mapped from Market List.xlsx"
+    "market_mapping": "Retailer/customer names are mapped from Market List.xlsx",
+    "mom_comparison": "MoM compares the July pull against the June pull from DR 07 July - MoM.xlsx using the same product, market, status, date, and display-conversion methodology"
+  },
+  "comparisons": {
+    "yoy": {
+      "source_workbook": "DR 07 July - YoY.xlsx",
+      "periods": [
+        {
+          "sheet": "2025",
+          "label": "2025",
+          "actual_year": 2025,
+          "status_filter": [
+            "Closed",
+            "Committed"
+          ]
+        },
+        {
+          "sheet": "2026",
+          "label": "2026",
+          "actual_year": 2026,
+          "status_filter": [
+            "Closed",
+            "Committed",
+            "Planned"
+          ]
+        }
+      ],
+      "period_labels": {
+        "base": "2025",
+        "comparison": "2026",
+        "base_short": "'25",
+        "comparison_short": "'26",
+        "base_stat": "FY 2025 Cases",
+        "comparison_stat": "FY 2026 Cases",
+        "delta": "Delta",
+        "delta_stat": "YoY Delta Cases",
+        "pct_stat": "YoY %",
+        "legend": "Grey = 2025 | Bold = 2026 | Full Year delta includes %"
+      },
+      "source_rows_read": 8132,
+      "included_source_month_rows": 9482,
+      "included_source_rows": 6037,
+      "excluded_rows": 2095,
+      "display_products_reviewed": 64,
+      "display_products_converted": 59,
+      "unconverted_display_products": 5,
+      "detail_rows": 18964,
+      "mode_totals": {
+        "blended": {
+          "fy25": 2324823,
+          "fy26": 2586883,
+          "base_total": 2324823,
+          "comparison_total": 2586883,
+          "delta": 262060,
+          "delta_pct": 11.3,
+          "banners": 34
+        },
+        "separate": {
+          "fy25": 2008605,
+          "fy26": 2306380,
+          "base_total": 2008605,
+          "comparison_total": 2306380,
+          "delta": 297775,
+          "delta_pct": 14.8,
+          "banners": 34
+        }
+      }
+    },
+    "mom": {
+      "source_workbook": "DR 07 July - MoM.xlsx",
+      "periods": [
+        {
+          "sheet": "June",
+          "label": "June",
+          "actual_year": 2026,
+          "status_filter": [
+            "Closed",
+            "Committed",
+            "Planned"
+          ]
+        },
+        {
+          "sheet": "July",
+          "label": "July",
+          "actual_year": 2026,
+          "status_filter": [
+            "Closed",
+            "Committed",
+            "Planned"
+          ]
+        }
+      ],
+      "period_labels": {
+        "base": "June",
+        "comparison": "July",
+        "base_short": "June",
+        "comparison_short": "July",
+        "base_stat": "June Cases",
+        "comparison_stat": "July Cases",
+        "delta": "Change",
+        "delta_stat": "MoM Change Cases",
+        "pct_stat": "MoM %",
+        "legend": "Grey = June pull | Bold = July pull | Full Year change includes %"
+      },
+      "source_rows_read": 6880,
+      "included_source_month_rows": 8352,
+      "included_source_rows": 5359,
+      "excluded_rows": 1521,
+      "display_products_reviewed": 48,
+      "display_products_converted": 45,
+      "unconverted_display_products": 3,
+      "detail_rows": 16704,
+      "mode_totals": {
+        "blended": {
+          "fy25": 2571167,
+          "fy26": 2586883,
+          "base_total": 2571167,
+          "comparison_total": 2586883,
+          "delta": 15716,
+          "delta_pct": 0.6,
+          "banners": 34
+        },
+        "separate": {
+          "fy25": 2299576,
+          "fy26": 2306380,
+          "base_total": 2299576,
+          "comparison_total": 2306380,
+          "delta": 6804,
+          "delta_pct": 0.3,
+          "banners": 34
+        }
+      }
+    }
   },
   "source_rows_read": 8132,
   "data_modes": {
@@ -75,6 +209,8 @@
     "blended": {
       "fy25": 2324823,
       "fy26": 2586883,
+      "base_total": 2324823,
+      "comparison_total": 2586883,
       "delta": 262060,
       "delta_pct": 11.3,
       "banners": 34
@@ -82,6 +218,8 @@
     "separate": {
       "fy25": 2008605,
       "fy26": 2306380,
+      "base_total": 2008605,
+      "comparison_total": 2306380,
       "delta": 297775,
       "delta_pct": 14.8,
       "banners": 34

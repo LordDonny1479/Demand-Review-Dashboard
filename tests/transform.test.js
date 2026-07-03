@@ -1,6 +1,9 @@
 import assert from "node:assert";
 import fs from "node:fs";
-import { META, MONTHS, RAW } from "../app/data/promo-yoy-data.js";
+
+const { META, MONTHS, RAW } = JSON.parse(
+  fs.readFileSync("public/data/promo-dashboard-data.json", "utf8"),
+);
 
 assert.deepStrictEqual(MONTHS, [
   "Jan",
@@ -26,6 +29,8 @@ assert.deepStrictEqual(RAW.banner_order.slice(0, 5), [
   "Canadian Tire",
 ]);
 assert.strictEqual(RAW.default_mode, "blended");
+assert.ok(RAW.comparisons.yoy);
+assert.ok(RAW.comparisons.mom);
 assert.ok(RAW.modes.blended);
 assert.ok(RAW.modes.separate);
 assert.strictEqual(RAW.modes.blended.stats.fy25, 2324823);
@@ -36,6 +41,17 @@ assert.strictEqual(RAW.modes.separate.stats.fy25, 2008605);
 assert.strictEqual(RAW.modes.separate.stats.fy26, 2306380);
 assert.strictEqual(RAW.modes.separate.stats.delta, 297775);
 assert.strictEqual(RAW.modes.separate.stats.delta_pct, 14.8);
+assert.strictEqual(RAW.comparisons.yoy.modes.blended.stats.fy26, RAW.modes.blended.stats.fy26);
+assert.strictEqual(RAW.comparisons.mom.period_labels.base, "June");
+assert.strictEqual(RAW.comparisons.mom.period_labels.comparison, "July");
+assert.strictEqual(RAW.comparisons.mom.modes.blended.stats.fy25, 2571167);
+assert.strictEqual(RAW.comparisons.mom.modes.blended.stats.fy26, 2586883);
+assert.strictEqual(RAW.comparisons.mom.modes.blended.stats.delta, 15716);
+assert.strictEqual(RAW.comparisons.mom.modes.blended.stats.delta_pct, 0.6);
+assert.strictEqual(RAW.comparisons.mom.modes.separate.stats.fy25, 2299576);
+assert.strictEqual(RAW.comparisons.mom.modes.separate.stats.fy26, 2306380);
+assert.strictEqual(RAW.comparisons.mom.modes.separate.stats.delta, 6804);
+assert.strictEqual(RAW.comparisons.mom.modes.separate.stats.delta_pct, 0.3);
 
 const grandTotal = RAW.modes.blended.rollup_ret.find((row) => row.label === "GRAND TOTAL");
 assert.ok(grandTotal);
@@ -100,6 +116,13 @@ assert.strictEqual(separateRetailers[0].fy25, 0);
 assert.strictEqual(separateRetailers[0].fy26, 18000);
 assertSortedByDeltaDesc(separateRetailers);
 
+const momRetailers = retailerRowsForMpg(RAW.comparisons.mom.modes.blended.rollup_grp, "R&G Small Bag 6/300g");
+assert.ok(momRetailers.length > 5);
+assert.strictEqual(momRetailers[0].label, "Metro Quebec");
+assert.strictEqual(momRetailers[0].fy25, 14191);
+assert.strictEqual(momRetailers[0].fy26, 15388);
+assertSortedByDeltaDesc(momRetailers);
+
 const audit = fs.readFileSync("data/display-conversion-audit.csv", "utf8");
 assert.ok(audit.includes("TDRGSB-48/300,R&G SMALL BAG 48/300GR,Roast & Ground,R&G Small Bag 6/300g,Roast & Ground Displays,R&G Small Bag 48/300g,8.0,yes"));
 assert.ok(audit.includes("TDSSKC-48/12,SS KCOMP 48/12CT,Single Serve (K-Cup),SS KComp 6/12ct,Single Serve (K-Cup) Displays,SS KComp 48/12ct,8.0,yes"));
@@ -111,6 +134,7 @@ assert.strictEqual(META.methodology.volume_source, "Product-level Fcst Inc Cases
 assert.strictEqual(META.methodology.row_filter, "Fcst Inc Cases > 0");
 assert.strictEqual(META.methodology.product_level, "MPG pack-size level from Product List; individual flavours are combined");
 assert.strictEqual(META.generated_from.demand_workbook, "DR 07 July - YoY.xlsx");
+assert.strictEqual(META.generated_from.mom_workbook, "DR 07 July - MoM.xlsx");
 assert.strictEqual(META.generated_from.market_workbook, "Market List.xlsx");
 assert.deepStrictEqual(META.methodology.year_status_filter["2026"], [
   "Closed",
@@ -123,12 +147,19 @@ assert.strictEqual(META.mode_totals.blended.fy26, 2586883);
 assert.strictEqual(META.mode_totals.separate.fy26, 2306380);
 assert.strictEqual(META.display_products_converted, 59);
 assert.strictEqual(META.unconverted_display_products, 5);
+assert.strictEqual(META.comparisons.mom.mode_totals.blended.fy25, 2571167);
+assert.strictEqual(META.comparisons.mom.mode_totals.blended.fy26, 2586883);
+assert.strictEqual(META.comparisons.mom.display_products_converted, 45);
 
 const dashboardSource = fs.readFileSync("app/demand-dashboard.jsx", "utf8");
 assert.ok(!dashboardSource.includes('type="file"'));
 assert.ok(!dashboardSource.includes("Upload"));
-assert.ok(dashboardSource.includes("./data/promo-yoy-data"));
+assert.ok(dashboardSource.includes("DASHBOARD_DATA_URL"));
 assert.ok(dashboardSource.includes("Blend DRPs into cases"));
+assert.ok(dashboardSource.includes("By Retailer - YoY"));
+assert.ok(dashboardSource.includes("By Product Group - YoY"));
+assert.ok(dashboardSource.includes("By Retailer - MoM"));
+assert.ok(dashboardSource.includes("By Product Group - MoM"));
 assert.ok(dashboardSource.includes("row.is_mpg"));
 assert.ok(dashboardSource.includes("row.is_retailer"));
 
