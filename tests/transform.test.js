@@ -17,18 +17,25 @@ assert.deepStrictEqual(MONTHS, [
   "Dec",
 ]);
 
-assert.strictEqual(RAW.banner_order.length, 11);
+assert.strictEqual(RAW.banner_order.length, 34);
+assert.deepStrictEqual(RAW.banner_order.slice(0, 5), [
+  "Amazon",
+  "Associated Grocers",
+  "Atlantic Grocers",
+  "Canada",
+  "Canadian Tire",
+]);
 assert.strictEqual(RAW.default_mode, "blended");
 assert.ok(RAW.modes.blended);
 assert.ok(RAW.modes.separate);
-assert.strictEqual(RAW.modes.blended.stats.fy25, 1432728);
-assert.strictEqual(RAW.modes.blended.stats.fy26, 1157633);
-assert.strictEqual(RAW.modes.blended.stats.delta, -275095);
-assert.strictEqual(RAW.modes.blended.stats.delta_pct, -19.2);
-assert.strictEqual(RAW.modes.separate.stats.fy25, 1037293);
-assert.strictEqual(RAW.modes.separate.stats.fy26, 888666);
-assert.strictEqual(RAW.modes.separate.stats.delta, -148627);
-assert.strictEqual(RAW.modes.separate.stats.delta_pct, -14.3);
+assert.strictEqual(RAW.modes.blended.stats.fy25, 2324823);
+assert.strictEqual(RAW.modes.blended.stats.fy26, 2508970);
+assert.strictEqual(RAW.modes.blended.stats.delta, 184147);
+assert.strictEqual(RAW.modes.blended.stats.delta_pct, 7.9);
+assert.strictEqual(RAW.modes.separate.stats.fy25, 2008605);
+assert.strictEqual(RAW.modes.separate.stats.fy26, 2237140);
+assert.strictEqual(RAW.modes.separate.stats.delta, 228535);
+assert.strictEqual(RAW.modes.separate.stats.delta_pct, 11.4);
 
 const grandTotal = RAW.modes.blended.rollup_ret.find((row) => row.label === "GRAND TOTAL");
 assert.ok(grandTotal);
@@ -37,21 +44,28 @@ assert.strictEqual(grandTotal.fy26, RAW.modes.blended.stats.fy26);
 
 const walmart = RAW.modes.blended.rollup_ret.find((row) => row.label === "Walmart");
 assert.ok(walmart);
-assert.strictEqual(walmart.fy25, 394261);
-assert.strictEqual(walmart.fy26, 319133);
+assert.strictEqual(walmart.fy25, 307261);
+assert.strictEqual(walmart.fy26, 324149);
 
 const separateWalmart = RAW.modes.separate.rollup_ret.find((row) => row.label === "Walmart");
 assert.ok(separateWalmart);
-assert.strictEqual(separateWalmart.fy25, 84306);
-assert.strictEqual(separateWalmart.fy26, 132812);
+assert.strictEqual(separateWalmart.fy25, 81906);
+assert.strictEqual(separateWalmart.fy26, 130171);
 
 const separateDisplayGroup = RAW.modes.separate.rollup_grp.find((row) => row.label === "Roast & Ground Displays");
 assert.ok(separateDisplayGroup);
-assert.strictEqual(separateDisplayGroup.fy25, 5364);
-assert.strictEqual(separateDisplayGroup.fy26, 5039);
+assert.strictEqual(separateDisplayGroup.fy25, 5906);
+assert.strictEqual(separateDisplayGroup.fy26, 4759);
 
 const blendedDisplayGroup = RAW.modes.blended.rollup_grp.find((row) => row.label === "Roast & Ground Displays");
 assert.strictEqual(blendedDisplayGroup, undefined);
+
+const categoryFallbackRows = [
+  RAW.modes.blended.rollup_grp.find((row) => row.label === "R&G Unspecified"),
+  RAW.modes.blended.rollup_grp.find((row) => row.label === "SS KComp Unspecified"),
+];
+assert.strictEqual(categoryFallbackRows[0].fy26, 8821);
+assert.strictEqual(categoryFallbackRows[1].fy26, 14655);
 
 function retailerRowsForMpg(rows, mpg) {
   const start = rows.findIndex((row) => row.label === mpg && row.is_mpg);
@@ -90,14 +104,18 @@ const audit = fs.readFileSync("data/display-conversion-audit.csv", "utf8");
 assert.ok(audit.includes("TDRGSB-48/300,R&G SMALL BAG 48/300GR,Roast & Ground,R&G Small Bag 6/300g,Roast & Ground Displays,R&G Small Bag 48/300g,8.0,yes"));
 assert.ok(audit.includes("TDSSKC-48/12,SS KCOMP 48/12CT,Single Serve (K-Cup),SS KComp 6/12ct,Single Serve (K-Cup) Displays,SS KComp 48/12ct,8.0,yes"));
 assert.ok(audit.includes("6320912131,TDL ORG/DR/COL KCUP SS 1/2 DRP 145/30 CT,Single Serve (K-Cup),SS KComp 4/30ct,Single Serve (K-Cup) Displays,SS KComp 145/30ct,36.25,yes"));
+assert.ok(audit.includes("TDGB-56/5,GRANOLA BAR 56/5EA,Granola Bar,Granola Bar 12/5/30g,Granola Bar Displays,Granola Bar 56/5ea,4.666667,yes"));
+assert.ok(audit.includes("6320925922,TDL INST MED/IC SYR CAP/MOC 1/2DRP 288EA,Iced Coffee & Syrups,Instant & Syrup Drp 288/1ea,Iced Coffee & Syrups Displays,Instant & Syrup Drp 288/1ea,1.0,no"));
 
 assert.strictEqual(META.methodology.volume_source, "Product-level Fcst Inc Cases");
 assert.strictEqual(META.methodology.row_filter, "Fcst Inc Cases > 0");
 assert.strictEqual(META.methodology.product_level, "MPG pack-size level from Product List; individual flavours are combined");
-assert.strictEqual(META.mode_totals.blended.fy25, 1432728);
-assert.strictEqual(META.mode_totals.separate.fy25, 1037293);
-assert.strictEqual(META.display_products_converted, 47);
-assert.strictEqual(META.unconverted_display_products, 3);
+assert.strictEqual(META.generated_from.demand_workbook, "DR 07 July - YoY.xlsx");
+assert.strictEqual(META.generated_from.market_workbook, "Market List.xlsx");
+assert.strictEqual(META.mode_totals.blended.fy25, 2324823);
+assert.strictEqual(META.mode_totals.separate.fy25, 2008605);
+assert.strictEqual(META.display_products_converted, 58);
+assert.strictEqual(META.unconverted_display_products, 5);
 
 const dashboardSource = fs.readFileSync("app/demand-dashboard.jsx", "utf8");
 assert.ok(!dashboardSource.includes('type="file"'));

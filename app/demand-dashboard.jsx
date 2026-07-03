@@ -170,7 +170,8 @@ export default function DemandDashboard() {
       </section>
 
       <footer className="data-footnote">
-        Source: {META.generated_from.demand_workbook} and {META.generated_from.product_workbook}
+        Source: {META.generated_from.demand_workbook}; mapping:{" "}
+        {META.generated_from.product_workbook} and {META.generated_from.market_workbook}
       </footer>
     </main>
   );

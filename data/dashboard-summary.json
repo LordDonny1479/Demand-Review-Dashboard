@@ -1,7 +1,8 @@
 {
   "generated_from": {
-    "demand_workbook": "DR 06 June - 2025 vs 2026.xlsx",
-    "product_workbook": "Product List 20260629.xlsx"
+    "demand_workbook": "DR 07 July - YoY.xlsx",
+    "product_workbook": "Product List 20260629.xlsx",
+    "market_workbook": "Market List.xlsx"
   },
   "methodology": {
     "volume_source": "Product-level Fcst Inc Cases",
@@ -20,49 +21,73 @@
     "display_method": "Toggleable: blended mode converts display/DRP/PDQ pack sizes to equivalent regular cases; separate mode keeps display/DRP rows separate and counts each as 1 case",
     "product_level": "MPG pack-size level from Product List; individual flavours are combined",
     "banner_scope": [
-      "Sobeys Banners FS",
-      "FreshCo",
-      "Sobeys Quebec",
+      "Amazon",
+      "Associated Grocers",
+      "Atlantic Grocers",
+      "Canada",
+      "Canadian Tire",
+      "Chens",
+      "CJR Wholesale",
+      "Colabor",
+      "Cold Star Solutions",
+      "Costco",
+      "Dist Benmar",
+      "Fed Coop",
+      "Giant Tiger",
+      "Highland Farms",
+      "Home Hardware",
+      "Island Grocers",
+      "Jean Coutu",
+      "Loblaw",
+      "London Drugs",
+      "Longos",
+      "McKesson",
+      "McMahon",
       "Metro Ontario",
       "Metro Quebec",
-      "Pattison Food Group",
-      "Giant Tiger",
-      "FCL",
-      "Canadian Tire",
+      "Northwest Company",
+      "PFG",
+      "Phoenicia",
+      "Pipers",
+      "Pratts Wholesale",
+      "SDM",
+      "Sobeys Quebec",
+      "Sobeys ROC",
       "Walmart",
-      "Loblaws"
-    ]
+      "Western Wholesale"
+    ],
+    "market_mapping": "Retailer/customer names are mapped from Market List.xlsx"
   },
-  "source_rows_read": 8138,
+  "source_rows_read": 8132,
   "data_modes": {
     "blended": "Blend DRPs/displays into regular-case equivalents",
     "separate": "Keep DRPs/displays separate and count each display as 1 case"
   },
-  "included_source_month_rows": 5719,
-  "included_source_rows": 3647,
-  "excluded_rows": 4491,
-  "display_products_reviewed": 50,
-  "display_products_converted": 47,
-  "unconverted_display_products": 3,
-  "detail_rows": 11438,
+  "included_source_month_rows": 9234,
+  "included_source_rows": 5836,
+  "excluded_rows": 2296,
+  "display_products_reviewed": 63,
+  "display_products_converted": 58,
+  "unconverted_display_products": 5,
+  "detail_rows": 18468,
   "mode_totals": {
     "blended": {
-      "fy25": 1432728,
-      "fy26": 1157633,
-      "delta": -275095,
-      "delta_pct": -19.2,
-      "banners": 11
+      "fy25": 2324823,
+      "fy26": 2508970,
+      "delta": 184147,
+      "delta_pct": 7.9,
+      "banners": 34
     },
     "separate": {
-      "fy25": 1037293,
-      "fy26": 888666,
-      "delta": -148627,
-      "delta_pct": -14.3,
-      "banners": 11
+      "fy25": 2008605,
+      "fy26": 2237140,
+      "delta": 228535,
+      "delta_pct": 11.4,
+      "banners": 34
     }
   },
-  "total_cases_2025": 1432728,
-  "total_cases_2026": 1157633,
-  "delta_cases": -275095,
-  "delta_pct": -19.2
+  "total_cases_2025": 2324823,
+  "total_cases_2026": 2508970,
+  "delta_cases": 184147,
+  "delta_pct": 7.9
 }

@@ -14,8 +14,9 @@ Those drilldown values switch with the display blending toggle.
 
 Raw workbooks are stored in `data/raw`:
 
-- `DR 06 June - 2025 vs 2026.xlsx`
+- `DR 07 July - YoY.xlsx`
 - `Product List 20260629.xlsx`
+- `Market List.xlsx`
 
 Generated dashboard data is written to:
 
@@ -44,14 +45,19 @@ The builder:
 - pro-rates cases into calendar months by inclusive execution days;
 - maps products through the product list and combines flavours at MPG pack-size
   level;
+- maps retailer/customer names through `Market List.xlsx` and renders active
+  mapped retailers from the current demand workbook;
+- retains material category-level rows without pack-size detail as transparent
+  `Unspecified` MPG rows rather than dropping their volume;
 - generates two display modes:
   - blended mode converts display, DRP, and PDQ pack sizes into equivalent
     regular cases and blends them into the regular MPG;
   - separate mode keeps display rows on their display MPG and counts each
     display/DRP as 1 case;
-- renders the 11 customer/banner groups from the reference view.
+- writes a display-conversion audit showing converted and unconverted display
+  products.
 
-Rows that cannot be mapped to a displayed banner, have no positive incremental
+Rows that cannot be mapped to a supplied retailer, have no positive incremental
 cases, fail the status filter, or cannot map to an MPG are preserved in
 `data/promo-yoy-excluded-rows.csv`.
 

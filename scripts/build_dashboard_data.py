@@ -14,8 +14,9 @@ from openpyxl import load_workbook
 
 ROOT = Path(__file__).resolve().parents[1]
 RAW_DIR = ROOT / "data" / "raw"
-DEMAND_XLSX = RAW_DIR / "DR 06 June - 2025 vs 2026.xlsx"
+DEMAND_XLSX = RAW_DIR / "DR 07 July - YoY.xlsx"
 PRODUCT_XLSX = RAW_DIR / "Product List 20260629.xlsx"
+MARKET_XLSX = RAW_DIR / "Market List.xlsx"
 
 OUTPUT_MODULE = ROOT / "app" / "data" / "promo-yoy-data.js"
 OUTPUT_DASHBOARD_JSON = ROOT / "data" / "promo-yoy-dashboard.json"
@@ -31,34 +32,7 @@ STATUS_BY_YEAR = {
     2026: {"Planned", "Committed"},
 }
 
-BANNER_ORDER = [
-    "Sobeys Banners FS",
-    "FreshCo",
-    "Sobeys Quebec",
-    "Metro Ontario",
-    "Metro Quebec",
-    "Pattison Food Group",
-    "Giant Tiger",
-    "FCL",
-    "Canadian Tire",
-    "Walmart",
-    "Loblaws",
-]
-
-DIRECT_BANNERS = {
-    "BT-SOBEYS ONTARIO": "Sobeys Banners FS",
-    "CG-SOBEY'S QUEBEC": "Sobeys Quebec",
-    "BT-SOBEYS QC MONTREAL": "Sobeys Quebec",
-    "NA-METRO ONTARIO": "Metro Ontario",
-    "NA-METRO QUEBEC": "Metro Quebec",
-    "NA-PATTISON FOOD GROUP": "Pattison Food Group",
-    "NA-OVERWAITEA FOOD GROUP": "Pattison Food Group",
-    "NA-GIANT TIGER": "Giant Tiger",
-    "NA-FED CO-OP": "FCL",
-    "NA-CANADIAN TIRE": "Canadian Tire",
-    "NA-WAL-MART": "Walmart",
-    "NA-LOBLAWS": "Loblaws",
-}
+BANNER_ORDER = []
 
 GROUP_ORDER = [
     "Granola Bar",
@@ -88,6 +62,18 @@ PACK_RE = re.compile(
     r"(\d+(?:\.\d+)?(?:\s*/\s*\d+(?:\.\d+)?)?\s*(?:GR|G|KG|ML|L|CT|EA|LB))",
     re.IGNORECASE,
 )
+CATEGORY_FALLBACKS = {
+    "TDSSKC": {
+        "pack_size": "SS KComp Unspecified",
+        "planner": "Single Serve",
+        "segment": "Single Serve",
+    },
+    "TDRG": {
+        "pack_size": "R&G Unspecified",
+        "planner": "Roast & Ground",
+        "segment": "Roast & Ground",
+    },
+}
 
 
 def clean(value) -> str:
@@ -168,11 +154,40 @@ def pretty_pack_size(pack_size: str) -> str:
     return f"{pretty_label(prefix)} {qty}/{unit}".strip()
 
 
-def map_banner(market: str, description: str) -> str | None:
+def load_market_map():
+    if not MARKET_XLSX.exists():
+        raise FileNotFoundError(f"Missing market mapping workbook: {MARKET_XLSX}")
+
+    workbook = load_workbook(MARKET_XLSX, read_only=True, data_only=True)
+    sheet = workbook.active
+    market_map = {}
+    banner_order = []
+
+    for row in sheet.iter_rows(values_only=True):
+        market = clean(row[0] if len(row) > 0 else "")
+        banner = clean(row[1] if len(row) > 1 else "")
+        if not market or not banner:
+            continue
+        market_map[market] = banner
+        if banner not in banner_order:
+            banner_order.append(banner)
+
+    workbook.close()
+    return market_map, banner_order
+
+
+def active_banner_order(rows: list[dict], configured_order: list[str]) -> list[str]:
+    active = {row["banner"] for row in rows}
+    ordered = [banner for banner in configured_order if banner in active]
+    ordered.extend(sorted(active - set(ordered)))
+    return ordered
+
+
+def map_banner(market: str, description: str, market_map: dict | None = None) -> str | None:
     market = clean(market)
-    if market == "CG-SOBEY'S ROC":
-        return "FreshCo" if re.search(r"\bfresh\s*co\b|freshco", description, re.IGNORECASE) else "Sobeys Banners FS"
-    return DIRECT_BANNERS.get(market)
+    if market_map is not None:
+        return market_map.get(market)
+    return None
 
 
 def infer_planner(*parts: str) -> str:
@@ -254,6 +269,8 @@ def family_key(rec: dict) -> str:
         return "soup"
     if "TEA" in planner or "TEA" in text:
         return "tea"
+    if "GRANOLA" in planner or "GRANOLA" in text:
+        return "granola"
     if "COLD" in planner or "SYRUP" in text or "READY TO DRINK" in text or "RTD" in text:
         return "cold_beverage"
     return clean(rec.get("planner")) or clean(rec.get("segment")) or "other"
@@ -283,15 +300,23 @@ def product_record(row) -> dict:
 
 def fallback_product_record(product_id: str, product: str) -> dict | None:
     pack = parse_pack(product)
-    if not pack:
+    fallback = CATEGORY_FALLBACKS.get(clean(product_id).upper())
+    if not pack and not fallback:
         return None
-    planner = infer_planner(product_id, product)
+    if not pack:
+        planner = fallback["planner"]
+        pack_size = fallback["pack_size"]
+        segment = fallback["segment"]
+    else:
+        planner = infer_planner(product_id, product)
+        pack_size = product
+        segment = planner
     rec = {
         "line_of_business": "",
         "brand": "",
-        "segment": planner,
+        "segment": segment,
         "pack_size_id": product_id,
-        "pack_size": product,
+        "pack_size": pack_size,
         "item_id": product_id,
         "item": product,
         "sub_category_1": "",
@@ -299,6 +324,7 @@ def fallback_product_record(product_id: str, product: str) -> dict | None:
         "lookup_source": "demand_product_text",
         "pack": pack,
         "is_display": is_display_text(product_id, product),
+        "is_unspecified_pack": bool(fallback and not pack),
     }
     return rec
 
@@ -446,6 +472,14 @@ def display_pack_candidates(row: dict, rec: dict):
     return unique
 
 
+def equivalent_display_units(family: str, unit: str) -> list[str]:
+    unit = normalize_unit(unit)
+    units = [unit]
+    if family == "granola" and unit == "5EA":
+        units.append("5/30G")
+    return units
+
+
 def month_splits(start: date, end: date):
     if end < start:
         start, end = end, start
@@ -589,10 +623,14 @@ def conversion_for_row(row: dict, base_lookup: dict):
         unit_type = "DRP"
         candidates = display_pack_candidates(row, rec)
         for candidate in candidates:
-            key = (family_key(rec), candidate[1])
-            if key in base_lookup:
-                display_pack = candidate
-                base = base_lookup[key]
+            family = family_key(rec)
+            for unit in equivalent_display_units(family, candidate[1]):
+                key = (family, unit)
+                if key in base_lookup:
+                    display_pack = candidate
+                    base = base_lookup[key]
+                    break
+            if base:
                 break
         if display_pack is None and candidates:
             display_pack = candidates[0]
@@ -632,6 +670,9 @@ def build_dashboard_from_rows(rows: list[dict]):
 
 
 def build_outputs():
+    global BANNER_ORDER
+
+    market_map, configured_banner_order = load_market_map()
     products, item_by_id, pack_groups = load_products()
     demand_rows = raw_demand_rows(item_by_id, pack_groups)
     base_lookup = build_base_pack_lookup(products, demand_rows)
@@ -644,7 +685,7 @@ def build_outputs():
 
     for row in demand_rows:
         year = row["year"]
-        banner = map_banner(row["market"], row["description"])
+        banner = map_banner(row["market"], row["description"], market_map)
         rec = row["product_record"]
         reason = None
 
@@ -653,8 +694,8 @@ def build_outputs():
         elif row["forecast_incremental_cases"] <= 0:
             reason = "Fcst Inc Cases is not positive"
         elif not banner:
-            reason = "Market is outside the 11 displayed banner/customer groups"
-        elif not rec or not rec.get("pack"):
+            reason = "Market is outside the supplied market list"
+        elif not rec or (not rec.get("pack") and not rec.get("is_unspecified_pack")):
             reason = "Product cannot be mapped to an MPG pack size"
         elif not row["execution_start"] or not row["execution_end"]:
             reason = "Missing execution start or end date"
@@ -745,6 +786,10 @@ def build_outputs():
                     "conversion_note": conversion["conversion_note"],
                 })
 
+    BANNER_ORDER = active_banner_order(
+        [row for rows in mode_rows.values() for row in rows],
+        configured_banner_order,
+    )
     dashboard_modes = {
         mode: build_dashboard_from_rows(rows)
         for mode, rows in mode_rows.items()
@@ -761,6 +806,7 @@ def build_outputs():
         "generated_from": {
             "demand_workbook": DEMAND_XLSX.name,
             "product_workbook": PRODUCT_XLSX.name,
+            "market_workbook": MARKET_XLSX.name,
         },
         "methodology": {
             "volume_source": "Product-level Fcst Inc Cases",
@@ -773,6 +819,7 @@ def build_outputs():
             "display_method": "Toggleable: blended mode converts display/DRP/PDQ pack sizes to equivalent regular cases; separate mode keeps display/DRP rows separate and counts each as 1 case",
             "product_level": "MPG pack-size level from Product List; individual flavours are combined",
             "banner_scope": BANNER_ORDER,
+            "market_mapping": "Retailer/customer names are mapped from Market List.xlsx",
         },
         "source_rows_read": len(demand_rows),
         "data_modes": DATA_MODES,

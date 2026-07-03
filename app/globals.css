@@ -177,14 +177,16 @@ button {
 
 .cards {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 8px;
+  overflow-x: auto;
   padding: 8px 20px;
   background: var(--cream);
   border-bottom: 1px solid var(--line);
 }
 
 .card {
+  flex: 0 0 130px;
   min-width: 130px;
   padding: 7px 10px;
   cursor: pointer;
