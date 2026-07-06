@@ -151,6 +151,40 @@ CATEGORY_FALLBACKS = {
 }
 HB_MIX_BASE_PACK_SIZE = "HB MIX 4/24EA"
 HB_MIX_BASE_PACK_QTY = 4.0
+MIXED_DRP_COMPONENTS = {
+    "6320925922": [
+        {
+            "base_pack_size": "INSTANT COFFEE 12/100GR",
+            "product_group": "Instant",
+            "component_label": "instant coffee",
+            "units": 192.0,
+            "case_pack_qty": 12.0,
+        },
+        {
+            "base_pack_size": "SYRUPS 12/470ML",
+            "product_group": "Syrups",
+            "component_label": "iced coffee syrup",
+            "units": 96.0,
+            "case_pack_qty": 12.0,
+        },
+    ],
+    "6320924394": [
+        {
+            "base_pack_size": "HB HOT CHOCOLATE 6/1.5KG",
+            "product_group": "Hot Chocolate",
+            "component_label": "hot chocolate",
+            "units": 90.0,
+            "case_pack_qty": 6.0,
+        },
+        {
+            "base_pack_size": "HB CAPPUCCINO 6/1KG",
+            "product_group": "Sweet & Creamy",
+            "component_label": "cappuccino french vanilla",
+            "units": 60.0,
+            "case_pack_qty": 6.0,
+        },
+    ],
+}
 
 
 def clean(value) -> str:
@@ -647,6 +681,33 @@ def hb_mix_display_base(row: dict, rec: dict, candidates: list[tuple[float, str]
     }
 
 
+def mixed_drp_components(row: dict):
+    if not row["is_display_product"]:
+        return None
+
+    product_id = clean(row["product_id"]).upper()
+    specs = MIXED_DRP_COMPONENTS.get(product_id)
+    if not specs:
+        return None
+
+    components = []
+    for spec in specs:
+        conversion = spec["units"] / spec["case_pack_qty"]
+        components.append(
+            {
+                "base_pack_size": spec["base_pack_size"],
+                "product_group": spec["product_group"],
+                "conversion": conversion,
+                "conversion_note": (
+                    f"Mixed DRP split: {format_qty(spec['units'])} "
+                    f"{spec['component_label']} units / regular case pack "
+                    f"{format_qty(spec['case_pack_qty'])} = {format_qty(conversion)} cases"
+                ),
+            }
+        )
+    return components
+
+
 def month_splits(start: date, end: date):
     if end < start:
         start, end = end, start
@@ -871,45 +932,63 @@ def conversion_for_row(row: dict, base_lookup: dict):
     conversion_note = "Reported as regular cases"
     display_pack = None
     base = None
+    components = None
 
     if row["is_display_product"]:
         unit_type = "DRP"
-        candidates = display_pack_candidates(row, rec)
-        hb_mix_base = hb_mix_display_base(row, rec, candidates)
-        if hb_mix_base:
-            display_pack = hb_mix_base["display_pack"]
-            base = hb_mix_base["base"]
+        components = mixed_drp_components(row)
+        if components:
+            conversion = sum(component["conversion"] for component in components)
+            base_pack_size = components[0]["base_pack_size"]
+            conversion_note = "; ".join(component["conversion_note"] for component in components)
         else:
-            for candidate in candidates:
-                family = family_key(rec)
-                for unit in equivalent_display_units(family, candidate[1]):
-                    key = (family, unit)
-                    if key in base_lookup:
-                        display_pack = candidate
-                        base = base_lookup[key]
+            candidates = display_pack_candidates(row, rec)
+            hb_mix_base = hb_mix_display_base(row, rec, candidates)
+            if hb_mix_base:
+                display_pack = hb_mix_base["display_pack"]
+                base = hb_mix_base["base"]
+            else:
+                for candidate in candidates:
+                    family = family_key(rec)
+                    for unit in equivalent_display_units(family, candidate[1]):
+                        key = (family, unit)
+                        if key in base_lookup:
+                            display_pack = candidate
+                            base = base_lookup[key]
+                            break
+                    if base:
                         break
-                if base:
-                    break
-            if display_pack is None and candidates:
-                display_pack = candidates[0]
-                base = base_lookup.get((family_key(rec), display_pack[1]))
+                if display_pack is None and candidates:
+                    display_pack = candidates[0]
+                    base = base_lookup.get((family_key(rec), display_pack[1]))
 
-        if display_pack and base:
-            conversion = display_pack[0] / base["pack_qty"]
-            base_pack_size = base["pack_size"] or rec["pack_size"]
-            base_unit = base.get("pack_unit", display_pack[1])
-            conversion_note = (
-                f"Display pack {format_qty(display_pack[0])}/{display_pack[1]} "
-                f"converted to regular case pack {format_qty(base['pack_qty'])}/{base_unit}"
-            )
-        else:
-            conversion_note = "Display product without matching regular pack; left as reported cases"
+            if display_pack and base:
+                conversion = display_pack[0] / base["pack_qty"]
+                base_pack_size = base["pack_size"] or rec["pack_size"]
+                base_unit = base.get("pack_unit", display_pack[1])
+                conversion_note = (
+                    f"Display pack {format_qty(display_pack[0])}/{display_pack[1]} "
+                    f"converted to regular case pack {format_qty(base['pack_qty'])}/{base_unit}"
+                )
+            else:
+                conversion_note = "Display product without matching regular pack; left as reported cases"
+
+    if not components:
+        components = [
+            {
+                "base_pack_size": base_pack_size,
+                "product_group": "",
+                "conversion": conversion,
+                "conversion_note": conversion_note,
+            }
+        ]
 
     return {
         "unit_type": unit_type,
         "conversion": conversion,
         "base_pack_size": base_pack_size,
         "conversion_note": conversion_note,
+        "components": components,
         "display_pack_qty": "" if display_pack is None else display_pack[0],
         "display_pack_unit": "" if display_pack is None else display_pack[1],
     }
@@ -1017,48 +1096,85 @@ def transform_comparison(comparison_key: str, config: dict, demand_rows: list[di
             continue
 
         conversion = conversion_for_row(row, base_lookup)
-        blended_mpg = pretty_pack_size(conversion["base_pack_size"])
-        blended_product_group = product_group_label(blended_mpg, rec["planner"], rec["segment"])
+        blended_components = []
+        for component in conversion["components"]:
+            blended_mpg = pretty_pack_size(component["base_pack_size"])
+            blended_product_group = component.get("product_group") or product_group_label(
+                blended_mpg,
+                rec["planner"],
+                rec["segment"],
+            )
+            blended_components.append(
+                {
+                    "product_group": blended_product_group,
+                    "mpg": blended_mpg,
+                    "conversion": component["conversion"],
+                    "conversion_note": component["conversion_note"],
+                }
+            )
         separate_mpg = pretty_pack_size(rec["pack_size"])
         separate_product_group = product_group_label(separate_mpg, rec["planner"], rec["segment"])
         source_cases = row["forecast_incremental_cases"]
-        converted_cases = source_cases * conversion["conversion"]
 
         if conversion["unit_type"] == "DRP":
-            separate_product_group = display_group_label(blended_product_group)
+            separate_product_group = display_group_label(separate_product_group)
 
         if conversion["unit_type"] == "DRP":
-            converted = "without matching regular pack" not in conversion["conversion_note"]
-            audit_key = (
-                comparison_key,
-                row["product_id"],
-                row["product"],
-                blended_mpg,
-                separate_mpg,
-                conversion["conversion"],
-                conversion["conversion_note"],
-            )
-            display_audit[audit_key] = {
-                "comparison_key": comparison_key,
-                "product_id": row["product_id"],
-                "product": row["product"],
-                "blended_mpg": blended_mpg,
-                "separate_mpg": separate_mpg,
-                "blended_product_group": blended_product_group,
-                "separate_product_group": separate_product_group,
-                "cases_per_display": round(conversion["conversion"], 6),
-                "converted": "yes" if converted else "no",
-                "conversion_note": conversion["conversion_note"],
-            }
+            for component in blended_components:
+                converted = "without matching regular pack" not in component["conversion_note"]
+                audit_key = (
+                    comparison_key,
+                    row["product_id"],
+                    row["product"],
+                    component["mpg"],
+                    separate_mpg,
+                    component["conversion"],
+                    component["conversion_note"],
+                )
+                display_audit[audit_key] = {
+                    "comparison_key": comparison_key,
+                    "product_id": row["product_id"],
+                    "product": row["product"],
+                    "blended_mpg": component["mpg"],
+                    "separate_mpg": separate_mpg,
+                    "blended_product_group": component["product_group"],
+                    "separate_product_group": separate_product_group,
+                    "cases_per_display": round(component["conversion"], 6),
+                    "converted": "yes" if converted else "no",
+                    "conversion_note": component["conversion_note"],
+                }
 
         for month_index, weight, split_days, total_days in month_splits(row["execution_start"], row["execution_end"]):
             included_split_keys.add((row["source_sheet"], row["source_row"], month_index))
             included_source_rows.add((row["source_sheet"], row["source_row"]))
             mode_definitions = [
-                ("blended", blended_product_group, blended_mpg, converted_cases),
-                ("separate", separate_product_group, separate_mpg, source_cases),
+                {
+                    "data_mode": "blended",
+                    "product_group": component["product_group"],
+                    "mpg": component["mpg"],
+                    "mode_cases": source_cases * component["conversion"],
+                    "cases_per_display": component["conversion"],
+                    "converted_fcst_inc_cases": source_cases * component["conversion"],
+                    "conversion_note": component["conversion_note"],
+                }
+                for component in blended_components
             ]
-            for data_mode, product_group, mpg, mode_cases in mode_definitions:
+            mode_definitions.append(
+                {
+                    "data_mode": "separate",
+                    "product_group": separate_product_group,
+                    "mpg": separate_mpg,
+                    "mode_cases": source_cases,
+                    "cases_per_display": conversion["conversion"],
+                    "converted_fcst_inc_cases": source_cases * conversion["conversion"],
+                    "conversion_note": conversion["conversion_note"],
+                }
+            )
+            for mode_definition in mode_definitions:
+                data_mode = mode_definition["data_mode"]
+                product_group = mode_definition["product_group"]
+                mpg = mode_definition["mpg"]
+                mode_cases = mode_definition["mode_cases"]
                 month_cases = mode_cases * weight
                 mode_rows[data_mode].append(
                     {
@@ -1093,8 +1209,8 @@ def transform_comparison(comparison_key: str, config: dict, demand_rows: list[di
                     "execution_end": row["execution_end"].isoformat(),
                     "source_fcst_inc_cases": round(source_cases, 6),
                     "unit_type": conversion["unit_type"],
-                    "cases_per_display": "" if conversion["unit_type"] == "CASE" else round(conversion["conversion"], 6),
-                    "converted_fcst_inc_cases": round(converted_cases, 6),
+                    "cases_per_display": "" if conversion["unit_type"] == "CASE" else round(mode_definition["cases_per_display"], 6),
+                    "converted_fcst_inc_cases": round(mode_definition["converted_fcst_inc_cases"], 6),
                     "mode_fcst_inc_cases": round(mode_cases, 6),
                     "prorate_weight": round(weight, 8),
                     "execution_days_in_month": split_days,
@@ -1102,7 +1218,7 @@ def transform_comparison(comparison_key: str, config: dict, demand_rows: list[di
                     "month_cases": round(month_cases, 6),
                     "source_sheet": row["source_sheet"],
                     "source_row": row["source_row"],
-                    "conversion_note": conversion["conversion_note"],
+                    "conversion_note": mode_definition["conversion_note"],
                 })
 
     return {

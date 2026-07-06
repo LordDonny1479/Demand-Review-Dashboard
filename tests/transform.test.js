@@ -55,10 +55,10 @@ assert.ok(RAW.modes.blended);
 assert.ok(RAW.modes.separate);
 assert.ok(RAW.modes.blended.rollup_segment);
 assert.ok(RAW.modes.separate.rollup_segment);
-assert.strictEqual(RAW.modes.blended.stats.fy25, 1521594);
-assert.strictEqual(RAW.modes.blended.stats.fy26, 1315533);
-assert.strictEqual(RAW.modes.blended.stats.delta, -206061);
-assert.strictEqual(RAW.modes.blended.stats.delta_pct, -13.5);
+assert.strictEqual(RAW.modes.blended.stats.fy25, 1519806);
+assert.strictEqual(RAW.modes.blended.stats.fy26, 1322033);
+assert.strictEqual(RAW.modes.blended.stats.delta, -197773);
+assert.strictEqual(RAW.modes.blended.stats.delta_pct, -13.0);
 assert.strictEqual(RAW.modes.blended.stats.banners, 31);
 assert.strictEqual(RAW.modes.separate.stats.fy25, 1199848);
 assert.strictEqual(RAW.modes.separate.stats.fy26, 1020138);
@@ -68,8 +68,8 @@ assert.strictEqual(RAW.modes.separate.stats.banners, 31);
 assert.strictEqual(RAW.comparisons.yoy.modes.blended.stats.fy26, RAW.modes.blended.stats.fy26);
 assert.strictEqual(RAW.comparisons.mom.period_labels.base, "June");
 assert.strictEqual(RAW.comparisons.mom.period_labels.comparison, "July");
-assert.strictEqual(RAW.comparisons.mom.modes.blended.stats.fy25, 1345328);
-assert.strictEqual(RAW.comparisons.mom.modes.blended.stats.fy26, 1315533);
+assert.strictEqual(RAW.comparisons.mom.modes.blended.stats.fy25, 1351828);
+assert.strictEqual(RAW.comparisons.mom.modes.blended.stats.fy26, 1322033);
 assert.strictEqual(RAW.comparisons.mom.modes.blended.stats.delta, -29795);
 assert.strictEqual(RAW.comparisons.mom.modes.blended.stats.delta_pct, -2.2);
 assert.strictEqual(RAW.comparisons.mom.modes.blended.stats.banners, 29);
@@ -128,8 +128,8 @@ assert.strictEqual(amazonTabGrandTotal.fy26, amazonStandalone.fy26);
 
 const walmart = RAW.modes.blended.rollup_ret.find((row) => row.label === "Walmart");
 assert.ok(walmart);
-assert.strictEqual(walmart.fy25, 312480);
-assert.strictEqual(walmart.fy26, 338749);
+assert.strictEqual(walmart.fy25, 310693);
+assert.strictEqual(walmart.fy26, 345249);
 
 const separateWalmart = RAW.modes.separate.rollup_ret.find((row) => row.label === "Walmart");
 assert.ok(separateWalmart);
@@ -277,6 +277,7 @@ assertSortedByDeltaDesc(segmentRetailers);
 
 assert.deepStrictEqual(RAW.modes.blended.visible_retailer_banners, [
   "Canadian Tire",
+  "Colabor",
   "Fed Coop",
   "Giant Tiger",
   "Loblaw",
@@ -339,8 +340,10 @@ assert.ok(audit.includes("6320912131,TDL ORG/DR/COL KCUP SS 1/2 DRP 145/30 CT,Si
 assert.ok(audit.includes("TDGB-56/5,GRANOLA BAR 56/5EA,Granola,Granola Bar 12/5/30g,Granola Displays,Granola Bar 56/5ea,4.666667,yes"));
 assert.ok(audit.includes("6320915034,TDL HOT BEVERAGE MIX DISPLAYER 36/1 EA,Sweet & Creamy,HB Mix 4/24ea,Sweet & Creamy Displays,HB Mix Displayer 36/1ea,9.0,yes,Display pack 36/1EA converted to regular case pack 4/24EA"));
 assert.ok(audit.includes("6320920674,TDL KCUP WINTER/HC/FVC DISPLAY 48/10 CT,Sweet & Creamy,HB Mix 4/24ea,Sweet & Creamy Displays,HB Mix Displayer 48/10ea,12.0,yes,Display pack 48/10EA converted to regular case pack 4/24EA"));
-assert.ok(audit.includes("6320924394,TDL HOT CHOC/FVC 1/2 DRP 150/1 EA,Sweet & Creamy,HB Mix 4/24ea,Sweet & Creamy Displays,HB Mix Drp 150/1ea,37.5,yes,Display pack 150/1EA converted to regular case pack 4/24EA"));
-assert.ok(audit.includes("6320925922,TDL INST MED/IC SYR CAP/MOC 1/2DRP 288EA,Instant,Instant & Syrup Drp 288/1ea,Instant Displays,Instant & Syrup Drp 288/1ea,1.0,no"));
+assert.ok(audit.includes("6320924394,TDL HOT CHOC/FVC 1/2 DRP 150/1 EA,Hot Chocolate,HB Hot Chocolate 6/1.5kg,Sweet & Creamy Displays,HB Mix Drp 150/1ea,15.0,yes,Mixed DRP split: 90 hot chocolate units / regular case pack 6 = 15 cases"));
+assert.ok(audit.includes("6320924394,TDL HOT CHOC/FVC 1/2 DRP 150/1 EA,Sweet & Creamy,HB Cappuccino 6/1kg,Sweet & Creamy Displays,HB Mix Drp 150/1ea,10.0,yes,Mixed DRP split: 60 cappuccino french vanilla units / regular case pack 6 = 10 cases"));
+assert.ok(audit.includes("6320925922,TDL INST MED/IC SYR CAP/MOC 1/2DRP 288EA,Instant,Instant Coffee 12/100g,Instant Displays,Instant & Syrup Drp 288/1ea,16.0,yes,Mixed DRP split: 192 instant coffee units / regular case pack 12 = 16 cases"));
+assert.ok(audit.includes("6320925922,TDL INST MED/IC SYR CAP/MOC 1/2DRP 288EA,Syrups,Syrups 12/470ml,Instant Displays,Instant & Syrup Drp 288/1ea,8.0,yes,Mixed DRP split: 96 iced coffee syrup units / regular case pack 12 = 8 cases"));
 
 assert.strictEqual(META.methodology.volume_source, "Product-level Fcst Inc Cases");
 assert.strictEqual(META.methodology.row_filter, "Fcst Inc Cases > 0");
@@ -376,16 +379,16 @@ assert.strictEqual(
   "Show focus retailers plus retailers whose absolute change is greater than 5% of the total absolute change for the active comparison and display mode",
 );
 assert.deepStrictEqual(META.methodology.visible_banner_tabs, RAW.banner_order);
-assert.strictEqual(META.mode_totals.blended.fy25, 1521594);
+assert.strictEqual(META.mode_totals.blended.fy25, 1519806);
 assert.strictEqual(META.mode_totals.separate.fy25, 1199848);
-assert.strictEqual(META.mode_totals.blended.fy26, 1315533);
+assert.strictEqual(META.mode_totals.blended.fy26, 1322033);
 assert.strictEqual(META.mode_totals.separate.fy26, 1020138);
-assert.strictEqual(META.display_products_converted, 62);
-assert.strictEqual(META.unconverted_display_products, 2);
-assert.strictEqual(META.comparisons.mom.mode_totals.blended.fy25, 1345328);
-assert.strictEqual(META.comparisons.mom.mode_totals.blended.fy26, 1315533);
-assert.strictEqual(META.comparisons.mom.display_products_converted, 47);
-assert.strictEqual(META.comparisons.mom.unconverted_display_products, 1);
+assert.strictEqual(META.display_products_converted, 65);
+assert.strictEqual(META.unconverted_display_products, 1);
+assert.strictEqual(META.comparisons.mom.mode_totals.blended.fy25, 1351828);
+assert.strictEqual(META.comparisons.mom.mode_totals.blended.fy26, 1322033);
+assert.strictEqual(META.comparisons.mom.display_products_converted, 50);
+assert.strictEqual(META.comparisons.mom.unconverted_display_products, 0);
 
 const dashboardSource = fs.readFileSync("app/demand-dashboard.jsx", "utf8");
 assert.ok(!dashboardSource.includes('type="file"'));
