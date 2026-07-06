@@ -125,6 +125,7 @@ FOCUS_RETAILER_BANNERS = {
     "Walmart",
 }
 SPECIAL_RETAILER_TAB_BANNERS = {"Amazon", "Costco"}
+NON_MULO_BANNERS = SPECIAL_RETAILER_TAB_BANNERS
 CHANGE_VISIBILITY_THRESHOLD = 0.05
 
 DISPLAY_RE = re.compile(
@@ -952,6 +953,35 @@ def build_dashboard_from_rows(rows: list[dict]):
         "change_visibility_threshold_cases": round_cases(visibility["threshold"]),
         "change_visibility_total_delta_cases": round_cases(visibility["total_delta"]),
         "stats": stats,
+        "non_mulo": build_non_mulo_dashboard_from_rows(rows),
+    }
+
+
+def build_non_mulo_dashboard_from_rows(rows: list[dict]):
+    scoped_rows = [
+        row
+        for row in rows
+        if row["banner"] in NON_MULO_BANNERS
+    ]
+    active_banners = {row["banner"] for row in scoped_rows}
+    visible_banners = NON_MULO_BANNERS & active_banners
+    rollup_ret, total_values = build_retailer_rollup(scoped_rows, visible_banners)
+    stats = build_stats(total_values)
+    stats["banners"] = len(active_banners)
+    return {
+        "rollup_ret": rollup_ret,
+        "rollup_grp": build_product_table(
+            scoped_rows,
+            include_retailer_drilldown=True,
+            visible_retailer_banners=visible_banners,
+        ),
+        "rollup_segment": build_segment_table(
+            scoped_rows,
+            include_retailer_drilldown=True,
+            visible_retailer_banners=visible_banners,
+        ),
+        "visible_retailer_banners": ordered_banner_subset(visible_banners),
+        "stats": stats,
     }
 
 
@@ -1210,6 +1240,7 @@ def build_outputs():
             "retailer_visibility_rule": f"Show focus retailers plus retailers whose absolute change is greater than {CHANGE_VISIBILITY_THRESHOLD:.0%} of the total absolute change for the active comparison and display mode",
             "focus_retailer_banners": sorted(FOCUS_RETAILER_BANNERS),
             "special_retailer_tabs": sorted(SPECIAL_RETAILER_TAB_BANNERS),
+            "non_mulo_banners": sorted(NON_MULO_BANNERS),
         },
         "comparisons": comparison_summaries,
         "source_rows_read": yoy_summary["source_rows_read"],

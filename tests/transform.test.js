@@ -78,6 +78,25 @@ assert.strictEqual(RAW.comparisons.mom.modes.separate.stats.fy26, 1020138);
 assert.strictEqual(RAW.comparisons.mom.modes.separate.stats.delta, -38691);
 assert.strictEqual(RAW.comparisons.mom.modes.separate.stats.delta_pct, -3.7);
 assert.strictEqual(RAW.comparisons.mom.modes.separate.stats.banners, 29);
+assert.ok(RAW.comparisons.mom.modes.blended.non_mulo);
+assert.ok(RAW.comparisons.mom.modes.separate.non_mulo);
+assert.strictEqual(RAW.comparisons.mom.modes.blended.non_mulo.stats.fy25, 1191747);
+assert.strictEqual(RAW.comparisons.mom.modes.blended.non_mulo.stats.fy26, 1237242);
+assert.strictEqual(RAW.comparisons.mom.modes.blended.non_mulo.stats.delta, 45495);
+assert.strictEqual(RAW.comparisons.mom.modes.blended.non_mulo.stats.delta_pct, 3.8);
+assert.strictEqual(RAW.comparisons.mom.modes.blended.non_mulo.stats.banners, 2);
+assert.deepStrictEqual(RAW.comparisons.mom.modes.blended.non_mulo.visible_retailer_banners, [
+  "Amazon",
+  "Costco",
+]);
+assert.deepStrictEqual(
+  RAW.comparisons.mom.modes.blended.non_mulo.rollup_ret.map((row) => row.label),
+  ["Amazon", "Costco", "GRAND TOTAL"],
+);
+assert.strictEqual(RAW.comparisons.mom.modes.blended.non_mulo.rollup_ret[0].fy25, 33246);
+assert.strictEqual(RAW.comparisons.mom.modes.blended.non_mulo.rollup_ret[0].fy26, 31091);
+assert.strictEqual(RAW.comparisons.mom.modes.blended.non_mulo.rollup_ret[1].fy25, 1158501);
+assert.strictEqual(RAW.comparisons.mom.modes.blended.non_mulo.rollup_ret[1].fy26, 1206151);
 
 const grandTotal = RAW.modes.blended.rollup_ret.find((row) => row.label === "GRAND TOTAL");
 assert.ok(grandTotal);
@@ -174,6 +193,19 @@ assertDisplayGroupsAtBottom(RAW.modes.separate.rollup_grp, "Granola Displays");
 assertDisplayGroupsAtBottom(RAW.comparisons.mom.modes.separate.rollup_grp, "Granola Displays");
 assertDisplayGroupsAtBottom(RAW.modes.separate.rollup_segment, "Granola Displays");
 assertDisplayGroupsAtBottom(RAW.modes.separate.retailers.Walmart, "Hot Chocolate Displays");
+
+const nonMuloMomRetailers = new Set(
+  RAW.comparisons.mom.modes.blended.non_mulo.rollup_grp
+    .filter((row) => row.is_retailer)
+    .map((row) => row.label),
+);
+assert.deepStrictEqual([...nonMuloMomRetailers].sort(), ["Amazon", "Costco"]);
+const nonMuloMomSegmentRetailers = new Set(
+  RAW.comparisons.mom.modes.blended.non_mulo.rollup_segment
+    .filter((row) => row.is_retailer)
+    .map((row) => row.label),
+);
+assert.deepStrictEqual([...nonMuloMomSegmentRetailers].sort(), ["Amazon", "Costco"]);
 
 function retailerRowsForMpg(rows, mpg) {
   const start = rows.findIndex((row) => row.label === mpg && row.is_mpg);
@@ -338,6 +370,7 @@ assert.deepStrictEqual(META.methodology.focus_retailer_banners, [
   "Walmart",
 ]);
 assert.deepStrictEqual(META.methodology.special_retailer_tabs, ["Amazon", "Costco"]);
+assert.deepStrictEqual(META.methodology.non_mulo_banners, ["Amazon", "Costco"]);
 assert.strictEqual(
   META.methodology.retailer_visibility_rule,
   "Show focus retailers plus retailers whose absolute change is greater than 5% of the total absolute change for the active comparison and display mode",
@@ -363,6 +396,9 @@ assert.ok(dashboardSource.includes("By Retailer - YoY"));
 assert.ok(dashboardSource.includes("By Product Group - YoY"));
 assert.ok(dashboardSource.includes("By Retailer - MoM"));
 assert.ok(dashboardSource.includes("By Product Group - MoM"));
+assert.ok(dashboardSource.includes("Non-Mulo - MoM (Retailer)"));
+assert.ok(dashboardSource.includes("Non-Mulo - MoM (Product Group)"));
+assert.ok(dashboardSource.includes("RetailerCardMetric"));
 assert.ok(dashboardSource.includes("Quarter"));
 assert.ok(dashboardSource.includes("Drilldown"));
 assert.ok(dashboardSource.includes("Segment"));
@@ -385,5 +421,6 @@ assert.ok(dashboardStyles.includes("tr.tot-row td.delta-neg"));
 assert.ok(dashboardStyles.includes("--month-divider-soft"));
 assert.ok(dashboardStyles.includes("table.dt .month-end"));
 assert.ok(dashboardStyles.includes("table.dt .fy-end"));
+assert.ok(dashboardStyles.includes(".card-section-title"));
 
 console.log("dashboard data tests passed");

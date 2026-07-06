@@ -334,9 +334,9 @@ button {
 }
 
 .card {
-  flex: 0 0 130px;
-  min-width: 130px;
-  padding: 7px 10px;
+  flex: 0 0 150px;
+  min-width: 150px;
+  padding: 6px 9px;
   cursor: pointer;
   text-align: left;
   background: var(--surface);
@@ -354,11 +354,30 @@ button {
 }
 
 .card-name {
-  margin-bottom: 4px;
+  margin-bottom: 5px;
   color: var(--brand-red);
   font-size: 10px;
   font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.card-section + .card-section {
+  margin-top: 6px;
+  padding-top: 5px;
+  border-top: 1px solid var(--line);
+}
+
+.card-section-title {
+  display: inline-block;
+  margin-bottom: 2px;
+  color: var(--coffee);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .card-row {

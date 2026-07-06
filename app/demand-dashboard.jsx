@@ -7,6 +7,8 @@ const YOY_RETAILER_TAB = "tab-rollup-retailer-yoy";
 const YOY_GROUP_TAB = "tab-rollup-group-yoy";
 const MOM_RETAILER_TAB = "tab-rollup-retailer-mom";
 const MOM_GROUP_TAB = "tab-rollup-group-mom";
+const NON_MULO_RETAILER_MOM_TAB = "tab-non-mulo-retailer-mom";
+const NON_MULO_GROUP_MOM_TAB = "tab-non-mulo-group-mom";
 
 const DEFAULT_PERIOD_LABELS = {
   base: "2025",
@@ -43,7 +45,14 @@ const EMPTY_MODE = {
   rollup_ret: [],
   rollup_grp: [],
   rollup_segment: [],
+  retailer_totals: [],
   retailers: {},
+  non_mulo: {
+    stats: EMPTY_STATS,
+    rollup_ret: [],
+    rollup_grp: [],
+    rollup_segment: [],
+  },
 };
 
 const EMPTY_DASHBOARD = {
@@ -106,15 +115,27 @@ function deltaClass(base, comparison) {
 }
 
 function comparisonKeyForTab(activeTab) {
-  return activeTab === MOM_RETAILER_TAB || activeTab === MOM_GROUP_TAB ? "mom" : "yoy";
+  const isMomTab = activeTab === MOM_RETAILER_TAB ||
+    activeTab === MOM_GROUP_TAB ||
+    activeTab === NON_MULO_RETAILER_MOM_TAB ||
+    activeTab === NON_MULO_GROUP_MOM_TAB;
+  return isMomTab ? "mom" : "yoy";
 }
 
 function isRetailerRollup(activeTab) {
-  return activeTab === YOY_RETAILER_TAB || activeTab === MOM_RETAILER_TAB;
+  return activeTab === YOY_RETAILER_TAB ||
+    activeTab === MOM_RETAILER_TAB ||
+    activeTab === NON_MULO_RETAILER_MOM_TAB;
 }
 
 function isProductGroupRollup(activeTab) {
-  return activeTab === YOY_GROUP_TAB || activeTab === MOM_GROUP_TAB;
+  return activeTab === YOY_GROUP_TAB ||
+    activeTab === MOM_GROUP_TAB ||
+    activeTab === NON_MULO_GROUP_MOM_TAB;
+}
+
+function isNonMuloTab(activeTab) {
+  return activeTab === NON_MULO_RETAILER_MOM_TAB || activeTab === NON_MULO_GROUP_MOM_TAB;
 }
 
 function quarterForRange(start, end) {
@@ -164,11 +185,21 @@ function tabTitle(activeTab, raw) {
   if (activeTab === YOY_GROUP_TAB) return "All Retailers Roll-Up - by Product Group / MPG - YoY";
   if (activeTab === MOM_RETAILER_TAB) return "All Retailers Roll-Up - by Retailer - MoM";
   if (activeTab === MOM_GROUP_TAB) return "All Retailers Roll-Up - by Product Group / MPG - MoM";
+  if (activeTab === NON_MULO_RETAILER_MOM_TAB) return "Non-Mulo - MoM by Retailer";
+  if (activeTab === NON_MULO_GROUP_MOM_TAB) return "Non-Mulo - MoM by Product Group / MPG";
   const banner = raw.banner_order.find((name) => bannerTabId(name) === activeTab);
   return `${banner} - Fcst Inc Cases by Product Group / MPG`;
 }
 
 function tabSubtitle(activeTab, blendDisplays) {
+  if (activeTab === NON_MULO_RETAILER_MOM_TAB) {
+    return "Compares the July pull against the June pull for Amazon and Costco only.";
+  }
+  if (activeTab === NON_MULO_GROUP_MOM_TAB) {
+    return blendDisplays
+      ? "Amazon and Costco only. Display volume is converted to regular cases, with retailer drilldowns sorted by total change."
+      : "Amazon and Costco only. Displays stay separate and count as 1 case each, with retailer drilldowns sorted by total change.";
+  }
   if (activeTab === MOM_RETAILER_TAB) {
     return "Compares the July pull against the June pull across all MPGs.";
   }
@@ -206,12 +237,13 @@ export default function DemandDashboard() {
   const activeComparisonKey = comparisonKeyForTab(activeTab);
   const activeComparison = RAW.comparisons?.[activeComparisonKey] || RAW;
   const yoyComparison = RAW.comparisons?.yoy || RAW;
+  const momComparison = RAW.comparisons?.mom || RAW;
   const activeData = activeComparison.modes?.[dataMode] || EMPTY_MODE;
   const yoyData = yoyComparison.modes?.[dataMode] || EMPTY_MODE;
-  const retailerCardComparisonKey = activeTab === MOM_RETAILER_TAB || activeTab === MOM_GROUP_TAB ? "mom" : "yoy";
-  const retailerCardComparison = RAW.comparisons?.[retailerCardComparisonKey] || RAW;
-  const retailerCardData = retailerCardComparison.modes?.[dataMode] || EMPTY_MODE;
-  const retailerCardPeriodLabels = retailerCardComparison.period_labels || DEFAULT_PERIOD_LABELS;
+  const momData = momComparison.modes?.[dataMode] || EMPTY_MODE;
+  const tableData = isNonMuloTab(activeTab) ? activeData.non_mulo || EMPTY_MODE : activeData;
+  const yoyPeriodLabels = yoyComparison.period_labels || DEFAULT_PERIOD_LABELS;
+  const momPeriodLabels = momComparison.period_labels || DEFAULT_PERIOD_LABELS;
   const periodLabels = activeComparison.period_labels || DEFAULT_PERIOD_LABELS;
   const visibleMonths = useMemo(
     () =>
@@ -248,21 +280,37 @@ export default function DemandDashboard() {
       { id: YOY_GROUP_TAB, label: "By Product Group - YoY" },
       { id: MOM_RETAILER_TAB, label: "By Retailer - MoM" },
       { id: MOM_GROUP_TAB, label: "By Product Group - MoM" },
-      ...RAW.banner_order.map((name) => ({ id: bannerTabId(name), label: name })),
+      { id: NON_MULO_RETAILER_MOM_TAB, label: "Non-Mulo - MoM (Retailer)" },
+      { id: NON_MULO_GROUP_MOM_TAB, label: "Non-Mulo - MoM (Product Group)" },
+      ...RAW.banner_order.map((name, index) => ({
+        id: bannerTabId(name),
+        label: name,
+        startsRetailerTabs: index === 0,
+      })),
     ],
     [RAW.banner_order],
   );
 
   const activeRows = useMemo(() => {
-    if (activeTab === YOY_RETAILER_TAB || activeTab === MOM_RETAILER_TAB) return activeData.rollup_ret;
-    if (activeTab === YOY_GROUP_TAB || activeTab === MOM_GROUP_TAB) {
+    if (
+      activeTab === YOY_RETAILER_TAB ||
+      activeTab === MOM_RETAILER_TAB ||
+      activeTab === NON_MULO_RETAILER_MOM_TAB
+    ) {
+      return tableData.rollup_ret;
+    }
+    if (
+      activeTab === YOY_GROUP_TAB ||
+      activeTab === MOM_GROUP_TAB ||
+      activeTab === NON_MULO_GROUP_MOM_TAB
+    ) {
       return productDrilldownLevel === "segment"
-        ? activeData.rollup_segment || activeData.rollup_grp
-        : activeData.rollup_grp;
+        ? tableData.rollup_segment || tableData.rollup_grp
+        : tableData.rollup_grp;
     }
     const banner = RAW.banner_order.find((name) => bannerTabId(name) === activeTab);
     return yoyData.retailers[banner] || [];
-  }, [activeData, activeTab, productDrilldownLevel, RAW.banner_order, yoyData]);
+  }, [activeTab, productDrilldownLevel, RAW.banner_order, tableData, yoyData]);
 
   function applyQuarter(value) {
     const option = QUARTER_OPTIONS.find((quarter) => quarter.value === value) || QUARTER_OPTIONS[0];
@@ -340,7 +388,7 @@ export default function DemandDashboard() {
         </p>
       </header>
 
-      <StatsBar periodLabels={periodLabels} stats={activeData.stats} />
+      <StatsBar periodLabels={periodLabels} stats={tableData.stats} />
 
       <ModeToggle
         blendDisplays={blendDisplays}
@@ -356,26 +404,24 @@ export default function DemandDashboard() {
             key={name}
             active={activeTab === bannerTabId(name)}
             name={name}
-            periodLabels={retailerCardPeriodLabels}
-            row={
-              (retailerCardData.retailer_totals || retailerCardData.rollup_ret).find(
-                (item) => item.label === name,
-              )
-            }
+            momPeriodLabels={momPeriodLabels}
+            momRow={findRetailerTotal(momData, name)}
             onClick={() => setActiveTab(bannerTabId(name))}
+            yoyPeriodLabels={yoyPeriodLabels}
+            yoyRow={findRetailerTotal(yoyData, name)}
           />
         ))}
       </section>
 
       <nav className="tabs" aria-label="Dashboard views">
-        {tabs.map((tab, index) => (
+        {tabs.map((tab) => (
           <button
             className={`tab-btn${activeTab === tab.id ? " active" : ""}`}
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             type="button"
           >
-            {index === 4 ? <span className="tab-sep" aria-hidden="true">|</span> : null}
+            {tab.startsRetailerTabs ? <span className="tab-sep" aria-hidden="true">|</span> : null}
             {tab.label}
           </button>
         ))}
@@ -554,6 +600,10 @@ function Stat({ className = "", label, value }) {
   );
 }
 
+function findRetailerTotal(data, name) {
+  return (data.retailer_totals || data.rollup_ret || []).find((item) => item.label === name);
+}
+
 function ModeToggle({ blendDisplays, onChange }) {
   return (
     <section className="mode-bar" aria-label="Display treatment">
@@ -577,7 +627,17 @@ function ModeToggle({ blendDisplays, onChange }) {
   );
 }
 
-function RetailerCard({ active, name, onClick, periodLabels, row }) {
+function RetailerCard({ active, momPeriodLabels, momRow, name, onClick, yoyPeriodLabels, yoyRow }) {
+  return (
+    <button className={`card${active ? " active-card" : ""}`} onClick={onClick} type="button">
+      <div className="card-name" title={name}>{name}</div>
+      <RetailerCardMetric label="YoY" periodLabels={yoyPeriodLabels} row={yoyRow} />
+      <RetailerCardMetric label="MoM" periodLabels={momPeriodLabels} row={momRow} />
+    </button>
+  );
+}
+
+function RetailerCardMetric({ label, periodLabels, row }) {
   const fy25 = row?.fy25 || 0;
   const fy26 = row?.fy26 || 0;
   const delta = fy26 - fy25;
@@ -585,8 +645,8 @@ function RetailerCard({ active, name, onClick, periodLabels, row }) {
   const cls = delta > 0 ? "pos" : delta < 0 ? "neg" : "";
 
   return (
-    <button className={`card${active ? " active-card" : ""}`} onClick={onClick} type="button">
-      <div className="card-name">{name}</div>
+    <div className="card-section">
+      <div className="card-section-title">{label}</div>
       <div className="card-row">
         <span>{periodLabels.base}</span>
         <span>{formatNumber(fy25)}</span>
@@ -599,7 +659,7 @@ function RetailerCard({ active, name, onClick, periodLabels, row }) {
         {formatSigned(delta)}
         {pct}
       </div>
-    </button>
+    </div>
   );
 }
 

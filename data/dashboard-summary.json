@@ -101,6 +101,10 @@
     "special_retailer_tabs": [
       "Amazon",
       "Costco"
+    ],
+    "non_mulo_banners": [
+      "Amazon",
+      "Costco"
     ]
   },
   "comparisons": {
