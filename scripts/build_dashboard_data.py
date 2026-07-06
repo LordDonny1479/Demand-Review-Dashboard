@@ -347,6 +347,15 @@ MIXED_DRP_COMPONENTS = {
             "case_pack_qty": 5.0,
         },
     ],
+    "TDHBHC-36/1": [
+        {
+            "base_pack_size": "HB HOT CHOCOLATE 12/500GR",
+            "product_group": "Hot Chocolate",
+            "component_label": "hot chocolate 500g",
+            "units": 36.0,
+            "case_pack_qty": 12.0,
+        },
+    ],
 }
 
 

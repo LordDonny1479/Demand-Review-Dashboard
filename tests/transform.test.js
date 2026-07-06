@@ -55,9 +55,9 @@ assert.ok(RAW.modes.blended);
 assert.ok(RAW.modes.separate);
 assert.ok(RAW.modes.blended.rollup_segment);
 assert.ok(RAW.modes.separate.rollup_segment);
-assert.strictEqual(RAW.modes.blended.stats.fy25, 1519601);
+assert.strictEqual(RAW.modes.blended.stats.fy25, 1519881);
 assert.strictEqual(RAW.modes.blended.stats.fy26, 1321835);
-assert.strictEqual(RAW.modes.blended.stats.delta, -197766);
+assert.strictEqual(RAW.modes.blended.stats.delta, -198046);
 assert.strictEqual(RAW.modes.blended.stats.delta_pct, -13.0);
 assert.strictEqual(RAW.modes.blended.stats.banners, 31);
 assert.strictEqual(RAW.modes.separate.stats.fy25, 1199848);
@@ -338,6 +338,7 @@ assert.ok(audit.includes("TDRGSB-48/300,R&G SMALL BAG 48/300GR,Roast & Ground,R&
 assert.ok(audit.includes("TDSSKC-48/12,SS KCOMP 48/12CT,Single Serve,SS KComp 6/12ct,Single Serve Displays,SS KComp 48/12ct,8.0,yes"));
 assert.ok(audit.includes("6320912131,TDL ORG/DR/COL KCUP SS 1/2 DRP 145/30 CT,Single Serve,SS KComp 4/30ct,Single Serve Displays,SS KComp 145/30ct,36.25,yes"));
 assert.ok(audit.includes("TDGB-56/5,GRANOLA BAR 56/5EA,Granola,Granola Bar 12/5/30g,Granola Displays,Granola Bar 56/5ea,4.666667,yes"));
+assert.ok(audit.includes("TDHBHC-36/1,HB HOT CHOCOLATE 36/1 EA,Hot Chocolate,HB Hot Chocolate 12/500g,Hot Chocolate Displays,HB Hot Chocolate 36/1ea,3.0,yes,Mixed DRP split: 36 hot chocolate 500g units / regular case pack 12 = 3 cases"));
 assert.ok(audit.includes("6320915034,TDL HOT BEVERAGE MIX DISPLAYER 36/1 EA,Hot Chocolate,HB Hot Chocolate 12/500g,Sweet & Creamy Displays,HB Mix Displayer 36/1ea,1.5,yes,Mixed DRP split: 18 hot chocolate 500g units / regular case pack 12 = 1.5 cases"));
 assert.ok(audit.includes("6320915034,TDL HOT BEVERAGE MIX DISPLAYER 36/1 EA,Hot Chocolate,HB Hot Chocolate 5/8ct,Sweet & Creamy Displays,HB Mix Displayer 36/1ea,1.8,yes,Mixed DRP split: 9 hot chocolate packet units / regular case pack 5 = 1.8 cases"));
 assert.ok(audit.includes("6320915034,TDL HOT BEVERAGE MIX DISPLAYER 36/1 EA,Sweet & Creamy,HB Cappuccino 5/8ct,Sweet & Creamy Displays,HB Mix Displayer 36/1ea,1.8,yes,Mixed DRP split: 9 cappuccino french vanilla packet units / regular case pack 5 = 1.8 cases"));
@@ -388,12 +389,12 @@ assert.strictEqual(
   "Show focus retailers plus retailers whose absolute change is greater than 5% of the total absolute change for the active comparison and display mode",
 );
 assert.deepStrictEqual(META.methodology.visible_banner_tabs, RAW.banner_order);
-assert.strictEqual(META.mode_totals.blended.fy25, 1519601);
+assert.strictEqual(META.mode_totals.blended.fy25, 1519881);
 assert.strictEqual(META.mode_totals.separate.fy25, 1199848);
 assert.strictEqual(META.mode_totals.blended.fy26, 1321835);
 assert.strictEqual(META.mode_totals.separate.fy26, 1020138);
-assert.strictEqual(META.display_products_converted, 78);
-assert.strictEqual(META.unconverted_display_products, 1);
+assert.strictEqual(META.display_products_converted, 79);
+assert.strictEqual(META.unconverted_display_products, 0);
 assert.strictEqual(META.comparisons.mom.mode_totals.blended.fy25, 1351622);
 assert.strictEqual(META.comparisons.mom.mode_totals.blended.fy26, 1321835);
 assert.strictEqual(META.comparisons.mom.display_products_converted, 61);
