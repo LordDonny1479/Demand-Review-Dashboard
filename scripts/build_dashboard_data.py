@@ -152,6 +152,146 @@ CATEGORY_FALLBACKS = {
 HB_MIX_BASE_PACK_SIZE = "HB MIX 4/24EA"
 HB_MIX_BASE_PACK_QTY = 4.0
 MIXED_DRP_COMPONENTS = {
+    "6320915034": [
+        {
+            "base_pack_size": "HB HOT CHOCOLATE 12/500GR",
+            "product_group": "Hot Chocolate",
+            "component_label": "hot chocolate 500g",
+            "units": 18.0,
+            "case_pack_qty": 12.0,
+        },
+        {
+            "base_pack_size": "HB HOT CHOCOLATE 5/8CT",
+            "product_group": "Hot Chocolate",
+            "component_label": "hot chocolate packet",
+            "units": 9.0,
+            "case_pack_qty": 5.0,
+        },
+        {
+            "base_pack_size": "HB CAPPUCCINO 5/8CT",
+            "product_group": "Sweet & Creamy",
+            "component_label": "cappuccino french vanilla packet",
+            "units": 9.0,
+            "case_pack_qty": 5.0,
+        },
+    ],
+    "6320920672": [
+        {
+            "base_pack_size": "HB HOT CHOCOLATE 12/500GR",
+            "product_group": "Hot Chocolate",
+            "component_label": "hot chocolate 500g",
+            "units": 18.0,
+            "case_pack_qty": 12.0,
+        },
+        {
+            "base_pack_size": "HB HOT CHOCOLATE 12/450GR",
+            "product_group": "Hot Chocolate",
+            "component_label": "candy cane hot chocolate",
+            "units": 18.0,
+            "case_pack_qty": 12.0,
+        },
+    ],
+    "6320920674": [
+        {
+            "base_pack_size": "SS KCOMP 6/10CT",
+            "product_group": "Single Serve",
+            "component_label": "winter blend k-cup",
+            "units": 24.0,
+            "case_pack_qty": 6.0,
+        },
+        {
+            "base_pack_size": "SS KCOMP 6/10CT",
+            "product_group": "Single Serve",
+            "component_label": "cappuccino french vanilla k-cup",
+            "units": 12.0,
+            "case_pack_qty": 6.0,
+        },
+        {
+            "base_pack_size": "HB HOT CHOCOLATE 6/10CT",
+            "product_group": "Hot Chocolate",
+            "component_label": "hot chocolate k-cup",
+            "units": 12.0,
+            "case_pack_qty": 6.0,
+        },
+    ],
+    "6320920675": [
+        {
+            "base_pack_size": "R&G SMALL BAG 6/300GR",
+            "product_group": "Roast & Ground",
+            "component_label": "original roast and ground",
+            "units": 24.0,
+            "case_pack_qty": 6.0,
+        },
+        {
+            "base_pack_size": "R&G SMALL BAG 6/283GR",
+            "product_group": "Roast & Ground",
+            "component_label": "special edition roast and ground",
+            "units": 24.0,
+            "case_pack_qty": 6.0,
+        },
+    ],
+    "6320920678": [
+        {
+            "base_pack_size": "SS KCOMP 6/10CT",
+            "product_group": "Single Serve",
+            "component_label": "winter blend k-cup",
+            "units": 12.0,
+            "case_pack_qty": 6.0,
+        },
+        {
+            "base_pack_size": "SS KCOMP 6/10CT",
+            "product_group": "Single Serve",
+            "component_label": "cappuccino french vanilla k-cup",
+            "units": 6.0,
+            "case_pack_qty": 6.0,
+        },
+        {
+            "base_pack_size": "HB HOT CHOCOLATE 6/10CT",
+            "product_group": "Hot Chocolate",
+            "component_label": "hot chocolate k-cup",
+            "units": 6.0,
+            "case_pack_qty": 6.0,
+        },
+    ],
+    "6320920753": [
+        {
+            "base_pack_size": "SS KCOMP 6/10CT",
+            "product_group": "Single Serve",
+            "component_label": "winter blend k-cup",
+            "units": 24.0,
+            "case_pack_qty": 6.0,
+        },
+        {
+            "base_pack_size": "SS KCOMP 6/10CT",
+            "product_group": "Single Serve",
+            "component_label": "cappuccino french vanilla k-cup",
+            "units": 12.0,
+            "case_pack_qty": 6.0,
+        },
+        {
+            "base_pack_size": "SS KCOMP 6/12CT",
+            "product_group": "Single Serve",
+            "component_label": "original k-cup",
+            "units": 12.0,
+            "case_pack_qty": 6.0,
+        },
+    ],
+    "6320924585": [
+        {
+            "base_pack_size": "HB HOT CHOCOLATE 12/500GR",
+            "product_group": "Hot Chocolate",
+            "component_label": "hot chocolate 500g",
+            "units": 120.0,
+            "case_pack_qty": 12.0,
+        },
+        {
+            "base_pack_size": "HB HOT CHOCOLATE 12/450GR",
+            "product_group": "Hot Chocolate",
+            "component_label": "candy cane hot chocolate",
+            "units": 120.0,
+            "case_pack_qty": 12.0,
+        },
+    ],
     "6320925922": [
         {
             "base_pack_size": "INSTANT COFFEE 12/100GR",
@@ -182,6 +322,29 @@ MIXED_DRP_COMPONENTS = {
             "component_label": "cappuccino french vanilla",
             "units": 60.0,
             "case_pack_qty": 6.0,
+        },
+    ],
+    "TDHBMX-36/1": [
+        {
+            "base_pack_size": "HB HOT CHOCOLATE 12/500GR",
+            "product_group": "Hot Chocolate",
+            "component_label": "hot chocolate 500g",
+            "units": 18.0,
+            "case_pack_qty": 12.0,
+        },
+        {
+            "base_pack_size": "HB HOT CHOCOLATE 5/8CT",
+            "product_group": "Hot Chocolate",
+            "component_label": "hot chocolate packet",
+            "units": 9.0,
+            "case_pack_qty": 5.0,
+        },
+        {
+            "base_pack_size": "HB CAPPUCCINO 5/8CT",
+            "product_group": "Sweet & Creamy",
+            "component_label": "cappuccino french vanilla packet",
+            "units": 9.0,
+            "case_pack_qty": 5.0,
         },
     ],
 }
