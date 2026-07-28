@@ -191,9 +191,12 @@ function tabTitle(activeTab, raw) {
   return `${banner} - Fcst Inc Cases by Product Group / MPG`;
 }
 
-function tabSubtitle(activeTab, blendDisplays) {
+function tabSubtitle(activeTab, blendDisplays, periodLabels) {
+  const base = periodLabels.base || "Base";
+  const comparison = periodLabels.comparison || "Comparison";
+
   if (activeTab === NON_MULO_RETAILER_MOM_TAB) {
-    return "Compares the July pull against the June pull for Amazon and Costco only.";
+    return `Compares the ${comparison} pull against the ${base} pull for Amazon and Costco only.`;
   }
   if (activeTab === NON_MULO_GROUP_MOM_TAB) {
     return blendDisplays
@@ -201,12 +204,12 @@ function tabSubtitle(activeTab, blendDisplays) {
       : "Amazon and Costco only. Displays stay separate and count as 1 case each, with retailer drilldowns sorted by total change.";
   }
   if (activeTab === MOM_RETAILER_TAB) {
-    return "Compares the July pull against the June pull across all MPGs.";
+    return `Compares the ${comparison} pull against the ${base} pull across all MPGs.`;
   }
   if (activeTab === MOM_GROUP_TAB) {
     return blendDisplays
-      ? "Compares July against June with display volume converted to regular cases. Retailer drilldowns are sorted by total change."
-      : "Compares July against June with displays separate and counted as 1 case each. Retailer drilldowns are sorted by total change.";
+      ? `Compares ${comparison} against ${base} with display volume converted to regular cases. Retailer drilldowns are sorted by total change.`
+      : `Compares ${comparison} against ${base} with displays separate and counted as 1 case each. Retailer drilldowns are sorted by total change.`;
   }
   if (activeTab === YOY_RETAILER_TAB) {
     return "Each row is one banner/customer total across all MPGs.";
@@ -384,7 +387,7 @@ export default function DemandDashboard() {
           In-market execution dates | Cases pro-rated by execution days per
           calendar month | Fcst Inc Cases &gt; 0 rows only | 2025 =
           Closed/Committed | 2026 = Closed/Planned/Committed | MoM =
-          July pull vs June pull
+          {momPeriodLabels.comparison} pull vs {momPeriodLabels.base} pull
         </p>
       </header>
 
@@ -429,7 +432,7 @@ export default function DemandDashboard() {
 
       <section className="tab-pane active">
         <h2>{tabTitle(activeTab, RAW)}</h2>
-        <div className="sub">{tabSubtitle(activeTab, blendDisplays)}</div>
+        <div className="sub">{tabSubtitle(activeTab, blendDisplays, periodLabels)}</div>
         <TableControls
           monthEnd={monthEnd}
           months={MONTHS}

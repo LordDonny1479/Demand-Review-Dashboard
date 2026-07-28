@@ -14,8 +14,8 @@ from openpyxl import load_workbook
 
 ROOT = Path(__file__).resolve().parents[1]
 RAW_DIR = ROOT / "data" / "raw"
-YOY_XLSX = RAW_DIR / "DR 07 July - YoY.xlsx"
-MOM_XLSX = RAW_DIR / "DR 07 July - MoM.xlsx"
+YOY_XLSX = RAW_DIR / "DR August - YoY.xlsx"
+MOM_XLSX = RAW_DIR / "DR August - MoM.xlsx"
 PRODUCT_XLSX = RAW_DIR / "Product List 20260629 (2).xlsx"
 MARKET_XLSX = RAW_DIR / "Market List.xlsx"
 
@@ -62,20 +62,20 @@ COMPARISON_CONFIGS = {
         "label": "MoM",
         "workbook": MOM_XLSX,
         "sheets": [
-            {"name": "June", "period_key": "base", "label": "June", "short_label": "June", "actual_year": 2026},
-            {"name": "July", "period_key": "comparison", "label": "July", "short_label": "July", "actual_year": 2026},
+            {"name": "July", "period_key": "base", "label": "July", "short_label": "July", "actual_year": 2026},
+            {"name": "August", "period_key": "comparison", "label": "August", "short_label": "August", "actual_year": 2026},
         ],
         "period_labels": {
-            "base": "June",
-            "comparison": "July",
-            "base_short": "June",
-            "comparison_short": "July",
-            "base_stat": "June Cases",
-            "comparison_stat": "July Cases",
+            "base": "July",
+            "comparison": "August",
+            "base_short": "July",
+            "comparison_short": "August",
+            "base_stat": "July Cases",
+            "comparison_stat": "August Cases",
             "delta": "Change",
             "delta_stat": "MoM Change Cases",
             "pct_stat": "MoM %",
-            "legend": "Grey = June pull | Bold = July pull | Full Year change includes %",
+            "legend": "Grey = July pull | Bold = August pull | Full Year change includes %",
         },
     },
 }
@@ -1522,7 +1522,7 @@ def build_outputs():
             "banner_scope": BANNER_ORDER,
             "visible_banner_tabs": visible_banner_order,
             "market_mapping": "Retailer/customer names are mapped from Market List.xlsx",
-            "mom_comparison": "MoM compares the July pull against the June pull from DR 07 July - MoM.xlsx using the same product, market, status, date, and display-conversion methodology",
+            "mom_comparison": "MoM compares the August pull against the July pull from DR August - MoM.xlsx using the same product, market, status, date, and display-conversion methodology",
             "site_excluded_banners": sorted(SITE_EXCLUDED_BANNERS),
             "rollup_excluded_banners": sorted(ROLLUP_EXCLUDED_BANNERS),
             "retailer_visibility_rule": f"Show focus retailers plus retailers whose absolute change is greater than {CHANGE_VISIBILITY_THRESHOLD:.0%} of the total absolute change for the active comparison and display mode",

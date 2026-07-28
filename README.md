@@ -2,7 +2,7 @@
 
 Sites dashboard for reviewing Tim Hortons CPG promotional forecast incremental
 cases year-over-year between 2025 and 2026, plus month-over-month changes
-between the June and July forecast pulls.
+between the July and August forecast pulls.
 
 The dashboard is built from embedded generated data. There is no upload control
 in the site.
@@ -16,9 +16,9 @@ toggle.
 
 Raw workbooks are stored in `data/raw`:
 
-- `DR 07 July - YoY.xlsx`
-- `DR 07 July - MoM.xlsx`
-- `Product List 20260629.xlsx`
+- `DR August - YoY.xlsx`
+- `DR August - MoM.xlsx`
+- `Product List 20260629 (2).xlsx`
 - `Market List.xlsx`
 
 Generated dashboard data is written to:
@@ -48,7 +48,7 @@ The builder:
 - keeps only rows where `Fcst Inc Cases > 0`;
 - includes 2025 rows with `Closed` or `Committed` promo status;
 - includes 2026 rows with `Closed`, `Planned`, or `Committed` promo status;
-- compares YoY as 2026 less 2025 and MoM as the July pull less the June pull;
+- compares YoY as 2026 less 2025 and MoM as the August pull less the July pull;
 - uses `Execution Start` through `Execution End`;
 - pro-rates cases into calendar months by inclusive execution days;
 - maps products through the product list and combines flavours at MPG pack-size
