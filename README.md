@@ -8,9 +8,12 @@ The dashboard is built from embedded generated data. There is no upload control
 in the site.
 
 In the all-retailer Product Group views, product groups expand into MPGs and
-MPGs expand into selected major-retailer rows sorted by full-year delta/change
-from highest to lowest. Those drilldown values switch with the display blending
-toggle.
+MPGs expand into selected major-retailer rows sorted by full-year delta/change.
+Retailer rows then expand into the promo IDs sourced from column H of the demand
+workbooks. In the all-retailer Retailer views, each retailer expands into product
+group, MPG, and promo ID. Retailer-specific tabs include a YoY/MoM selector and
+expand from product group to MPG to promo ID. All drilldown values switch with
+the display blending toggle.
 
 ## Source data
 
@@ -55,6 +58,7 @@ The builder:
   level;
 - maps retailer/customer names through `Market List.xlsx` and renders active
   mapped retailers from the current demand workbook;
+- carries promo IDs from demand-workbook column H into reconciled drilldowns;
 - excludes Amazon and Costco from all-retailer rollup tabs, product-group
   rollup totals, and top-line rollup statistics, while keeping their individual
   retailer tabs intact;

@@ -323,6 +323,10 @@ button {
   border-color: var(--brand-red);
 }
 
+.comparison-toggle {
+  margin: 6px 0;
+}
+
 .cards {
   display: flex;
   flex-wrap: nowrap;
@@ -614,6 +618,22 @@ tr.retailer-row:hover td {
   background: #f3f7fb !important;
 }
 
+tr.retailer-row.depth-0 td {
+  background: #f0f4f8;
+}
+
+tr.retailer-row.depth-0:hover td {
+  background: #e7eef5 !important;
+}
+
+tr.promo-row td {
+  background: #fbfcfe;
+}
+
+tr.promo-row:hover td {
+  background: #f3f7fb !important;
+}
+
 tr.tot-row td {
   color: #fff !important;
   font-weight: 700;
@@ -631,6 +651,7 @@ tr.tot-row td.delta-neg {
 td.glbl,
 td.mlbl,
 td.rlbl,
+td.plbl,
 td.slbl,
 td.totlbl {
   position: sticky;
@@ -672,6 +693,25 @@ td.rlbl {
   background: var(--surface);
   border-right-color: var(--line);
   font-size: 9px;
+}
+
+td.plbl {
+  color: #46586b;
+  background: #fbfcfe;
+  border-right-color: var(--line);
+  font-size: 9px;
+  font-weight: 600;
+}
+
+tr.retailer-row.depth-0 td.rlbl {
+  color: var(--coffee);
+  background: #f0f4f8;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+td.hierarchy-label {
+  padding-left: calc(4px + (var(--row-depth) * 14px));
 }
 
 td.totlbl {

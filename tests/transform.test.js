@@ -98,13 +98,18 @@ assert.deepStrictEqual(RAW.comparisons.mom.modes.blended.non_mulo.visible_retail
   "Costco",
 ]);
 assert.deepStrictEqual(
-  RAW.comparisons.mom.modes.blended.non_mulo.rollup_ret.map((row) => row.label),
+  RAW.comparisons.mom.modes.blended.non_mulo.rollup_ret
+    .filter((row) => row.is_total || row.depth === 0)
+    .map((row) => row.label),
   ["Amazon", "Costco", "GRAND TOTAL"],
 );
 assert.strictEqual(RAW.comparisons.mom.modes.blended.non_mulo.rollup_ret[0].fy25, 31091);
 assert.strictEqual(RAW.comparisons.mom.modes.blended.non_mulo.rollup_ret[0].fy26, 81774);
-assert.strictEqual(RAW.comparisons.mom.modes.blended.non_mulo.rollup_ret[1].fy25, 1206151);
-assert.strictEqual(RAW.comparisons.mom.modes.blended.non_mulo.rollup_ret[1].fy26, 1206151);
+const nonMuloMomCostco = RAW.comparisons.mom.modes.blended.non_mulo.rollup_ret.find(
+  (row) => row.label === "Costco" && row.depth === 0,
+);
+assert.strictEqual(nonMuloMomCostco.fy25, 1206151);
+assert.strictEqual(nonMuloMomCostco.fy26, 1206151);
 
 const grandTotal = RAW.modes.blended.rollup_ret.find((row) => row.label === "GRAND TOTAL");
 assert.ok(grandTotal);
@@ -341,6 +346,65 @@ for (const [label, data, rows] of [
   assert.deepStrictEqual(hiddenRows, [], `${label} has non-visible drilldown retailers`);
 }
 
+function assertPromoReconciliation(data, label) {
+  assert.ok(data.promo_rows.length > 0, `${label} should include promo rows`);
+  assert.ok(data.promo_rows.every((row) => row.is_promo && row.promo_id), `${label} has a blank promo ID`);
+
+  const promoTotals = new Map();
+  for (const row of data.promo_rows) {
+    const key = [row.banner, row.product_group, row.mpg].join("\u001f");
+    if (!promoTotals.has(key)) {
+      promoTotals.set(key, { m25: Array(12).fill(0), m26: Array(12).fill(0), fy25: 0, fy26: 0 });
+    }
+    const total = promoTotals.get(key);
+    row.m25.forEach((value, index) => { total.m25[index] += value; });
+    row.m26.forEach((value, index) => { total.m26[index] += value; });
+    total.fy25 += row.fy25;
+    total.fy26 += row.fy26;
+  }
+
+  let banner = null;
+  let productGroup = null;
+  let reconciledMpgRows = 0;
+  for (const row of data.rollup_ret) {
+    if (row.is_retailer && row.depth === 0) {
+      banner = row.label;
+      productGroup = null;
+    } else if (row.is_group) {
+      productGroup = row.label;
+    } else if (row.is_mpg) {
+      const key = [banner, productGroup, row.label].join("\u001f");
+      const promoTotal = promoTotals.get(key);
+      assert.ok(promoTotal, `${label} is missing promos for ${key}`);
+      assert.deepStrictEqual(promoTotal.m25, row.m25, `${label} base months do not reconcile for ${key}`);
+      assert.deepStrictEqual(promoTotal.m26, row.m26, `${label} comparison months do not reconcile for ${key}`);
+      assert.strictEqual(promoTotal.fy25, row.fy25, `${label} base total does not reconcile for ${key}`);
+      assert.strictEqual(promoTotal.fy26, row.fy26, `${label} comparison total does not reconcile for ${key}`);
+      reconciledMpgRows += 1;
+    }
+  }
+  assert.ok(reconciledMpgRows > 100, `${label} should expose retailer to MPG drilldowns`);
+}
+
+for (const [label, data] of [
+  ["YoY blended", RAW.comparisons.yoy.modes.blended],
+  ["YoY separate", RAW.comparisons.yoy.modes.separate],
+  ["MoM blended", RAW.comparisons.mom.modes.blended],
+  ["MoM separate", RAW.comparisons.mom.modes.separate],
+]) {
+  assertPromoReconciliation(data, label);
+}
+
+const yoyRetailerHierarchy = RAW.comparisons.yoy.modes.blended.rollup_ret;
+assert.ok(yoyRetailerHierarchy.some((row) => row.is_retailer && row.depth === 0 && row.has_children));
+assert.ok(yoyRetailerHierarchy.some((row) => row.is_group && row.depth === 1 && row.has_children));
+assert.ok(yoyRetailerHierarchy.some((row) => row.is_mpg && row.depth === 2 && row.has_children));
+assert.ok(
+  RAW.comparisons.mom.modes.blended.retailers.Walmart.some(
+    (row) => row.is_mpg && row.depth === 1 && row.has_children,
+  ),
+);
+
 const audit = fs.readFileSync("data/display-conversion-audit.csv", "utf8");
 assert.ok(audit.includes("TDRGSB-48/300,R&G SMALL BAG 48/300GR,Roast & Ground,R&G Small Bag 6/300g,Roast & Ground Displays,R&G Small Bag 48/300g,8.0,yes"));
 assert.ok(audit.includes("TDSSKC-48/12,SS KCOMP 48/12CT,Single Serve,SS KComp 6/12ct,Single Serve Displays,SS KComp 48/12ct,8.0,yes"));
@@ -430,6 +494,10 @@ assert.ok(dashboardSource.includes("visibleMonthColumns"));
 assert.ok(dashboardSource.includes("visibleMonths"));
 assert.ok(dashboardSource.includes("row.is_mpg"));
 assert.ok(dashboardSource.includes("row.is_retailer"));
+assert.ok(dashboardSource.includes("row.is_promo"));
+assert.ok(dashboardSource.includes("attachPromoRows"));
+assert.ok(dashboardSource.includes("Retailer comparison"));
+assert.ok(dashboardSource.includes("setRetailerComparisonKey"));
 assert.ok(dashboardSource.includes("month-end"));
 assert.ok(dashboardSource.includes("fy-end"));
 
@@ -443,5 +511,7 @@ assert.ok(dashboardStyles.includes("--month-divider-soft"));
 assert.ok(dashboardStyles.includes("table.dt .month-end"));
 assert.ok(dashboardStyles.includes("table.dt .fy-end"));
 assert.ok(dashboardStyles.includes(".card-section-title"));
+assert.ok(dashboardStyles.includes("tr.promo-row"));
+assert.ok(dashboardStyles.includes("td.plbl"));
 
 console.log("dashboard data tests passed");

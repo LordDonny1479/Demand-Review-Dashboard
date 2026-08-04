@@ -931,6 +931,43 @@ def row_from_values(label: str, values: dict, is_group: bool = False, is_total: 
     }
 
 
+def hierarchy_key(*parts) -> str:
+    return "::".join(clean(part).replace("::", ":") for part in parts)
+
+
+def hierarchy_row(
+    label: str,
+    values: dict,
+    row_type: str,
+    depth: int,
+    row_key: str,
+    parent_key: str | None = None,
+    has_children: bool = False,
+):
+    row = row_from_values(label, values, is_group=row_type == "group")
+    row.update(
+        {
+            "row_type": row_type,
+            "depth": depth,
+            "row_key": row_key,
+            "has_children": has_children,
+        }
+    )
+    if parent_key:
+        row["parent_key"] = parent_key
+    if row_type == "mpg":
+        row["is_mpg"] = True
+    elif row_type == "retailer":
+        row["is_retailer"] = True
+    elif row_type == "promo":
+        row["is_promo"] = True
+    return row
+
+
+def promo_label(row: dict) -> str:
+    return clean(row.get("promo_id")) or "Unspecified Promo ID"
+
+
 def add_values(target: dict, source: dict):
     for period in PERIOD_KEYS:
         for index, value in enumerate(source[period]):
@@ -950,7 +987,12 @@ def fy_delta(row: dict) -> int:
     return (row.get("fy26") or 0) - (row.get("fy25") or 0)
 
 
-def build_product_table(rows, include_retailer_drilldown: bool = False, visible_retailer_banners: set[str] | None = None):
+def build_product_table(
+    rows,
+    include_retailer_drilldown: bool = False,
+    visible_retailer_banners: set[str] | None = None,
+    include_promo_drilldown: bool = False,
+):
     group_values = defaultdict(empty_years)
     mpg_values = defaultdict(empty_years)
     retailer_values = defaultdict(empty_years)
@@ -967,9 +1009,15 @@ def build_product_table(rows, include_retailer_drilldown: bool = False, visible_
     table_rows = []
     display_section_started = False
     for group in sorted(group_values, key=group_sort_key):
-        group_row = row_from_values(group, group_values[group], is_group=True)
-        group_row["row_type"] = "group"
-        group_row["has_children"] = True
+        group_key = hierarchy_key("group", group)
+        group_row = hierarchy_row(
+            group,
+            group_values[group],
+            "group",
+            0,
+            group_key,
+            has_children=True,
+        )
         if group.endswith(" Displays"):
             group_row["is_display_group"] = True
             if not display_section_started:
@@ -982,11 +1030,17 @@ def build_product_table(rows, include_retailer_drilldown: bool = False, visible_
             key=lambda key: key[1],
         )
         for _, mpg in children:
-            mpg_row = row_from_values(mpg, mpg_values[(group, mpg)])
-            if include_retailer_drilldown:
-                mpg_row["row_type"] = "mpg"
-                mpg_row["is_mpg"] = True
-                mpg_row["has_children"] = True
+            mpg_key = hierarchy_key("group", group, "mpg", mpg)
+            has_mpg_children = include_retailer_drilldown or include_promo_drilldown
+            mpg_row = hierarchy_row(
+                mpg,
+                mpg_values[(group, mpg)],
+                "mpg",
+                1,
+                mpg_key,
+                parent_key=group_key,
+                has_children=has_mpg_children,
+            )
             table_rows.append(mpg_row)
 
             if include_retailer_drilldown:
@@ -994,20 +1048,37 @@ def build_product_table(rows, include_retailer_drilldown: bool = False, visible_
                 for _, _, banner in (key for key in retailer_values if key[0] == group and key[1] == mpg):
                     if visible_retailer_banners is not None and banner not in visible_retailer_banners:
                         continue
-                    retailer_row = row_from_values(banner, retailer_values[(group, mpg, banner)])
-                    retailer_row["row_type"] = "retailer"
-                    retailer_row["is_retailer"] = True
-                    retailer_rows.append(retailer_row)
+                    retailer_key = hierarchy_key("group", group, "mpg", mpg, "retailer", banner)
+                    retailer_row = hierarchy_row(
+                        banner,
+                        retailer_values[(group, mpg, banner)],
+                        "retailer",
+                        2,
+                        retailer_key,
+                        parent_key=mpg_key,
+                        has_children=include_promo_drilldown,
+                    )
+                    retailer_rows.append((retailer_row, banner, retailer_key))
 
-                table_rows.extend(
-                    sorted(retailer_rows, key=lambda row: (-fy_delta(row), row["label"]))
-                )
+                for retailer_row, banner, retailer_key in sorted(
+                    retailer_rows,
+                    key=lambda item: (-fy_delta(item[0]), item[0]["label"]),
+                ):
+                    table_rows.append(retailer_row)
 
-    table_rows.append(row_from_values("GRAND TOTAL", total_values, is_total=True))
+    total_row = row_from_values("GRAND TOTAL", total_values, is_total=True)
+    total_row["row_type"] = "total"
+    total_row["depth"] = 0
+    table_rows.append(total_row)
     return table_rows
 
 
-def build_segment_table(rows, include_retailer_drilldown: bool = False, visible_retailer_banners: set[str] | None = None):
+def build_segment_table(
+    rows,
+    include_retailer_drilldown: bool = False,
+    visible_retailer_banners: set[str] | None = None,
+    include_promo_drilldown: bool = False,
+):
     group_values = defaultdict(empty_years)
     retailer_values = defaultdict(empty_years)
     total_values = empty_years()
@@ -1022,19 +1093,32 @@ def build_segment_table(rows, include_retailer_drilldown: bool = False, visible_
     display_section_started = False
     for group in sorted(group_values, key=group_sort_key):
         retailer_rows = []
+        group_key = hierarchy_key("group", group)
         if include_retailer_drilldown:
             for _, banner in (key for key in retailer_values if key[0] == group):
                 if visible_retailer_banners is not None and banner not in visible_retailer_banners:
                     continue
-                retailer_row = row_from_values(banner, retailer_values[(group, banner)])
-                retailer_row["row_type"] = "retailer"
-                retailer_row["is_retailer"] = True
+                retailer_key = hierarchy_key("group", group, "retailer", banner)
+                retailer_row = hierarchy_row(
+                    banner,
+                    retailer_values[(group, banner)],
+                    "retailer",
+                    1,
+                    retailer_key,
+                    parent_key=group_key,
+                    has_children=include_promo_drilldown,
+                )
                 retailer_row["parent_level"] = "group"
-                retailer_rows.append(retailer_row)
+                retailer_rows.append((retailer_row, banner, retailer_key))
 
-        group_row = row_from_values(group, group_values[group], is_group=True)
-        group_row["row_type"] = "group"
-        group_row["has_children"] = bool(retailer_rows)
+        group_row = hierarchy_row(
+            group,
+            group_values[group],
+            "group",
+            0,
+            group_key,
+            has_children=bool(retailer_rows),
+        )
         if group.endswith(" Displays"):
             group_row["is_display_group"] = True
             if not display_section_started:
@@ -1042,9 +1126,16 @@ def build_segment_table(rows, include_retailer_drilldown: bool = False, visible_
                 display_section_started = True
         table_rows.append(group_row)
 
-        table_rows.extend(sorted(retailer_rows, key=lambda row: (-fy_delta(row), row["label"])))
+        for retailer_row, banner, retailer_key in sorted(
+            retailer_rows,
+            key=lambda item: (-fy_delta(item[0]), item[0]["label"]),
+        ):
+            table_rows.append(retailer_row)
 
-    table_rows.append(row_from_values("GRAND TOTAL", total_values, is_total=True))
+    total_row = row_from_values("GRAND TOTAL", total_values, is_total=True)
+    total_row["row_type"] = "total"
+    total_row["depth"] = 0
+    table_rows.append(total_row)
     return table_rows
 
 
@@ -1078,22 +1169,159 @@ def retailer_change_visibility(rows: list[dict]) -> dict:
     }
 
 
-def build_retailer_rollup(rows, visible_retailer_banners: set[str] | None = None):
+def build_retailer_rollup(
+    rows,
+    visible_retailer_banners: set[str] | None = None,
+    include_product_drilldown: bool = False,
+    include_promo_drilldown: bool = False,
+):
     retailer_values = {banner: empty_years() for banner in BANNER_ORDER}
+    group_values = defaultdict(empty_years)
+    mpg_values = defaultdict(empty_years)
     total_values = empty_years()
 
     for row in rows:
         add_month(retailer_values[row["banner"]], row["period_key"], row["month_index"], row["cases"])
+        if include_product_drilldown:
+            group_key = (row["banner"], row["product_group"])
+            mpg_key = (row["banner"], row["product_group"], row["mpg"])
+            add_month(group_values[group_key], row["period_key"], row["month_index"], row["cases"])
+            add_month(mpg_values[mpg_key], row["period_key"], row["month_index"], row["cases"])
         add_month(total_values, row["period_key"], row["month_index"], row["cases"])
 
-    table_rows = [
-        row_from_values(banner, retailer_values[banner], is_group=True)
+    active_banners = [
+        banner
         for banner in BANNER_ORDER
         if visible_retailer_banners is None or banner in visible_retailer_banners
         if sum(retailer_values[banner]["base"]) or sum(retailer_values[banner]["comparison"])
     ]
-    table_rows.append(row_from_values("GRAND TOTAL", total_values, is_total=True))
+
+    if not include_product_drilldown:
+        table_rows = [
+            row_from_values(banner, retailer_values[banner], is_group=True)
+            for banner in active_banners
+        ]
+    else:
+        table_rows = []
+        for banner in active_banners:
+            retailer_key = hierarchy_key("retailer", banner)
+            retailer_row = hierarchy_row(
+                banner,
+                retailer_values[banner],
+                "retailer",
+                0,
+                retailer_key,
+                has_children=True,
+            )
+            table_rows.append(retailer_row)
+
+            display_section_started = False
+            groups = sorted(
+                (group for retailer, group in group_values if retailer == banner),
+                key=group_sort_key,
+            )
+            for group in groups:
+                group_key = hierarchy_key("retailer", banner, "group", group)
+                group_row = hierarchy_row(
+                    group,
+                    group_values[(banner, group)],
+                    "group",
+                    1,
+                    group_key,
+                    parent_key=retailer_key,
+                    has_children=True,
+                )
+                if group.endswith(" Displays"):
+                    group_row["is_display_group"] = True
+                    if not display_section_started:
+                        group_row["display_section_start"] = True
+                        display_section_started = True
+                table_rows.append(group_row)
+
+                mp_indices = sorted(
+                    (
+                        mpg
+                        for retailer, product_group, mpg in mpg_values
+                        if retailer == banner and product_group == group
+                    ),
+                )
+                for mpg in mp_indices:
+                    mpg_key = hierarchy_key("retailer", banner, "group", group, "mpg", mpg)
+                    mpg_row = hierarchy_row(
+                        mpg,
+                        mpg_values[(banner, group, mpg)],
+                        "mpg",
+                        2,
+                        mpg_key,
+                        parent_key=group_key,
+                        has_children=include_promo_drilldown,
+                    )
+                    table_rows.append(mpg_row)
+
+    total_row = row_from_values("GRAND TOTAL", total_values, is_total=True)
+    total_row["row_type"] = "total"
+    total_row["depth"] = 0
+    table_rows.append(total_row)
     return table_rows, total_values
+
+
+def build_promo_rows(rows: list[dict]):
+    promo_values = defaultdict(empty_years)
+    parent_values = defaultdict(empty_years)
+    for row in rows:
+        key = (row["banner"], row["product_group"], row["mpg"], promo_label(row))
+        parent_key = key[:3]
+        add_month(promo_values[key], row["period_key"], row["month_index"], row["cases"])
+        add_month(parent_values[parent_key], row["period_key"], row["month_index"], row["cases"])
+
+    banner_order = {banner: index for index, banner in enumerate(BANNER_ORDER)}
+    promo_rows = []
+    for banner, group, mpg, promo_id in sorted(
+        promo_values,
+        key=lambda key: (
+            banner_order.get(key[0], len(banner_order)),
+            group_sort_key(key[1]),
+            key[2],
+            key[3],
+        ),
+    ):
+        row = row_from_values(promo_id, promo_values[(banner, group, mpg, promo_id)])
+        row.update(
+            {
+                "row_type": "promo",
+                "is_promo": True,
+                "banner": banner,
+                "product_group": group,
+                "mpg": mpg,
+                "promo_id": promo_id,
+            }
+        )
+        promo_rows.append(row)
+
+    rows_by_parent = defaultdict(list)
+    for row in promo_rows:
+        rows_by_parent[(row["banner"], row["product_group"], row["mpg"])].append(row)
+
+    for parent_key, child_rows in rows_by_parent.items():
+        parent_row = row_from_values("", parent_values[parent_key])
+        for field in ("m25", "m26"):
+            for month_index, target in enumerate(parent_row[field]):
+                residual = target - sum(row[field][month_index] for row in child_rows)
+                if residual:
+                    recipient = max(child_rows, key=lambda row: abs(row[field][month_index]))
+                    recipient[field][month_index] += residual
+        for field in ("fy25", "fy26"):
+            residual = parent_row[field] - sum(row[field] for row in child_rows)
+            if residual:
+                recipient = max(child_rows, key=lambda row: abs(row[field]))
+                recipient[field] += residual
+
+        for row in child_rows:
+            row["base_months"] = row["m25"]
+            row["comparison_months"] = row["m26"]
+            row["base_total"] = row["fy25"]
+            row["comparison_total"] = row["fy26"]
+    return promo_rows
 
 
 def conversion_for_row(row: dict, base_lookup: dict):
@@ -1174,7 +1402,12 @@ def build_dashboard_from_rows(rows: list[dict]):
     ]
     visibility = retailer_change_visibility(rollup_rows)
     visible_rollup_banners = visibility["visible_banners"]
-    rollup_ret, total_values = build_retailer_rollup(rollup_rows, visible_rollup_banners)
+    rollup_ret, total_values = build_retailer_rollup(
+        rollup_rows,
+        visible_rollup_banners,
+        include_product_drilldown=True,
+        include_promo_drilldown=True,
+    )
     all_retailer_totals, _ = build_retailer_rollup(rows)
     stats = build_stats(total_values)
     stats["banners"] = len({row["banner"] for row in rollup_rows})
@@ -1184,11 +1417,13 @@ def build_dashboard_from_rows(rows: list[dict]):
             rollup_rows,
             include_retailer_drilldown=True,
             visible_retailer_banners=visible_rollup_banners,
+            include_promo_drilldown=True,
         ),
         "rollup_segment": build_segment_table(
             rollup_rows,
             include_retailer_drilldown=True,
             visible_retailer_banners=visible_rollup_banners,
+            include_promo_drilldown=True,
         ),
         "retailer_totals": [
             row
@@ -1196,9 +1431,13 @@ def build_dashboard_from_rows(rows: list[dict]):
             if not row.get("is_total")
         ],
         "retailers": {
-            banner: build_product_table([row for row in rows if row["banner"] == banner])
+            banner: build_product_table(
+                [row for row in rows if row["banner"] == banner],
+                include_promo_drilldown=True,
+            )
             for banner in BANNER_ORDER
         },
+        "promo_rows": build_promo_rows(rows),
         "visible_retailer_banners": ordered_banner_subset(visible_rollup_banners),
         "significant_retailer_banners": ordered_banner_subset(visibility["significant_banners"]),
         "change_visibility_threshold_cases": round_cases(visibility["threshold"]),
@@ -1216,7 +1455,12 @@ def build_non_mulo_dashboard_from_rows(rows: list[dict]):
     ]
     active_banners = {row["banner"] for row in scoped_rows}
     visible_banners = NON_MULO_BANNERS & active_banners
-    rollup_ret, total_values = build_retailer_rollup(scoped_rows, visible_banners)
+    rollup_ret, total_values = build_retailer_rollup(
+        scoped_rows,
+        visible_banners,
+        include_product_drilldown=True,
+        include_promo_drilldown=True,
+    )
     stats = build_stats(total_values)
     stats["banners"] = len(active_banners)
     return {
@@ -1225,11 +1469,13 @@ def build_non_mulo_dashboard_from_rows(rows: list[dict]):
             scoped_rows,
             include_retailer_drilldown=True,
             visible_retailer_banners=visible_banners,
+            include_promo_drilldown=True,
         ),
         "rollup_segment": build_segment_table(
             scoped_rows,
             include_retailer_drilldown=True,
             visible_retailer_banners=visible_banners,
+            include_promo_drilldown=True,
         ),
         "visible_retailer_banners": ordered_banner_subset(visible_banners),
         "stats": stats,
@@ -1359,6 +1605,7 @@ def transform_comparison(comparison_key: str, config: dict, demand_rows: list[di
                         "month_index": month_index,
                         "product_group": product_group,
                         "mpg": mpg,
+                        "promo_id": promo_label(row),
                         "cases": month_cases,
                     }
                 )
@@ -1475,13 +1722,18 @@ def build_outputs():
         comparison_visible_banners = set(SPECIAL_RETAILER_TAB_BANNERS) & set(BANNER_ORDER)
         for data in dashboard_modes.values():
             comparison_visible_banners.update(data["visible_retailer_banners"])
+        legacy_blended = {
+            field: value
+            for field, value in dashboard_modes["blended"].items()
+            if field != "promo_rows"
+        }
         comparison_dashboards[key] = {
             "label": config["label"],
             "period_labels": config["period_labels"],
             "mode_labels": DATA_MODES,
             "banner_order": ordered_banner_subset(comparison_visible_banners),
             "modes": dashboard_modes,
-            **dashboard_modes["blended"],
+            **legacy_blended,
         }
         comparison_summaries[key] = comparison_summary(config, transformed[key], dashboard_modes)
 
@@ -1491,14 +1743,22 @@ def build_outputs():
     for comparison in comparison_dashboards.values():
         visible_tab_banners.update(comparison["banner_order"])
     visible_banner_order = ordered_banner_subset(visible_tab_banners)
+    legacy_yoy_modes = {
+        mode: {
+            field: value
+            for field, value in data.items()
+            if field != "promo_rows"
+        }
+        for mode, data in yoy_dashboard["modes"].items()
+    }
     dashboard = {
         "banner_order": visible_banner_order,
         "all_banner_order": BANNER_ORDER,
         "default_mode": "blended",
         "mode_labels": DATA_MODES,
         "comparisons": comparison_dashboards,
-        "modes": yoy_dashboard["modes"],
-        **yoy_dashboard["modes"]["blended"],
+        "modes": legacy_yoy_modes,
+        **legacy_yoy_modes["blended"],
     }
 
     summary = {
@@ -1554,8 +1814,11 @@ def build_outputs():
         json.dumps({"MONTHS": MONTHS, "RAW": dashboard, "META": summary}, separators=(",", ":")),
         encoding="utf-8",
     )
-    OUTPUT_DASHBOARD_JSON.write_text(json.dumps(dashboard, indent=2), encoding="utf-8")
-    OUTPUT_MOM_DASHBOARD_JSON.write_text(json.dumps(comparison_dashboards["mom"], indent=2), encoding="utf-8")
+    OUTPUT_DASHBOARD_JSON.write_text(json.dumps(dashboard, separators=(",", ":")), encoding="utf-8")
+    OUTPUT_MOM_DASHBOARD_JSON.write_text(
+        json.dumps(comparison_dashboards["mom"], separators=(",", ":")),
+        encoding="utf-8",
+    )
     OUTPUT_SUMMARY.write_text(json.dumps(summary, indent=2), encoding="utf-8")
     OUTPUT_MODULE.write_text(module_text(dashboard, summary), encoding="utf-8")
 

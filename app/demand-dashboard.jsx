@@ -45,6 +45,7 @@ const EMPTY_MODE = {
   rollup_ret: [],
   rollup_grp: [],
   rollup_segment: [],
+  promo_rows: [],
   retailer_totals: [],
   retailers: {},
   non_mulo: {
@@ -114,12 +115,18 @@ function deltaClass(base, comparison) {
   return "delta-zero";
 }
 
-function comparisonKeyForTab(activeTab) {
+function isRetailerSpecificTab(activeTab, raw) {
+  return raw.banner_order.some((name) => bannerTabId(name) === activeTab);
+}
+
+function comparisonKeyForTab(activeTab, raw, retailerComparisonKey) {
   const isMomTab = activeTab === MOM_RETAILER_TAB ||
     activeTab === MOM_GROUP_TAB ||
     activeTab === NON_MULO_RETAILER_MOM_TAB ||
     activeTab === NON_MULO_GROUP_MOM_TAB;
-  return isMomTab ? "mom" : "yoy";
+  if (isMomTab) return "mom";
+  if (isRetailerSpecificTab(activeTab, raw)) return retailerComparisonKey;
+  return "yoy";
 }
 
 function isRetailerRollup(activeTab) {
@@ -180,7 +187,7 @@ function rowHasChange(row, visibleMonths) {
   );
 }
 
-function tabTitle(activeTab, raw) {
+function tabTitle(activeTab, raw, activeComparisonKey) {
   if (activeTab === YOY_RETAILER_TAB) return "All Retailers Roll-Up - by Retailer - YoY";
   if (activeTab === YOY_GROUP_TAB) return "All Retailers Roll-Up - by Product Group / MPG - YoY";
   if (activeTab === MOM_RETAILER_TAB) return "All Retailers Roll-Up - by Retailer - MoM";
@@ -188,7 +195,7 @@ function tabTitle(activeTab, raw) {
   if (activeTab === NON_MULO_RETAILER_MOM_TAB) return "Non-Mulo - MoM by Retailer";
   if (activeTab === NON_MULO_GROUP_MOM_TAB) return "Non-Mulo - MoM by Product Group / MPG";
   const banner = raw.banner_order.find((name) => bannerTabId(name) === activeTab);
-  return `${banner} - Fcst Inc Cases by Product Group / MPG`;
+  return `${banner} - Fcst Inc Cases by Product Group / MPG - ${activeComparisonKey === "mom" ? "MoM" : "YoY"}`;
 }
 
 function tabSubtitle(activeTab, blendDisplays, periodLabels) {
@@ -224,6 +231,168 @@ function tabSubtitle(activeTab, blendDisplays, periodLabels) {
     : "Display and DRP rows stay separate and count each display as 1 case.";
 }
 
+function promoLookupKey(...parts) {
+  return parts.join("\u001f");
+}
+
+function sortPromoRows(rows) {
+  return [...rows].sort((left, right) => {
+    const deltaDifference = (right.fy26 - right.fy25) - (left.fy26 - left.fy25);
+    return deltaDifference || left.label.localeCompare(right.label);
+  });
+}
+
+function buildPromoLookups(promoRows) {
+  const exact = new Map();
+  const segmentAggregates = new Map();
+
+  promoRows.forEach((row) => {
+    const exactKey = promoLookupKey(row.banner, row.product_group, row.mpg);
+    if (!exact.has(exactKey)) exact.set(exactKey, []);
+    exact.get(exactKey).push(row);
+
+    const aggregateKey = promoLookupKey(row.banner, row.product_group, row.promo_id);
+    if (!segmentAggregates.has(aggregateKey)) {
+      segmentAggregates.set(aggregateKey, {
+        ...row,
+        m25: Array(12).fill(0),
+        m26: Array(12).fill(0),
+        fy25: 0,
+        fy26: 0,
+      });
+    }
+    const aggregate = segmentAggregates.get(aggregateKey);
+    row.m25.forEach((value, index) => {
+      aggregate.m25[index] += value;
+    });
+    row.m26.forEach((value, index) => {
+      aggregate.m26[index] += value;
+    });
+    aggregate.fy25 += row.fy25;
+    aggregate.fy26 += row.fy26;
+  });
+
+  const segment = new Map();
+  segmentAggregates.forEach((row) => {
+    row.base_months = row.m25;
+    row.comparison_months = row.m26;
+    row.base_total = row.fy25;
+    row.comparison_total = row.fy26;
+    const segmentKey = promoLookupKey(row.banner, row.product_group);
+    if (!segment.has(segmentKey)) segment.set(segmentKey, []);
+    segment.get(segmentKey).push(row);
+  });
+
+  exact.forEach((rows, key) => exact.set(key, sortPromoRows(rows)));
+  segment.forEach((rows, key) => segment.set(key, sortPromoRows(rows)));
+  return { exact, segment };
+}
+
+function attachPromoRows(rows, promoLookups, layout, fixedBanner = null) {
+  const result = [];
+  let banner = fixedBanner;
+  let productGroup = null;
+  let mpg = null;
+
+  function appendPromos(parent, promoRows) {
+    const reconciledRows = promoRows.map((promo) => ({
+      ...promo,
+      m25: [...promo.m25],
+      m26: [...promo.m26],
+    }));
+
+    ["m25", "m26"].forEach((field) => {
+      parent[field].forEach((target, monthIndex) => {
+        const residual = target - reconciledRows.reduce(
+          (total, row) => total + row[field][monthIndex],
+          0,
+        );
+        if (!residual || !reconciledRows.length) return;
+        const recipient = reconciledRows.reduce((largest, row) =>
+          Math.abs(row[field][monthIndex]) > Math.abs(largest[field][monthIndex]) ? row : largest,
+        );
+        recipient[field][monthIndex] += residual;
+      });
+    });
+
+    ["fy25", "fy26"].forEach((field) => {
+      const residual = parent[field] - reconciledRows.reduce((total, row) => total + row[field], 0);
+      if (!residual || !reconciledRows.length) return;
+      const recipient = reconciledRows.reduce((largest, row) =>
+        Math.abs(row[field]) > Math.abs(largest[field]) ? row : largest,
+      );
+      recipient[field] += residual;
+    });
+
+    reconciledRows.forEach((promo) => {
+      result.push({
+        ...promo,
+        base_months: promo.m25,
+        comparison_months: promo.m26,
+        base_total: promo.fy25,
+        comparison_total: promo.fy26,
+        depth: (parent.depth || 0) + 1,
+        has_children: false,
+        parent_key: parent.row_key,
+        row_key: `${parent.row_key}::promo::${promo.promo_id}`,
+      });
+    });
+  }
+
+  rows.forEach((row) => {
+    if (row.is_total) {
+      result.push(row);
+      return;
+    }
+
+    if (layout === "retailer") {
+      if (row.is_retailer && row.depth === 0) {
+        banner = row.label;
+        productGroup = null;
+        mpg = null;
+      } else if (row.is_group) {
+        productGroup = row.label;
+        mpg = null;
+      } else if (row.is_mpg) {
+        mpg = row.label;
+      }
+    } else if (layout === "product") {
+      if (row.is_group) {
+        productGroup = row.label;
+        mpg = null;
+      } else if (row.is_mpg) {
+        mpg = row.label;
+      } else if (row.is_retailer) {
+        banner = row.label;
+      }
+    } else if (layout === "segment") {
+      if (row.is_group) productGroup = row.label;
+      else if (row.is_retailer) banner = row.label;
+    } else if (layout === "retailer-specific") {
+      if (row.is_group) {
+        productGroup = row.label;
+        mpg = null;
+      } else if (row.is_mpg) {
+        mpg = row.label;
+      }
+    }
+
+    result.push(row);
+
+    const exactParent =
+      (layout === "retailer" && row.is_mpg) ||
+      (layout === "product" && row.is_retailer) ||
+      (layout === "retailer-specific" && row.is_mpg);
+    if (exactParent) {
+      appendPromos(row, promoLookups.exact.get(promoLookupKey(banner, productGroup, mpg)) || []);
+    } else if (layout === "segment" && row.is_retailer) {
+      appendPromos(row, promoLookups.segment.get(promoLookupKey(banner, productGroup)) || []);
+    }
+  });
+
+  return result;
+}
+
 export default function DemandDashboard() {
   const [dashboardData, setDashboardData] = useState(null);
   const [loadError, setLoadError] = useState(null);
@@ -233,11 +402,12 @@ export default function DemandDashboard() {
   const [monthEnd, setMonthEnd] = useState(11);
   const [quarterSelection, setQuarterSelection] = useState("all");
   const [productDrilldownLevel, setProductDrilldownLevel] = useState("mpg");
+  const [retailerComparisonKey, setRetailerComparisonKey] = useState("yoy");
   const [hideZeroChanges, setHideZeroChanges] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState(() => new Set());
   const { META, MONTHS, RAW } = dashboardData || EMPTY_DASHBOARD;
   const dataMode = blendDisplays ? "blended" : "separate";
-  const activeComparisonKey = comparisonKeyForTab(activeTab);
+  const activeComparisonKey = comparisonKeyForTab(activeTab, RAW, retailerComparisonKey);
   const activeComparison = RAW.comparisons?.[activeComparisonKey] || RAW;
   const yoyComparison = RAW.comparisons?.yoy || RAW;
   const momComparison = RAW.comparisons?.mom || RAW;
@@ -248,6 +418,11 @@ export default function DemandDashboard() {
   const yoyPeriodLabels = yoyComparison.period_labels || DEFAULT_PERIOD_LABELS;
   const momPeriodLabels = momComparison.period_labels || DEFAULT_PERIOD_LABELS;
   const periodLabels = activeComparison.period_labels || DEFAULT_PERIOD_LABELS;
+  const activeBanner = RAW.banner_order.find((name) => bannerTabId(name) === activeTab) || null;
+  const promoLookups = useMemo(
+    () => buildPromoLookups(activeData.promo_rows || []),
+    [activeData.promo_rows],
+  );
   const visibleMonths = useMemo(
     () =>
       MONTHS.map((label, index) => ({ label, index })).filter(
@@ -300,20 +475,29 @@ export default function DemandDashboard() {
       activeTab === MOM_RETAILER_TAB ||
       activeTab === NON_MULO_RETAILER_MOM_TAB
     ) {
-      return tableData.rollup_ret;
+      return attachPromoRows(tableData.rollup_ret, promoLookups, "retailer");
     }
     if (
       activeTab === YOY_GROUP_TAB ||
       activeTab === MOM_GROUP_TAB ||
       activeTab === NON_MULO_GROUP_MOM_TAB
     ) {
-      return productDrilldownLevel === "segment"
+      const rows = productDrilldownLevel === "segment"
         ? tableData.rollup_segment || tableData.rollup_grp
         : tableData.rollup_grp;
+      return attachPromoRows(
+        rows,
+        promoLookups,
+        productDrilldownLevel === "segment" ? "segment" : "product",
+      );
     }
-    const banner = RAW.banner_order.find((name) => bannerTabId(name) === activeTab);
-    return yoyData.retailers[banner] || [];
-  }, [activeTab, productDrilldownLevel, RAW.banner_order, tableData, yoyData]);
+    return attachPromoRows(
+      activeData.retailers[activeBanner] || [],
+      promoLookups,
+      "retailer-specific",
+      activeBanner,
+    );
+  }, [activeBanner, activeData.retailers, activeTab, productDrilldownLevel, promoLookups, tableData]);
 
   function applyQuarter(value) {
     const option = QUARTER_OPTIONS.find((quarter) => quarter.value === value) || QUARTER_OPTIONS[0];
@@ -431,8 +615,17 @@ export default function DemandDashboard() {
       </nav>
 
       <section className="tab-pane active">
-        <h2>{tabTitle(activeTab, RAW)}</h2>
+        <h2>{tabTitle(activeTab, RAW, activeComparisonKey)}</h2>
         <div className="sub">{tabSubtitle(activeTab, blendDisplays, periodLabels)}</div>
+        {activeBanner ? (
+          <ComparisonToggle
+            comparisonKey={retailerComparisonKey}
+            onChange={(comparisonKey) => {
+              setRetailerComparisonKey(comparisonKey);
+              setExpandedGroups(new Set());
+            }}
+          />
+        ) : null}
         <TableControls
           monthEnd={monthEnd}
           months={MONTHS}
@@ -455,12 +648,12 @@ export default function DemandDashboard() {
           expandedGroups={expandedGroups}
           labelHeader={
             isRetailerRollup(activeTab)
-              ? "Retailer"
+              ? "Retailer / Product Group / MPG / Promo ID"
               : isProductGroupRollup(activeTab)
                 ? productDrilldownLevel === "segment"
-                  ? "Segment / Retailer"
-                  : "Product Group / MPG / Retailer"
-                : "Product Group / MPG"
+                  ? "Segment / Retailer / Promo ID"
+                  : "Product Group / MPG / Retailer / Promo ID"
+                : "Product Group / MPG / Promo ID"
           }
           months={MONTHS}
           periodLabels={periodLabels}
@@ -479,6 +672,28 @@ export default function DemandDashboard() {
         {META.generated_from.product_workbook} and {META.generated_from.market_workbook}
       </footer>
     </main>
+  );
+}
+
+function ComparisonToggle({ comparisonKey, onChange }) {
+  return (
+    <div className="comparison-toggle segmented-control" aria-label="Retailer comparison">
+      <span>Comparison</span>
+      <button
+        className={comparisonKey === "yoy" ? "active" : ""}
+        onClick={() => onChange("yoy")}
+        type="button"
+      >
+        YoY
+      </button>
+      <button
+        className={comparisonKey === "mom" ? "active" : ""}
+        onClick={() => onChange("mom")}
+        type="button"
+      >
+        MoM
+      </button>
+    </div>
   );
 }
 
@@ -678,10 +893,11 @@ function Legend({ periodLabels }) {
 }
 
 function rowLevel(row) {
-  if (row.is_total) return 0;
-  if (row.is_group) return 1;
-  if (row.is_mpg) return 2;
-  return 3;
+  if (row.is_total) return -1;
+  if (Number.isInteger(row.depth)) return row.depth;
+  if (row.is_group) return 0;
+  if (row.is_mpg) return 1;
+  return 2;
 }
 
 function filterRowsForChange(rows, visibleMonths, hideZeroChanges) {
@@ -691,7 +907,7 @@ function filterRowsForChange(rows, visibleMonths, hideZeroChanges) {
 
   for (let index = rows.length - 1; index >= 0; index -= 1) {
     const level = rowLevel(rows[index]);
-    if (level !== 1 && level !== 2) continue;
+    if (!rows[index].has_children) continue;
 
     for (let childIndex = index + 1; childIndex < rows.length; childIndex += 1) {
       const childLevel = rowLevel(rows[childIndex]);
@@ -704,7 +920,7 @@ function filterRowsForChange(rows, visibleMonths, hideZeroChanges) {
   }
 
   const filteredRows = rows.filter((_, index) => keep[index]);
-  let displayDividerSeen = false;
+  const displayDividerParents = new Set();
 
   return filteredRows.map((row, index) => {
     let hasVisibleChild = false;
@@ -721,11 +937,12 @@ function filterRowsForChange(rows, visibleMonths, hideZeroChanges) {
     let nextRow = row.has_children !== hasVisibleChild ? { ...row, has_children: hasVisibleChild } : row;
 
     if (nextRow.is_display_group) {
-      const shouldStartDisplaySection = !displayDividerSeen;
+      const displayParent = nextRow.parent_key || "root";
+      const shouldStartDisplaySection = !displayDividerParents.has(displayParent);
       if (nextRow === row || nextRow.display_section_start !== shouldStartDisplaySection) {
         nextRow = { ...nextRow, display_section_start: shouldStartDisplaySection };
       }
-      displayDividerSeen = true;
+      displayDividerParents.add(displayParent);
     } else if (nextRow.display_section_start) {
       nextRow = { ...nextRow, display_section_start: false };
     }
@@ -742,49 +959,23 @@ function visibleMonthColumns(rows, visibleMonths, hideZeroChanges) {
 }
 
 function prepareVisibleRows(rows, expandedGroups, tabId) {
-  let currentGroup = null;
-  let currentGroupOpen = true;
-  let currentMpg = null;
-  let currentMpgOpen = true;
-  let groupIndex = 0;
-  let mpgIndex = 0;
+  const openByDepth = [];
   const visibleRows = [];
 
   rows.forEach((row, index) => {
-    let groupKey = currentGroup;
-    let mpgKey = currentMpg;
-    let rowKey = null;
-    let visible = currentGroupOpen;
-    let isOpen = false;
-
-    if (row.is_group && !row.is_total) {
-      groupKey = `${tabId}-${groupIndex}-${row.label}`;
-      currentGroup = groupKey;
-      currentMpg = null;
-      currentMpgOpen = false;
-      groupIndex += 1;
-      mpgIndex = 0;
-      currentGroupOpen = row.has_children ? expandedGroups.has(groupKey) : true;
-      visible = true;
-      rowKey = row.has_children ? groupKey : null;
-      isOpen = currentGroupOpen;
-    } else if (row.is_mpg) {
-      mpgKey = `${groupKey}-${mpgIndex}-${row.label}`;
-      currentMpg = mpgKey;
-      mpgIndex += 1;
-      currentMpgOpen = row.has_children ? expandedGroups.has(mpgKey) : true;
-      visible = currentGroupOpen;
-      rowKey = row.has_children ? mpgKey : null;
-      isOpen = currentMpgOpen;
-    } else if (row.is_retailer) {
-      visible = row.parent_level === "group" ? currentGroupOpen : currentGroupOpen && currentMpgOpen;
-    } else if (row.is_total) {
-      groupKey = null;
-      mpgKey = null;
-      visible = true;
-    } else {
-      visible = currentGroupOpen;
+    if (row.is_total) {
+      visibleRows.push({ index, isOpen: false, row, rowClass: "tot-row", rowKey: null });
+      return;
     }
+
+    const depth = Math.max(0, rowLevel(row));
+    const visible = depth === 0 || Boolean(openByDepth[depth - 1]);
+    const rowKey = row.has_children
+      ? `${tabId}-${row.row_key || `${index}-${row.row_type}-${row.label}`}`
+      : null;
+    const isOpen = row.has_children ? expandedGroups.has(rowKey) : true;
+    openByDepth[depth] = visible && isOpen;
+    openByDepth.length = depth + 1;
 
     if (!visible) return;
 
@@ -796,8 +987,10 @@ function prepareVisibleRows(rows, expandedGroups, tabId) {
           ? "mpg-row"
           : row.is_retailer
             ? "retailer-row"
-            : "sku-row";
-    const rowClass = `${baseRowClass}${row.display_section_start ? " display-section-start" : ""}`;
+            : row.is_promo
+              ? "promo-row"
+              : "sku-row";
+    const rowClass = `${baseRowClass} depth-${depth}${row.display_section_start ? " display-section-start" : ""}`;
     visibleRows.push({ index, isOpen, row, rowClass, rowKey });
   });
 
@@ -839,7 +1032,7 @@ function DataTable({
         </thead>
         <tbody>
           {visibleRows.map(({ index, isOpen, row, rowClass, rowKey }) => (
-              <tr className={rowClass} key={`${tabId}-${index}-${row.label}`}>
+              <tr className={rowClass} key={`${tabId}-${row.row_key || `${index}-${row.label}`}`}>
                 <LabelCell
                   groupKey={rowKey}
                   isOpen={isOpen}
@@ -891,43 +1084,34 @@ function MonthSubhead({ index, monthCount, periodLabels }) {
 function LabelCell({ groupKey, isOpen, row, toggleGroup }) {
   if (row.is_total) return <td className="totlbl">{row.label}</td>;
 
-  if (row.is_group) {
-    if (!row.has_children) return <td className="glbl">{row.label}</td>;
+  const labelClass = row.is_group
+    ? "glbl"
+    : row.is_mpg
+      ? "mlbl"
+      : row.is_retailer
+        ? "rlbl"
+        : row.is_promo
+          ? "plbl"
+          : "slbl";
+  const style = { "--row-depth": rowLevel(row) };
 
-    return (
-      <td className="glbl">
-        <button
-          aria-expanded={isOpen}
-          className="group-toggle"
-          onClick={() => toggleGroup(groupKey)}
-          type="button"
-        >
-          <span className={`arr${isOpen ? " open" : ""}`} aria-hidden="true">&gt;</span>
-          <span>{row.label}</span>
-        </button>
-      </td>
-    );
+  if (!row.has_children) {
+    return <td className={`${labelClass} hierarchy-label`} style={style}>{row.label}</td>;
   }
 
-  if (row.is_mpg) {
-    return (
-      <td className="mlbl">
-        <button
-          aria-expanded={isOpen}
-          className="group-toggle"
-          onClick={() => toggleGroup(groupKey)}
-          type="button"
-        >
-          <span className={`arr${isOpen ? " open" : ""}`} aria-hidden="true">&gt;</span>
-          <span>{row.label}</span>
-        </button>
-      </td>
-    );
-  }
-
-  if (row.is_retailer) return <td className="rlbl">{row.label}</td>;
-
-  return <td className="slbl">{row.label}</td>;
+  return (
+    <td className={`${labelClass} hierarchy-label`} style={style}>
+      <button
+        aria-expanded={isOpen}
+        className="group-toggle"
+        onClick={() => toggleGroup(groupKey)}
+        type="button"
+      >
+        <span className={`arr${isOpen ? " open" : ""}`} aria-hidden="true">&gt;</span>
+        <span>{row.label}</span>
+      </button>
+    </td>
+  );
 }
 
 function MonthCells({ base, comparison, fullYear = false, monthIndex = null }) {
