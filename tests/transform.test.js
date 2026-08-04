@@ -480,6 +480,7 @@ assert.ok(!dashboardSource.includes('type="file"'));
 assert.ok(!dashboardSource.includes("Upload"));
 assert.ok(dashboardSource.includes("DASHBOARD_DATA_URL"));
 assert.ok(dashboardSource.includes("Blend DRPs into cases"));
+assert.ok(dashboardSource.includes("retailer-rollup-table"));
 assert.ok(dashboardSource.includes("By Retailer - YoY"));
 assert.ok(dashboardSource.includes("By Product Group - YoY"));
 assert.ok(dashboardSource.includes("By Retailer - MoM"));

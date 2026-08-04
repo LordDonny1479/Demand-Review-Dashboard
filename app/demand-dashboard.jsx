@@ -658,6 +658,7 @@ export default function DemandDashboard() {
           months={MONTHS}
           periodLabels={periodLabels}
           hideZeroChanges={hideZeroChanges}
+          retailerRollup={isRetailerRollup(activeTab)}
           rows={activeRows}
           summaryLabel={summaryLabel}
           tabId={`${activeComparisonKey}-${dataMode}-${productDrilldownLevel}-${activeTab}`}
@@ -1003,6 +1004,7 @@ function DataTable({
   labelHeader,
   months,
   periodLabels,
+  retailerRollup,
   rows,
   summaryLabel,
   tabId,
@@ -1015,7 +1017,7 @@ function DataTable({
 
   return (
     <div className="tbl-wrap">
-      <table className="dt">
+      <table className={`dt${retailerRollup ? " retailer-rollup-table" : ""}`}>
         <thead>
           <tr className="hdr1">
             <th className="lhdr" rowSpan="2">{labelHeader}</th>
