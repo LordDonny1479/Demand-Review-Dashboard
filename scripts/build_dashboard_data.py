@@ -14,8 +14,9 @@ from openpyxl import load_workbook
 
 ROOT = Path(__file__).resolve().parents[1]
 RAW_DIR = ROOT / "data" / "raw"
-YOY_XLSX = RAW_DIR / "DR August - YoY.xlsx"
-MOM_XLSX = RAW_DIR / "DR August - MoM.xlsx"
+YOY_2025_XLSX = RAW_DIR / "DR 2025 - 2026-08-04 (EXCEXP_TLS_000JGVACI).xlsx"
+YOY_2026_XLSX = RAW_DIR / "DR 2026 - 2026-08-04 (EXCEXP_TLS_000JGVABX).xlsx"
+MOM_JULY_XLSX = RAW_DIR / "DR August - MoM.xlsx"
 PRODUCT_XLSX = RAW_DIR / "Product List 20260629 (2).xlsx"
 MARKET_XLSX = RAW_DIR / "Market List.xlsx"
 
@@ -40,10 +41,9 @@ STATUS_BY_YEAR = {
 COMPARISON_CONFIGS = {
     "yoy": {
         "label": "YoY",
-        "workbook": YOY_XLSX,
         "sheets": [
-            {"name": "2025", "period_key": "base", "label": "2025", "short_label": "'25", "actual_year": 2025},
-            {"name": "2026", "period_key": "comparison", "label": "2026", "short_label": "'26", "actual_year": 2026},
+            {"workbook": YOY_2025_XLSX, "name": "Rebates", "period_key": "base", "label": "2025", "short_label": "'25", "actual_year": 2025},
+            {"workbook": YOY_2026_XLSX, "name": "Rebates", "period_key": "comparison", "label": "2026", "short_label": "'26", "actual_year": 2026},
         ],
         "period_labels": {
             "base": "2025",
@@ -60,10 +60,9 @@ COMPARISON_CONFIGS = {
     },
     "mom": {
         "label": "MoM",
-        "workbook": MOM_XLSX,
         "sheets": [
-            {"name": "July", "period_key": "base", "label": "July", "short_label": "July", "actual_year": 2026},
-            {"name": "August", "period_key": "comparison", "label": "August", "short_label": "August", "actual_year": 2026},
+            {"workbook": MOM_JULY_XLSX, "name": "July", "period_key": "base", "label": "July", "short_label": "July", "actual_year": 2026},
+            {"workbook": YOY_2026_XLSX, "name": "Rebates", "period_key": "comparison", "label": "August", "short_label": "August", "actual_year": 2026},
         ],
         "period_labels": {
             "base": "July",
@@ -693,11 +692,12 @@ def lookup_product(product_id: str, product: str, item_by_id, pack_groups):
     return fallback_product_record(product_id, product)
 
 
-def raw_demand_rows(item_by_id, pack_groups, workbook_path: Path, sheet_configs: list[dict]):
-    workbook = load_workbook(workbook_path, read_only=True, data_only=True)
+def raw_demand_rows(item_by_id, pack_groups, sheet_configs: list[dict]):
     rows = []
 
     for sheet_config in sheet_configs:
+        workbook_path = sheet_config["workbook"]
+        workbook = load_workbook(workbook_path, read_only=True, data_only=True)
         sheet_name = sheet_config["name"]
         sheet = workbook[sheet_name]
         year = sheet_config["actual_year"]
@@ -721,6 +721,7 @@ def raw_demand_rows(item_by_id, pack_groups, workbook_path: Path, sheet_configs:
 
             rows.append(
                 {
+                    "source_workbook": workbook_path.name,
                     "source_sheet": sheet_name,
                     "source_row": row_number,
                     "year": year,
@@ -746,8 +747,8 @@ def raw_demand_rows(item_by_id, pack_groups, workbook_path: Path, sheet_configs:
                     "is_display_product": is_display,
                 }
             )
+        workbook.close()
 
-    workbook.close()
     return rows
 
 
@@ -1563,8 +1564,8 @@ def transform_comparison(comparison_key: str, config: dict, demand_rows: list[di
                 }
 
         for month_index, weight, split_days, total_days in month_splits(row["execution_start"], row["execution_end"]):
-            included_split_keys.add((row["source_sheet"], row["source_row"], month_index))
-            included_source_rows.add((row["source_sheet"], row["source_row"]))
+            included_split_keys.add((row["source_workbook"], row["source_sheet"], row["source_row"], month_index))
+            included_source_rows.add((row["source_workbook"], row["source_sheet"], row["source_row"]))
             mode_definitions = [
                 {
                     "data_mode": "blended",
@@ -1635,6 +1636,7 @@ def transform_comparison(comparison_key: str, config: dict, demand_rows: list[di
                     "execution_days_in_month": split_days,
                     "execution_days_total": total_days,
                     "month_cases": round(month_cases, 6),
+                    "source_workbook": row["source_workbook"],
                     "source_sheet": row["source_sheet"],
                     "source_row": row["source_row"],
                     "conversion_note": mode_definition["conversion_note"],
@@ -1648,16 +1650,19 @@ def transform_comparison(comparison_key: str, config: dict, demand_rows: list[di
         "included_split_keys": included_split_keys,
         "included_source_rows": included_source_rows,
         "source_rows_read": len(demand_rows),
-        "workbook": config["workbook"].name,
+        "workbooks": list(dict.fromkeys(sheet["workbook"].name for sheet in config["sheets"])),
     }
 
 
 def comparison_summary(config: dict, transformed: dict, dashboard_modes: dict):
     display_audit = transformed["display_audit"]
+    source_workbooks = list(dict.fromkeys(sheet["workbook"].name for sheet in config["sheets"]))
     return {
-        "source_workbook": config["workbook"].name,
+        "source_workbook": " + ".join(source_workbooks),
+        "source_workbooks": source_workbooks,
         "periods": [
             {
+                "source_workbook": sheet["workbook"].name,
                 "sheet": sheet["name"],
                 "label": sheet["label"],
                 "actual_year": sheet["actual_year"],
@@ -1687,7 +1692,7 @@ def build_outputs():
     market_map, configured_banner_order = load_market_map()
     products, item_by_id, pack_groups = load_products()
     demand_rows_by_comparison = {
-        key: raw_demand_rows(item_by_id, pack_groups, config["workbook"], config["sheets"])
+        key: raw_demand_rows(item_by_id, pack_groups, config["sheets"])
         for key, config in COMPARISON_CONFIGS.items()
     }
     all_demand_rows = [
@@ -1763,9 +1768,13 @@ def build_outputs():
 
     summary = {
         "generated_from": {
-            "demand_workbook": YOY_XLSX.name,
-            "yoy_workbook": YOY_XLSX.name,
-            "mom_workbook": MOM_XLSX.name,
+            "demand_workbook": f"{YOY_2025_XLSX.name} + {YOY_2026_XLSX.name}",
+            "yoy_workbook": f"{YOY_2025_XLSX.name} + {YOY_2026_XLSX.name}",
+            "yoy_2025_workbook": YOY_2025_XLSX.name,
+            "yoy_2026_workbook": YOY_2026_XLSX.name,
+            "mom_workbook": f"{MOM_JULY_XLSX.name} (July) + {YOY_2026_XLSX.name} (August)",
+            "mom_july_workbook": MOM_JULY_XLSX.name,
+            "mom_august_workbook": YOY_2026_XLSX.name,
             "product_workbook": PRODUCT_XLSX.name,
             "market_workbook": MARKET_XLSX.name,
         },
@@ -1782,7 +1791,7 @@ def build_outputs():
             "banner_scope": BANNER_ORDER,
             "visible_banner_tabs": visible_banner_order,
             "market_mapping": "Retailer/customer names are mapped from Market List.xlsx",
-            "mom_comparison": "MoM compares the August pull against the July pull from DR August - MoM.xlsx using the same product, market, status, date, and display-conversion methodology",
+            "mom_comparison": "MoM compares the August 4 pull against the retained July 3 pull using the same product, market, status, date, and display-conversion methodology",
             "site_excluded_banners": sorted(SITE_EXCLUDED_BANNERS),
             "rollup_excluded_banners": sorted(ROLLUP_EXCLUDED_BANNERS),
             "retailer_visibility_rule": f"Show focus retailers plus retailers whose absolute change is greater than {CHANGE_VISIBILITY_THRESHOLD:.0%} of the total absolute change for the active comparison and display mode",
@@ -1889,6 +1898,7 @@ def excluded_row(row: dict, banner: str | None, reason: str, comparison_key: str
         "forecast_incremental_cases": row["forecast_incremental_cases"],
         "execution_start": "" if not row["execution_start"] else row["execution_start"].isoformat(),
         "execution_end": "" if not row["execution_end"] else row["execution_end"].isoformat(),
+        "source_workbook": row["source_workbook"],
         "source_sheet": row["source_sheet"],
         "source_row": row["source_row"],
         "description": row["description"],
@@ -1922,6 +1932,7 @@ def detail_fieldnames():
         "execution_days_in_month",
         "execution_days_total",
         "month_cases",
+        "source_workbook",
         "source_sheet",
         "source_row",
         "conversion_note",
@@ -1943,6 +1954,7 @@ def excluded_fieldnames():
         "forecast_incremental_cases",
         "execution_start",
         "execution_end",
+        "source_workbook",
         "source_sheet",
         "source_row",
         "description",

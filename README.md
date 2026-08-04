@@ -19,8 +19,9 @@ the display blending toggle.
 
 Raw workbooks are stored in `data/raw`:
 
-- `DR August - YoY.xlsx`
-- `DR August - MoM.xlsx`
+- `DR 2025 - 2026-08-04 (EXCEXP_TLS_000JGVACI).xlsx` for the latest 2025 YoY pull
+- `DR 2026 - 2026-08-04 (EXCEXP_TLS_000JGVABX).xlsx` for the latest 2026 YoY and August MoM pull
+- `DR August - MoM.xlsx` for the retained July 3 MoM baseline sheet
 - `Product List 20260629 (2).xlsx`
 - `Market List.xlsx`
 

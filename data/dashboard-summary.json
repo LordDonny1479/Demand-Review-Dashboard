@@ -1,8 +1,12 @@
 {
   "generated_from": {
-    "demand_workbook": "DR August - YoY.xlsx",
-    "yoy_workbook": "DR August - YoY.xlsx",
-    "mom_workbook": "DR August - MoM.xlsx",
+    "demand_workbook": "DR 2025 - 2026-08-04 (EXCEXP_TLS_000JGVACI).xlsx + DR 2026 - 2026-08-04 (EXCEXP_TLS_000JGVABX).xlsx",
+    "yoy_workbook": "DR 2025 - 2026-08-04 (EXCEXP_TLS_000JGVACI).xlsx + DR 2026 - 2026-08-04 (EXCEXP_TLS_000JGVABX).xlsx",
+    "yoy_2025_workbook": "DR 2025 - 2026-08-04 (EXCEXP_TLS_000JGVACI).xlsx",
+    "yoy_2026_workbook": "DR 2026 - 2026-08-04 (EXCEXP_TLS_000JGVABX).xlsx",
+    "mom_workbook": "DR August - MoM.xlsx (July) + DR 2026 - 2026-08-04 (EXCEXP_TLS_000JGVABX).xlsx (August)",
+    "mom_july_workbook": "DR August - MoM.xlsx",
+    "mom_august_workbook": "DR 2026 - 2026-08-04 (EXCEXP_TLS_000JGVABX).xlsx",
     "product_workbook": "Product List 20260629 (2).xlsx",
     "market_workbook": "Market List.xlsx"
   },
@@ -76,7 +80,7 @@
       "Walmart"
     ],
     "market_mapping": "Retailer/customer names are mapped from Market List.xlsx",
-    "mom_comparison": "MoM compares the August pull against the July pull from DR August - MoM.xlsx using the same product, market, status, date, and display-conversion methodology",
+    "mom_comparison": "MoM compares the August 4 pull against the retained July 3 pull using the same product, market, status, date, and display-conversion methodology",
     "site_excluded_banners": [
       "Canada"
     ],
@@ -109,10 +113,15 @@
   },
   "comparisons": {
     "yoy": {
-      "source_workbook": "DR August - YoY.xlsx",
+      "source_workbook": "DR 2025 - 2026-08-04 (EXCEXP_TLS_000JGVACI).xlsx + DR 2026 - 2026-08-04 (EXCEXP_TLS_000JGVABX).xlsx",
+      "source_workbooks": [
+        "DR 2025 - 2026-08-04 (EXCEXP_TLS_000JGVACI).xlsx",
+        "DR 2026 - 2026-08-04 (EXCEXP_TLS_000JGVABX).xlsx"
+      ],
       "periods": [
         {
-          "sheet": "2025",
+          "source_workbook": "DR 2025 - 2026-08-04 (EXCEXP_TLS_000JGVACI).xlsx",
+          "sheet": "Rebates",
           "label": "2025",
           "actual_year": 2025,
           "status_filter": [
@@ -121,7 +130,8 @@
           ]
         },
         {
-          "sheet": "2026",
+          "source_workbook": "DR 2026 - 2026-08-04 (EXCEXP_TLS_000JGVABX).xlsx",
+          "sheet": "Rebates",
           "label": "2026",
           "actual_year": 2026,
           "status_filter": [
@@ -143,39 +153,44 @@
         "pct_stat": "YoY %",
         "legend": "Grey = 2025 | Bold = 2026 | Full Year delta includes %"
       },
-      "source_rows_read": 8338,
-      "included_source_month_rows": 9600,
-      "included_source_rows": 6155,
-      "excluded_rows": 2183,
-      "display_products_reviewed": 76,
-      "display_products_converted": 76,
+      "source_rows_read": 8369,
+      "included_source_month_rows": 9656,
+      "included_source_rows": 6178,
+      "excluded_rows": 2191,
+      "display_products_reviewed": 77,
+      "display_products_converted": 77,
       "unconverted_display_products": 0,
-      "detail_rows": 19343,
+      "detail_rows": 19455,
       "mode_totals": {
         "blended": {
           "fy25": 1519951,
-          "fy26": 1326352,
+          "fy26": 1339295,
           "base_total": 1519951,
-          "comparison_total": 1326352,
-          "delta": -193599,
-          "delta_pct": -12.7,
+          "comparison_total": 1339295,
+          "delta": -180656,
+          "delta_pct": -11.9,
           "banners": 31
         },
         "separate": {
           "fy25": 1199918,
-          "fy26": 1060731,
+          "fy26": 1071799,
           "base_total": 1199918,
-          "comparison_total": 1060731,
-          "delta": -139187,
-          "delta_pct": -11.6,
+          "comparison_total": 1071799,
+          "delta": -128119,
+          "delta_pct": -10.7,
           "banners": 31
         }
       }
     },
     "mom": {
-      "source_workbook": "DR August - MoM.xlsx",
+      "source_workbook": "DR August - MoM.xlsx + DR 2026 - 2026-08-04 (EXCEXP_TLS_000JGVABX).xlsx",
+      "source_workbooks": [
+        "DR August - MoM.xlsx",
+        "DR 2026 - 2026-08-04 (EXCEXP_TLS_000JGVABX).xlsx"
+      ],
       "periods": [
         {
+          "source_workbook": "DR August - MoM.xlsx",
           "sheet": "July",
           "label": "July",
           "actual_year": 2026,
@@ -186,7 +201,8 @@
           ]
         },
         {
-          "sheet": "August",
+          "source_workbook": "DR 2026 - 2026-08-04 (EXCEXP_TLS_000JGVABX).xlsx",
+          "sheet": "Rebates",
           "label": "August",
           "actual_year": 2026,
           "status_filter": [
@@ -208,70 +224,70 @@
         "pct_stat": "MoM %",
         "legend": "Grey = July pull | Bold = August pull | Full Year change includes %"
       },
-      "source_rows_read": 7071,
-      "included_source_month_rows": 8348,
-      "included_source_rows": 5429,
-      "excluded_rows": 1642,
-      "display_products_reviewed": 60,
-      "display_products_converted": 60,
+      "source_rows_read": 7102,
+      "included_source_month_rows": 8403,
+      "included_source_rows": 5452,
+      "excluded_rows": 1650,
+      "display_products_reviewed": 61,
+      "display_products_converted": 61,
       "unconverted_display_products": 0,
-      "detail_rows": 16818,
+      "detail_rows": 16928,
       "mode_totals": {
         "blended": {
           "fy25": 1321835,
-          "fy26": 1326352,
+          "fy26": 1339295,
           "base_total": 1321835,
-          "comparison_total": 1326352,
-          "delta": 4517,
-          "delta_pct": 0.3,
+          "comparison_total": 1339295,
+          "delta": 17460,
+          "delta_pct": 1.3,
           "banners": 29
         },
         "separate": {
           "fy25": 1020138,
-          "fy26": 1060731,
+          "fy26": 1071799,
           "base_total": 1020138,
-          "comparison_total": 1060731,
-          "delta": 40593,
-          "delta_pct": 4.0,
+          "comparison_total": 1071799,
+          "delta": 51661,
+          "delta_pct": 5.1,
           "banners": 29
         }
       }
     }
   },
-  "source_rows_read": 8338,
+  "source_rows_read": 8369,
   "data_modes": {
     "blended": "Blend DRPs/displays into regular-case equivalents",
     "separate": "Keep DRPs/displays separate and count each display as 1 case"
   },
-  "included_source_month_rows": 9600,
-  "included_source_rows": 6155,
-  "excluded_rows": 2183,
-  "display_products_reviewed": 76,
-  "display_products_converted": 76,
+  "included_source_month_rows": 9656,
+  "included_source_rows": 6178,
+  "excluded_rows": 2191,
+  "display_products_reviewed": 77,
+  "display_products_converted": 77,
   "unconverted_display_products": 0,
-  "detail_rows": 19343,
+  "detail_rows": 19455,
   "mode_totals": {
     "blended": {
       "fy25": 1519951,
-      "fy26": 1326352,
+      "fy26": 1339295,
       "base_total": 1519951,
-      "comparison_total": 1326352,
-      "delta": -193599,
-      "delta_pct": -12.7,
+      "comparison_total": 1339295,
+      "delta": -180656,
+      "delta_pct": -11.9,
       "banners": 31
     },
     "separate": {
       "fy25": 1199918,
-      "fy26": 1060731,
+      "fy26": 1071799,
       "base_total": 1199918,
-      "comparison_total": 1060731,
-      "delta": -139187,
-      "delta_pct": -11.6,
+      "comparison_total": 1071799,
+      "delta": -128119,
+      "delta_pct": -10.7,
       "banners": 31
     }
   },
   "total_cases_2025": 1519951,
-  "total_cases_2026": 1326352,
-  "delta_cases": -193599,
-  "delta_pct": -12.7
+  "total_cases_2026": 1339295,
+  "delta_cases": -180656,
+  "delta_pct": -11.9
 }

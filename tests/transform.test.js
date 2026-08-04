@@ -56,27 +56,27 @@ assert.ok(RAW.modes.separate);
 assert.ok(RAW.modes.blended.rollup_segment);
 assert.ok(RAW.modes.separate.rollup_segment);
 assert.strictEqual(RAW.modes.blended.stats.fy25, 1519951);
-assert.strictEqual(RAW.modes.blended.stats.fy26, 1326352);
-assert.strictEqual(RAW.modes.blended.stats.delta, -193599);
-assert.strictEqual(RAW.modes.blended.stats.delta_pct, -12.7);
+assert.strictEqual(RAW.modes.blended.stats.fy26, 1339295);
+assert.strictEqual(RAW.modes.blended.stats.delta, -180656);
+assert.strictEqual(RAW.modes.blended.stats.delta_pct, -11.9);
 assert.strictEqual(RAW.modes.blended.stats.banners, 31);
 assert.strictEqual(RAW.modes.separate.stats.fy25, 1199918);
-assert.strictEqual(RAW.modes.separate.stats.fy26, 1060731);
-assert.strictEqual(RAW.modes.separate.stats.delta, -139187);
-assert.strictEqual(RAW.modes.separate.stats.delta_pct, -11.6);
+assert.strictEqual(RAW.modes.separate.stats.fy26, 1071799);
+assert.strictEqual(RAW.modes.separate.stats.delta, -128119);
+assert.strictEqual(RAW.modes.separate.stats.delta_pct, -10.7);
 assert.strictEqual(RAW.modes.separate.stats.banners, 31);
 assert.strictEqual(RAW.comparisons.yoy.modes.blended.stats.fy26, RAW.modes.blended.stats.fy26);
 assert.strictEqual(RAW.comparisons.mom.period_labels.base, "July");
 assert.strictEqual(RAW.comparisons.mom.period_labels.comparison, "August");
 assert.strictEqual(RAW.comparisons.mom.modes.blended.stats.fy25, 1321835);
-assert.strictEqual(RAW.comparisons.mom.modes.blended.stats.fy26, 1326352);
-assert.strictEqual(RAW.comparisons.mom.modes.blended.stats.delta, 4517);
-assert.strictEqual(RAW.comparisons.mom.modes.blended.stats.delta_pct, 0.3);
+assert.strictEqual(RAW.comparisons.mom.modes.blended.stats.fy26, 1339295);
+assert.strictEqual(RAW.comparisons.mom.modes.blended.stats.delta, 17460);
+assert.strictEqual(RAW.comparisons.mom.modes.blended.stats.delta_pct, 1.3);
 assert.strictEqual(RAW.comparisons.mom.modes.blended.stats.banners, 29);
 assert.strictEqual(RAW.comparisons.mom.modes.separate.stats.fy25, 1020138);
-assert.strictEqual(RAW.comparisons.mom.modes.separate.stats.fy26, 1060731);
-assert.strictEqual(RAW.comparisons.mom.modes.separate.stats.delta, 40593);
-assert.strictEqual(RAW.comparisons.mom.modes.separate.stats.delta_pct, 4.0);
+assert.strictEqual(RAW.comparisons.mom.modes.separate.stats.fy26, 1071799);
+assert.strictEqual(RAW.comparisons.mom.modes.separate.stats.delta, 51661);
+assert.strictEqual(RAW.comparisons.mom.modes.separate.stats.delta_pct, 5.1);
 assert.strictEqual(RAW.comparisons.mom.modes.separate.stats.banners, 29);
 assert.strictEqual(
   RAW.comparisons.mom.modes.blended.stats.fy26,
@@ -268,7 +268,7 @@ const momRetailers = retailerRowsForMpg(RAW.comparisons.mom.modes.blended.rollup
 assert.ok(momRetailers.length > 5);
 assert.strictEqual(momRetailers[0].label, "Sobeys ROC");
 assert.strictEqual(momRetailers[0].fy25, 39548);
-assert.strictEqual(momRetailers[0].fy26, 42305);
+assert.strictEqual(momRetailers[0].fy26, 43479);
 assertSortedByDeltaDesc(momRetailers);
 
 const mpgRoastGround = RAW.modes.blended.rollup_grp.find((row) => row.label === "Roast & Ground" && row.is_group);
@@ -284,7 +284,7 @@ const segmentRetailers = retailerRowsForSegment(RAW.modes.blended.rollup_segment
 assert.ok(segmentRetailers.length > 5);
 assert.strictEqual(segmentRetailers[0].label, "Metro Quebec");
 assert.strictEqual(segmentRetailers[0].fy25, 33333);
-assert.strictEqual(segmentRetailers[0].fy26, 49738);
+assert.strictEqual(segmentRetailers[0].fy26, 48838);
 assert.ok(segmentRetailers.every((row) => row.parent_level === "group"));
 assertSortedByDeltaDesc(segmentRetailers);
 
@@ -308,6 +308,7 @@ assert.deepStrictEqual(RAW.modes.separate.visible_retailer_banners, [
   "Fed Coop",
   "Giant Tiger",
   "Loblaw",
+  "London Drugs",
   "Metro Ontario",
   "Metro Quebec",
   "PFG",
@@ -321,7 +322,6 @@ assert.deepStrictEqual(RAW.comparisons.mom.modes.blended.visible_retailer_banner
   "Fed Coop",
   "Giant Tiger",
   "Loblaw",
-  "London Drugs",
   "Metro Ontario",
   "Metro Quebec",
   "PFG",
@@ -426,12 +426,15 @@ assert.ok(audit.includes("6320924394,TDL HOT CHOC/FVC 1/2 DRP 150/1 EA,Hot Choco
 assert.ok(audit.includes("6320924394,TDL HOT CHOC/FVC 1/2 DRP 150/1 EA,Sweet & Creamy,HB Cappuccino 6/1kg,Sweet & Creamy Displays,HB Mix Drp 150/1ea,10.0,yes,Mixed DRP split: 60 cappuccino french vanilla units / regular case pack 6 = 10 cases"));
 assert.ok(audit.includes("6320925922,TDL INST MED/IC SYR CAP/MOC 1/2DRP 288EA,Instant,Instant Coffee 12/100g,Instant Displays,Instant & Syrup Drp 288/1ea,16.0,yes,Mixed DRP split: 192 instant coffee units / regular case pack 12 = 16 cases"));
 assert.ok(audit.includes("6320925922,TDL INST MED/IC SYR CAP/MOC 1/2DRP 288EA,Syrups,Syrups 12/470ml,Instant Displays,Instant & Syrup Drp 288/1ea,8.0,yes,Mixed DRP split: 96 iced coffee syrup units / regular case pack 12 = 8 cases"));
+assert.ok(audit.includes("TDPS-24/473,SAUCES 24/473 ML,Sauces,Sauces 6/473ml,Sauces Displays,Sauces 24/473ml,4.0,yes,Display pack 24/473ML converted to regular case pack 6/473ML"));
 
 assert.strictEqual(META.methodology.volume_source, "Product-level Fcst Inc Cases");
 assert.strictEqual(META.methodology.row_filter, "Fcst Inc Cases > 0");
 assert.strictEqual(META.methodology.product_level, "Product group is sourced from Product List column Q (Demand Review Planner); MPG pack-size level combines individual flavours");
-assert.strictEqual(META.generated_from.demand_workbook, "DR August - YoY.xlsx");
-assert.strictEqual(META.generated_from.mom_workbook, "DR August - MoM.xlsx");
+assert.strictEqual(META.generated_from.yoy_2025_workbook, "DR 2025 - 2026-08-04 (EXCEXP_TLS_000JGVACI).xlsx");
+assert.strictEqual(META.generated_from.yoy_2026_workbook, "DR 2026 - 2026-08-04 (EXCEXP_TLS_000JGVABX).xlsx");
+assert.strictEqual(META.generated_from.mom_july_workbook, "DR August - MoM.xlsx");
+assert.strictEqual(META.generated_from.mom_august_workbook, "DR 2026 - 2026-08-04 (EXCEXP_TLS_000JGVABX).xlsx");
 assert.strictEqual(META.generated_from.product_workbook, "Product List 20260629 (2).xlsx");
 assert.strictEqual(META.generated_from.market_workbook, "Market List.xlsx");
 assert.deepStrictEqual(META.methodology.year_status_filter["2026"], [
@@ -463,13 +466,13 @@ assert.strictEqual(
 assert.deepStrictEqual(META.methodology.visible_banner_tabs, RAW.banner_order);
 assert.strictEqual(META.mode_totals.blended.fy25, 1519951);
 assert.strictEqual(META.mode_totals.separate.fy25, 1199918);
-assert.strictEqual(META.mode_totals.blended.fy26, 1326352);
-assert.strictEqual(META.mode_totals.separate.fy26, 1060731);
-assert.strictEqual(META.display_products_converted, 76);
+assert.strictEqual(META.mode_totals.blended.fy26, 1339295);
+assert.strictEqual(META.mode_totals.separate.fy26, 1071799);
+assert.strictEqual(META.display_products_converted, 77);
 assert.strictEqual(META.unconverted_display_products, 0);
 assert.strictEqual(META.comparisons.mom.mode_totals.blended.fy25, 1321835);
-assert.strictEqual(META.comparisons.mom.mode_totals.blended.fy26, 1326352);
-assert.strictEqual(META.comparisons.mom.display_products_converted, 60);
+assert.strictEqual(META.comparisons.mom.mode_totals.blended.fy26, 1339295);
+assert.strictEqual(META.comparisons.mom.display_products_converted, 61);
 assert.strictEqual(META.comparisons.mom.unconverted_display_products, 0);
 
 const dashboardSource = fs.readFileSync("app/demand-dashboard.jsx", "utf8");
