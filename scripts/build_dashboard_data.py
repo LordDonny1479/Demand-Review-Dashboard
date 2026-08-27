@@ -14,9 +14,9 @@ from openpyxl import load_workbook
 
 ROOT = Path(__file__).resolve().parents[1]
 RAW_DIR = ROOT / "data" / "raw"
-YOY_2025_XLSX = RAW_DIR / "DR 2025 - 2026-08-04 (EXCEXP_TLS_000JGVACI).xlsx"
-YOY_2026_XLSX = RAW_DIR / "DR 2026 - 2026-08-04 (EXCEXP_TLS_000JGVABX).xlsx"
-MOM_JULY_XLSX = RAW_DIR / "DR August - MoM.xlsx"
+YOY_2025_XLSX = RAW_DIR / "DR 2025 - 2026-08-27 (EXCEXP_TLS_000JHUZ8P).xlsx"
+AUGUST_2026_XLSX = RAW_DIR / "DR 2026 - 2026-08-04 (EXCEXP_TLS_000JGVABX).xlsx"
+SEPTEMBER_2026_XLSX = RAW_DIR / "DR 2026 - 2026-08-27 (EXCEXP_TLS_000JHUZ8F).xlsx"
 PRODUCT_XLSX = RAW_DIR / "Product List 20260629 (2).xlsx"
 MARKET_XLSX = RAW_DIR / "Market List.xlsx"
 
@@ -43,7 +43,7 @@ COMPARISON_CONFIGS = {
         "label": "YoY",
         "sheets": [
             {"workbook": YOY_2025_XLSX, "name": "Rebates", "period_key": "base", "label": "2025", "short_label": "'25", "actual_year": 2025},
-            {"workbook": YOY_2026_XLSX, "name": "Rebates", "period_key": "comparison", "label": "2026", "short_label": "'26", "actual_year": 2026},
+            {"workbook": SEPTEMBER_2026_XLSX, "name": "Rebates", "period_key": "comparison", "label": "2026", "short_label": "'26", "actual_year": 2026},
         ],
         "period_labels": {
             "base": "2025",
@@ -61,20 +61,20 @@ COMPARISON_CONFIGS = {
     "mom": {
         "label": "MoM",
         "sheets": [
-            {"workbook": MOM_JULY_XLSX, "name": "July", "period_key": "base", "label": "July", "short_label": "July", "actual_year": 2026},
-            {"workbook": YOY_2026_XLSX, "name": "Rebates", "period_key": "comparison", "label": "August", "short_label": "August", "actual_year": 2026},
+            {"workbook": AUGUST_2026_XLSX, "name": "Rebates", "period_key": "base", "label": "August", "short_label": "August", "actual_year": 2026},
+            {"workbook": SEPTEMBER_2026_XLSX, "name": "Rebates", "period_key": "comparison", "label": "September", "short_label": "September", "actual_year": 2026},
         ],
         "period_labels": {
-            "base": "July",
-            "comparison": "August",
-            "base_short": "July",
-            "comparison_short": "August",
-            "base_stat": "July Cases",
-            "comparison_stat": "August Cases",
+            "base": "August",
+            "comparison": "September",
+            "base_short": "August",
+            "comparison_short": "September",
+            "base_stat": "August Cases",
+            "comparison_stat": "September Cases",
             "delta": "Change",
             "delta_stat": "MoM Change Cases",
             "pct_stat": "MoM %",
-            "legend": "Grey = July pull | Bold = August pull | Full Year change includes %",
+            "legend": "Grey = August pull | Bold = September pull | Full Year change includes %",
         },
     },
 }
@@ -1768,13 +1768,13 @@ def build_outputs():
 
     summary = {
         "generated_from": {
-            "demand_workbook": f"{YOY_2025_XLSX.name} + {YOY_2026_XLSX.name}",
-            "yoy_workbook": f"{YOY_2025_XLSX.name} + {YOY_2026_XLSX.name}",
+            "demand_workbook": f"{YOY_2025_XLSX.name} + {SEPTEMBER_2026_XLSX.name}",
+            "yoy_workbook": f"{YOY_2025_XLSX.name} + {SEPTEMBER_2026_XLSX.name}",
             "yoy_2025_workbook": YOY_2025_XLSX.name,
-            "yoy_2026_workbook": YOY_2026_XLSX.name,
-            "mom_workbook": f"{MOM_JULY_XLSX.name} (July) + {YOY_2026_XLSX.name} (August)",
-            "mom_july_workbook": MOM_JULY_XLSX.name,
-            "mom_august_workbook": YOY_2026_XLSX.name,
+            "yoy_2026_workbook": SEPTEMBER_2026_XLSX.name,
+            "mom_workbook": f"{AUGUST_2026_XLSX.name} (August) + {SEPTEMBER_2026_XLSX.name} (September)",
+            "mom_august_workbook": AUGUST_2026_XLSX.name,
+            "mom_september_workbook": SEPTEMBER_2026_XLSX.name,
             "product_workbook": PRODUCT_XLSX.name,
             "market_workbook": MARKET_XLSX.name,
         },
@@ -1791,7 +1791,7 @@ def build_outputs():
             "banner_scope": BANNER_ORDER,
             "visible_banner_tabs": visible_banner_order,
             "market_mapping": "Retailer/customer names are mapped from Market List.xlsx",
-            "mom_comparison": "MoM compares the August 4 pull against the retained July 3 pull using the same product, market, status, date, and display-conversion methodology",
+            "mom_comparison": "MoM compares the September-labelled August 27 pull against the retained August 4 pull using the same product, market, status, date, and display-conversion methodology",
             "site_excluded_banners": sorted(SITE_EXCLUDED_BANNERS),
             "rollup_excluded_banners": sorted(ROLLUP_EXCLUDED_BANNERS),
             "retailer_visibility_rule": f"Show focus retailers plus retailers whose absolute change is greater than {CHANGE_VISIBILITY_THRESHOLD:.0%} of the total absolute change for the active comparison and display mode",

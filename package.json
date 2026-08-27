@@ -12,6 +12,7 @@
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "drizzle-kit generate",
     "data:build": "python scripts/build_dashboard_data.py",
+    "export:html": "node scripts/export_standalone.mjs",
     "test": "node tests/transform.test.js"
   },
   "dependencies": {
