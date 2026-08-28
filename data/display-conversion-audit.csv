@@ -52,7 +52,7 @@ mom,TDSSKC-48/12,SS KCOMP 48/12CT,Single Serve,SS KComp 6/12ct,Single Serve Disp
 mom,6320913827,TDL CN/COB/CR SOUP 1/2 DRP 192/540 ML,Soups and Hot Bowls,Soups 12/540ml,Soups and Hot Bowls Displays,Soups 192/540ml,16.0,yes,Display pack 192/540ML converted to regular case pack 12/540ML
 mom,6320917474,TDL COB/CN/CR/PB SOUP 1/2 DRP 288/540 ML,Soups and Hot Bowls,Soups 12/540ml,Soups and Hot Bowls Displays,Soups 288/540ml,24.0,yes,Display pack 288/540ML converted to regular case pack 12/540ML
 mom,6320923630,TDL COB/CN/IW SOUP 1/2 DRP 288/540 ML,Soups and Hot Bowls,Soups 12/540ml,Soups and Hot Bowls Displays,Soups 288/540ml,24.0,yes,Display pack 288/540ML converted to regular case pack 12/540ML
-mom,6320925920,TDL LOADED CN//IM/CR/BPB 1/2DRP 288/540M,Soups and Hot Bowls,Soups 12/540ml,Soups and Hot Bowls Displays,Soups 288/540ml,24.0,yes,Display pack 288/540ML converted to regular case pack 12/540ML
+mom,TDSHSP-192/540,SOUPS 192/540ML,Soups and Hot Bowls,Soups 12/540ml,Soups and Hot Bowls Displays,Soups 192/540ml,16.0,yes,Display pack 192/540ML converted to regular case pack 12/540ML
 mom,6320915034,TDL HOT BEVERAGE MIX DISPLAYER 36/1 EA,Sweet & Creamy,HB Cappuccino 5/8ct,Sweet & Creamy Displays,HB Mix Displayer 36/1ea,1.8,yes,Mixed DRP split: 9 cappuccino french vanilla packet units / regular case pack 5 = 1.8 cases
 mom,6320925415,TDL ICECOF SYRUP CAP/MOCHA DISP 32/470ML,Syrups,Syrups 12/470ml,Syrups Displays,Syrups 32/470ml,2.666667,yes,Display pack 32/470ML converted to regular case pack 12/470ML
 mom,TDSIC-32/470,SYRUPS 32/470ML,Syrups,Syrups 12/470ml,Syrups Displays,Syrups 32/470ml,2.666667,yes,Display pack 32/470ML converted to regular case pack 12/470ML
@@ -126,7 +126,6 @@ yoy,TDSSKC-48/12,SS KCOMP 48/12CT,Single Serve,SS KComp 6/12ct,Single Serve Disp
 yoy,6320913827,TDL CN/COB/CR SOUP 1/2 DRP 192/540 ML,Soups and Hot Bowls,Soups 12/540ml,Soups and Hot Bowls Displays,Soups 192/540ml,16.0,yes,Display pack 192/540ML converted to regular case pack 12/540ML
 yoy,6320917474,TDL COB/CN/CR/PB SOUP 1/2 DRP 288/540 ML,Soups and Hot Bowls,Soups 12/540ml,Soups and Hot Bowls Displays,Soups 288/540ml,24.0,yes,Display pack 288/540ML converted to regular case pack 12/540ML
 yoy,6320923630,TDL COB/CN/IW SOUP 1/2 DRP 288/540 ML,Soups and Hot Bowls,Soups 12/540ml,Soups and Hot Bowls Displays,Soups 288/540ml,24.0,yes,Display pack 288/540ML converted to regular case pack 12/540ML
-yoy,6320925920,TDL LOADED CN//IM/CR/BPB 1/2DRP 288/540M,Soups and Hot Bowls,Soups 12/540ml,Soups and Hot Bowls Displays,Soups 288/540ml,24.0,yes,Display pack 288/540ML converted to regular case pack 12/540ML
 yoy,TDSHSP-192/540,SOUPS 192/540ML,Soups and Hot Bowls,Soups 12/540ml,Soups and Hot Bowls Displays,Soups 192/540ml,16.0,yes,Display pack 192/540ML converted to regular case pack 12/540ML
 yoy,TDSHSP-288/540,SOUPS 288/540ML,Soups and Hot Bowls,Soups 12/540ml,Soups and Hot Bowls Displays,Soups 288/540ml,24.0,yes,Display pack 288/540ML converted to regular case pack 12/540ML
 yoy,6320915034,TDL HOT BEVERAGE MIX DISPLAYER 36/1 EA,Sweet & Creamy,HB Cappuccino 5/8ct,Sweet & Creamy Displays,HB Mix Displayer 36/1ea,1.8,yes,Mixed DRP split: 9 cappuccino french vanilla packet units / regular case pack 5 = 1.8 cases

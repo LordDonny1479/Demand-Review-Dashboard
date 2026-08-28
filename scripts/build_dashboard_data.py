@@ -14,9 +14,9 @@ from openpyxl import load_workbook
 
 ROOT = Path(__file__).resolve().parents[1]
 RAW_DIR = ROOT / "data" / "raw"
-YOY_2025_XLSX = RAW_DIR / "DR 2025 - 2026-08-27 (EXCEXP_TLS_000JHUZ8P).xlsx"
+YOY_2025_XLSX = RAW_DIR / "DR 2025 - 2026-08-28 (EXCEXP_TLS_000JHWRHC).xlsx"
 AUGUST_2026_XLSX = RAW_DIR / "DR 2026 - 2026-08-04 (EXCEXP_TLS_000JGVABX).xlsx"
-SEPTEMBER_2026_XLSX = RAW_DIR / "DR 2026 - 2026-08-27 (EXCEXP_TLS_000JHUZ8F).xlsx"
+SEPTEMBER_2026_XLSX = RAW_DIR / "DR 2026 - 2026-08-28 (EXCEXP_TLS_000JHWRH0).xlsx"
 PRODUCT_XLSX = RAW_DIR / "Product List 20260629 (2).xlsx"
 MARKET_XLSX = RAW_DIR / "Market List.xlsx"
 
@@ -1791,7 +1791,7 @@ def build_outputs():
             "banner_scope": BANNER_ORDER,
             "visible_banner_tabs": visible_banner_order,
             "market_mapping": "Retailer/customer names are mapped from Market List.xlsx",
-            "mom_comparison": "MoM compares the September-labelled August 27 pull against the retained August 4 pull using the same product, market, status, date, and display-conversion methodology",
+            "mom_comparison": "MoM compares the September-labelled August 28 pull against the retained August 4 pull using the same product, market, status, date, and display-conversion methodology",
             "site_excluded_banners": sorted(SITE_EXCLUDED_BANNERS),
             "rollup_excluded_banners": sorted(ROLLUP_EXCLUDED_BANNERS),
             "retailer_visibility_rule": f"Show focus retailers plus retailers whose absolute change is greater than {CHANGE_VISIBILITY_THRESHOLD:.0%} of the total absolute change for the active comparison and display mode",
