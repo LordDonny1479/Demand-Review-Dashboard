@@ -48,6 +48,13 @@ const EMPTY_MODE = {
   promo_rows: [],
   retailer_totals: [],
   retailers: {},
+  inventory: {
+    stats: EMPTY_STATS,
+    rollup_ret: [],
+    rollup_grp: [],
+    rollup_segment: [],
+    promo_rows: [],
+  },
   non_mulo: {
     stats: EMPTY_STATS,
     rollup_ret: [],
@@ -86,28 +93,28 @@ function formatSigned(value) {
   return `${rounded > 0 ? "+" : "-"}${Math.abs(rounded).toLocaleString("en-US")}`;
 }
 
-function formatDelta(base, comparison) {
+function formatDelta(base, comparison, showNewLabel = true) {
   const a = base || 0;
   const b = comparison || 0;
-  if (a === 0 && b > 0) return "NEW";
+  if (showNewLabel && a === 0 && b > 0) return "NEW";
   if (a === 0 && b === 0) return "-";
   return formatSigned(b - a);
 }
 
-function formatFullYearDelta(base, comparison) {
+function formatFullYearDelta(base, comparison, showNewLabel = true) {
   const a = base || 0;
   const b = comparison || 0;
-  if (!a || !b) return formatDelta(a, b);
+  if (!a || !b) return formatDelta(a, b, showNewLabel);
   const delta = b - a;
   if (delta === 0) return "-";
   const pct = ((delta / Math.abs(a)) * 100).toFixed(1);
   return `${formatSigned(delta)} (${delta > 0 ? "+" : ""}${pct}%)`;
 }
 
-function deltaClass(base, comparison) {
+function deltaClass(base, comparison, showNewLabel = true) {
   const a = base || 0;
   const b = comparison || 0;
-  if (a === 0 && b > 0) return "delta-new";
+  if (showNewLabel && a === 0 && b > 0) return "delta-new";
   if (a > 0 && b === 0) return "delta-neg";
   const delta = b - a;
   if (delta > 0) return "delta-pos";
@@ -143,6 +150,13 @@ function isProductGroupRollup(activeTab) {
 
 function isNonMuloTab(activeTab) {
   return activeTab === NON_MULO_RETAILER_MOM_TAB || activeTab === NON_MULO_GROUP_MOM_TAB;
+}
+
+function showsInventoryTable(activeTab) {
+  return activeTab === YOY_RETAILER_TAB ||
+    activeTab === YOY_GROUP_TAB ||
+    activeTab === MOM_RETAILER_TAB ||
+    activeTab === MOM_GROUP_TAB;
 }
 
 function quarterForRange(start, end) {
@@ -415,6 +429,7 @@ export default function DemandDashboard() {
   const yoyData = yoyComparison.modes?.[dataMode] || EMPTY_MODE;
   const momData = momComparison.modes?.[dataMode] || EMPTY_MODE;
   const tableData = isNonMuloTab(activeTab) ? activeData.non_mulo || EMPTY_MODE : activeData;
+  const inventoryData = tableData.inventory || EMPTY_MODE.inventory;
   const yoyPeriodLabels = yoyComparison.period_labels || DEFAULT_PERIOD_LABELS;
   const momPeriodLabels = momComparison.period_labels || DEFAULT_PERIOD_LABELS;
   const periodLabels = activeComparison.period_labels || DEFAULT_PERIOD_LABELS;
@@ -422,6 +437,10 @@ export default function DemandDashboard() {
   const promoLookups = useMemo(
     () => buildPromoLookups(activeData.promo_rows || []),
     [activeData.promo_rows],
+  );
+  const inventoryPromoLookups = useMemo(
+    () => buildPromoLookups(inventoryData.promo_rows || []),
+    [inventoryData.promo_rows],
   );
   const visibleMonths = useMemo(
     () =>
@@ -498,6 +517,31 @@ export default function DemandDashboard() {
       activeBanner,
     );
   }, [activeBanner, activeData.retailers, activeTab, productDrilldownLevel, promoLookups, tableData]);
+
+  const inventoryRows = useMemo(() => {
+    if (isRetailerRollup(activeTab)) {
+      return attachPromoRows(inventoryData.rollup_ret, inventoryPromoLookups, "retailer");
+    }
+    if (isProductGroupRollup(activeTab)) {
+      const rows = productDrilldownLevel === "segment"
+        ? inventoryData.rollup_segment || inventoryData.rollup_grp
+        : inventoryData.rollup_grp;
+      return attachPromoRows(
+        rows,
+        inventoryPromoLookups,
+        productDrilldownLevel === "segment" ? "segment" : "product",
+      );
+    }
+    return [];
+  }, [activeTab, inventoryData, inventoryPromoLookups, productDrilldownLevel]);
+
+  const labelHeader = isRetailerRollup(activeTab)
+    ? "Retailer / Product Group / MPG / Promo ID"
+    : isProductGroupRollup(activeTab)
+      ? productDrilldownLevel === "segment"
+        ? "Segment / Retailer / Promo ID"
+        : "Product Group / MPG / Retailer / Promo ID"
+      : "Product Group / MPG / Promo ID";
 
   function applyQuarter(value) {
     const option = QUARTER_OPTIONS.find((quarter) => quarter.value === value) || QUARTER_OPTIONS[0];
@@ -646,15 +690,7 @@ export default function DemandDashboard() {
         <Legend periodLabels={periodLabels} />
         <DataTable
           expandedGroups={expandedGroups}
-          labelHeader={
-            isRetailerRollup(activeTab)
-              ? "Retailer / Product Group / MPG / Promo ID"
-              : isProductGroupRollup(activeTab)
-                ? productDrilldownLevel === "segment"
-                  ? "Segment / Retailer / Promo ID"
-                  : "Product Group / MPG / Retailer / Promo ID"
-                : "Product Group / MPG / Promo ID"
-          }
+          labelHeader={labelHeader}
           months={MONTHS}
           periodLabels={periodLabels}
           hideZeroChanges={hideZeroChanges}
@@ -665,6 +701,35 @@ export default function DemandDashboard() {
           toggleGroup={toggleGroup}
           visibleMonths={visibleMonths}
         />
+        {showsInventoryTable(activeTab) ? (
+          <section className="inventory-table-section" aria-labelledby="inventory-table-title">
+            <div className="inventory-table-heading">
+              <h3 id="inventory-table-title">Inventory Build / Burn - Net Cases</h3>
+              <div className="inventory-direction-key" aria-label="Inventory movement legend">
+                <span className="inventory-build-key">+ Build</span>
+                <span className="inventory-burn-key">- Burn</span>
+              </div>
+            </div>
+            <div className="inventory-sub">
+              Build is prorated from TLS Ship Start through Execution Start. Burn uses the same
+              volume from Execution Start through Execution End.
+            </div>
+            <DataTable
+              expandedGroups={expandedGroups}
+              hideZeroChanges={hideZeroChanges}
+              labelHeader={labelHeader}
+              months={MONTHS}
+              periodLabels={periodLabels}
+              retailerRollup={isRetailerRollup(activeTab)}
+              rows={inventoryRows}
+              signedValues
+              summaryLabel={summaryLabel}
+              tabId={`inventory-${activeComparisonKey}-${dataMode}-${productDrilldownLevel}-${activeTab}`}
+              toggleGroup={toggleGroup}
+              visibleMonths={visibleMonths}
+            />
+          </section>
+        ) : null}
       </section>
 
       <footer className="data-footnote">
@@ -1006,6 +1071,7 @@ function DataTable({
   periodLabels,
   retailerRollup,
   rows,
+  signedValues = false,
   summaryLabel,
   tabId,
   toggleGroup,
@@ -1047,6 +1113,7 @@ function DataTable({
                     comparison={row.m26?.[month.index] || 0}
                     key={month.label}
                     monthIndex={month.index}
+                    signedValues={signedValues}
                   />
                 ))}
                 <MonthCells
@@ -1061,6 +1128,7 @@ function DataTable({
                       : sumMonthValues(row.m26, visibleMonths)
                   }
                   fullYear
+                  signedValues={signedValues}
                 />
               </tr>
           ))}
@@ -1116,16 +1184,24 @@ function LabelCell({ groupKey, isOpen, row, toggleGroup }) {
   );
 }
 
-function MonthCells({ base, comparison, fullYear = false, monthIndex = null }) {
+function signedValueClass(value, signedValues) {
+  if (!signedValues || !value) return "";
+  return value > 0 ? " inventory-build-value" : " inventory-burn-value";
+}
+
+function MonthCells({ base, comparison, fullYear = false, monthIndex = null, signedValues = false }) {
   const boundaryClass = fullYear || monthIndex !== null ? (fullYear ? " fy-boundary" : " month-boundary") : "";
   const endClass = fullYear ? " fy-end" : " month-end";
+  const showNewLabel = !signedValues;
 
   return (
     <>
-      <td className={`y25${boundaryClass}`}>{formatNumber(base)}</td>
-      <td className="y26">{formatNumber(comparison)}</td>
-      <td className={`${deltaClass(base, comparison)}${endClass}`}>
-        {fullYear ? formatFullYearDelta(base, comparison) : formatDelta(base, comparison)}
+      <td className={`y25${boundaryClass}${signedValueClass(base, signedValues)}`}>{formatNumber(base)}</td>
+      <td className={`y26${signedValueClass(comparison, signedValues)}`}>{formatNumber(comparison)}</td>
+      <td className={`${deltaClass(base, comparison, showNewLabel)}${endClass}`}>
+        {fullYear
+          ? formatFullYearDelta(base, comparison, showNewLabel)
+          : formatDelta(base, comparison, showNewLabel)}
       </td>
     </>
   );

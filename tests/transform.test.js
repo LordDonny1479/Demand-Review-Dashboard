@@ -203,10 +203,14 @@ assertNoDisplayDivider(RAW.modes.blended.rollup_grp);
 assertNoDisplayDivider(RAW.comparisons.mom.modes.blended.rollup_grp);
 assertNoDisplayDivider(RAW.modes.blended.rollup_segment);
 assertNoDisplayDivider(RAW.comparisons.mom.modes.blended.rollup_segment);
+assertNoDisplayDivider(RAW.comparisons.yoy.modes.blended.inventory.rollup_grp);
+assertNoDisplayDivider(RAW.comparisons.mom.modes.blended.inventory.rollup_grp);
 assertDisplayGroupsAtBottom(RAW.modes.separate.rollup_grp, "Granola Displays");
 assertDisplayGroupsAtBottom(RAW.comparisons.mom.modes.separate.rollup_grp, "Granola Displays");
 assertDisplayGroupsAtBottom(RAW.modes.separate.rollup_segment, "Granola Displays");
 assertDisplayGroupsAtBottom(RAW.modes.separate.retailers.Walmart, "Hot Chocolate Displays");
+assertDisplayGroupsAtBottom(RAW.comparisons.yoy.modes.separate.inventory.rollup_grp, "Granola Displays");
+assertDisplayGroupsAtBottom(RAW.comparisons.mom.modes.separate.inventory.rollup_grp, "Granola Displays");
 
 const nonMuloMomRetailers = new Set(
   RAW.comparisons.mom.modes.blended.non_mulo.rollup_grp
@@ -396,6 +400,61 @@ for (const [label, data] of [
   assertPromoReconciliation(data, label);
 }
 
+for (const [label, data] of [
+  ["YoY blended inventory", RAW.comparisons.yoy.modes.blended],
+  ["YoY separate inventory", RAW.comparisons.yoy.modes.separate],
+  ["MoM blended inventory", RAW.comparisons.mom.modes.blended],
+  ["MoM separate inventory", RAW.comparisons.mom.modes.separate],
+]) {
+  const inventory = data.inventory;
+  assert.ok(inventory, `${label} should exist`);
+  assert.deepStrictEqual(
+    inventory.visible_retailer_banners,
+    data.visible_retailer_banners,
+    `${label} should use the regular table's retailer visibility rule`,
+  );
+  assert.strictEqual(inventory.stats.fy25, 0, `${label} base lifecycle should balance`);
+  assert.strictEqual(inventory.stats.fy26, 0, `${label} comparison lifecycle should balance`);
+  assert.strictEqual(inventory.stats.delta, 0, `${label} full-year change should balance`);
+  assert.ok(
+    inventory.promo_rows.every((row) => row.fy25 === 0 && row.fy26 === 0),
+    `${label} promo lifecycles should balance`,
+  );
+  const inventoryGrandTotal = inventory.rollup_ret.find((row) => row.is_total);
+  assert.ok(inventoryGrandTotal.m25.some((value) => value > 0), `${label} should include builds`);
+  assert.ok(inventoryGrandTotal.m25.some((value) => value < 0), `${label} should include burns`);
+  assertPromoReconciliation(inventory, label);
+}
+
+const sameMonthInventoryPromo = RAW.comparisons.yoy.modes.blended.inventory.promo_rows.find(
+  (row) => row.banner === "Sobeys ROC"
+    && row.product_group === "Roast & Ground"
+    && row.mpg === "R&G Small Bag 6/300g"
+    && row.promo_id === "000I31U0V",
+);
+assert.ok(sameMonthInventoryPromo);
+assert.deepStrictEqual(sameMonthInventoryPromo.m25, Array(12).fill(0));
+assert.strictEqual(sameMonthInventoryPromo.fy25, 0);
+
+const reversedDateInventoryPromo = RAW.comparisons.yoy.modes.blended.inventory.promo_rows.find(
+  (row) => row.banner === "PFG"
+    && row.product_group === "Sweet & Creamy"
+    && row.mpg === "HB Cappuccino 5/8ct"
+    && row.promo_id === "000J7SVI8",
+);
+assert.ok(reversedDateInventoryPromo);
+assert.deepStrictEqual(reversedDateInventoryPromo.m26, [24, -24, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+assert.strictEqual(reversedDateInventoryPromo.fy26, 0);
+
+const reversedDateMomInventoryPromo = RAW.comparisons.mom.modes.blended.inventory.promo_rows.find(
+  (row) => row.banner === "PFG"
+    && row.mpg === "HB Cappuccino 5/8ct"
+    && row.promo_id === "000J7SVI8",
+);
+assert.ok(reversedDateMomInventoryPromo);
+assert.deepStrictEqual(reversedDateMomInventoryPromo.m25, reversedDateInventoryPromo.m26);
+assert.deepStrictEqual(reversedDateMomInventoryPromo.m26, reversedDateInventoryPromo.m26);
+
 const yoyRetailerHierarchy = RAW.comparisons.yoy.modes.blended.rollup_ret;
 assert.ok(yoyRetailerHierarchy.some((row) => row.is_retailer && row.depth === 0 && row.has_children));
 assert.ok(yoyRetailerHierarchy.some((row) => row.is_group && row.depth === 1 && row.has_children));
@@ -475,6 +534,27 @@ assert.strictEqual(META.comparisons.mom.mode_totals.blended.fy25, 1339295);
 assert.strictEqual(META.comparisons.mom.mode_totals.blended.fy26, 1365751);
 assert.strictEqual(META.comparisons.mom.display_products_converted, 57);
 assert.strictEqual(META.comparisons.mom.unconverted_display_products, 0);
+assert.strictEqual(META.comparisons.yoy.inventory_detail_rows, 35894);
+assert.strictEqual(META.comparisons.yoy.inventory_source_rows, 6268);
+assert.strictEqual(META.comparisons.yoy.inventory_missing_ship_start_rows, 0);
+assert.strictEqual(META.comparisons.yoy.inventory_ship_after_execution_rows, 6);
+assert.strictEqual(META.comparisons.mom.inventory_detail_rows, 32252);
+assert.strictEqual(META.comparisons.mom.inventory_source_rows, 5686);
+assert.strictEqual(META.comparisons.mom.inventory_missing_ship_start_rows, 0);
+assert.strictEqual(META.comparisons.mom.inventory_ship_after_execution_rows, 2);
+assert.strictEqual(
+  META.methodology.inventory_method,
+  "Inventory build is positive and prorated from TLS Ship Start through Execution Start, inclusive; inventory burn is the same volume negative and prorated from Execution Start through Execution End, inclusive; if TLS Ship Start is after Execution Start, the full build is assigned to the TLS Ship Start month",
+);
+
+const yoyInventoryAudit = fs.readFileSync("data/promo-yoy-inventory-detail.csv", "utf8");
+const momInventoryAudit = fs.readFileSync("data/promo-mom-inventory-detail.csv", "utf8");
+assert.ok(yoyInventoryAudit.includes("movement_type"));
+assert.ok(yoyInventoryAudit.includes("Build"));
+assert.ok(yoyInventoryAudit.includes("Burn"));
+assert.ok(yoyInventoryAudit.includes("Ship start after execution start; full build assigned to ship-start month"));
+assert.ok(momInventoryAudit.includes("Build"));
+assert.ok(momInventoryAudit.includes("Burn"));
 
 const dashboardSource = fs.readFileSync("app/demand-dashboard.jsx", "utf8");
 assert.ok(!dashboardSource.includes('type="file"'));
@@ -505,6 +585,9 @@ assert.ok(dashboardSource.includes("Retailer comparison"));
 assert.ok(dashboardSource.includes("setRetailerComparisonKey"));
 assert.ok(dashboardSource.includes("month-end"));
 assert.ok(dashboardSource.includes("fy-end"));
+assert.ok(dashboardSource.includes("showsInventoryTable"));
+assert.ok(dashboardSource.includes("Inventory Build / Burn - Net Cases"));
+assert.ok(dashboardSource.includes("signedValues"));
 
 const dashboardStyles = fs.readFileSync("app/globals.css", "utf8");
 assert.ok(dashboardStyles.includes(".range-slider"));
@@ -518,5 +601,8 @@ assert.ok(dashboardStyles.includes("table.dt .fy-end"));
 assert.ok(dashboardStyles.includes(".card-section-title"));
 assert.ok(dashboardStyles.includes("tr.promo-row"));
 assert.ok(dashboardStyles.includes("td.plbl"));
+assert.ok(dashboardStyles.includes(".inventory-table-section"));
+assert.ok(dashboardStyles.includes(".inventory-build-value"));
+assert.ok(dashboardStyles.includes(".inventory-burn-value"));
 
 console.log("dashboard data tests passed");

@@ -14,6 +14,7 @@
     "volume_source": "Product-level Fcst Inc Cases",
     "row_filter": "Fcst Inc Cases > 0",
     "date_method": "Execution Start through Execution End, prorated by inclusive execution days per calendar month",
+    "inventory_method": "Inventory build is positive and prorated from TLS Ship Start through Execution Start, inclusive; inventory burn is the same volume negative and prorated from Execution Start through Execution End, inclusive; if TLS Ship Start is after Execution Start, the full build is assigned to the TLS Ship Start month",
     "year_status_filter": {
       "2025": [
         "Closed",
@@ -162,6 +163,10 @@
       "display_products_converted": 77,
       "unconverted_display_products": 0,
       "detail_rows": 19711,
+      "inventory_detail_rows": 35894,
+      "inventory_source_rows": 6268,
+      "inventory_missing_ship_start_rows": 0,
+      "inventory_ship_after_execution_rows": 6,
       "mode_totals": {
         "blended": {
           "fy25": 1519951,
@@ -233,6 +238,10 @@
       "display_products_converted": 57,
       "unconverted_display_products": 0,
       "detail_rows": 17512,
+      "inventory_detail_rows": 32252,
+      "inventory_source_rows": 5686,
+      "inventory_missing_ship_start_rows": 0,
+      "inventory_ship_after_execution_rows": 2,
       "mode_totals": {
         "blended": {
           "fy25": 1339295,

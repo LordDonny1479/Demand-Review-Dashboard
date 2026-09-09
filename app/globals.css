@@ -496,6 +496,51 @@ button {
   color: var(--muted);
 }
 
+.inventory-table-section {
+  margin-top: 18px;
+  padding-top: 12px;
+  border-top: 2px solid var(--line-strong);
+}
+
+.inventory-table-heading {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 2px;
+}
+
+.inventory-table-heading h3 {
+  margin: 0;
+  color: var(--coffee);
+  font-size: 12px;
+  letter-spacing: 0;
+}
+
+.inventory-direction-key {
+  display: inline-flex;
+  gap: 12px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.inventory-build-key,
+.inventory-build-value {
+  color: var(--pos) !important;
+}
+
+.inventory-burn-key,
+.inventory-burn-value {
+  color: var(--neg) !important;
+}
+
+.inventory-sub {
+  margin-bottom: 7px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
 .tbl-wrap {
   overflow-x: auto;
   padding-bottom: 6px;
@@ -832,6 +877,14 @@ table.retailer-rollup-table tr.grp-hdr.depth-1 td.delta-neg {
 table.retailer-rollup-table tr.grp-hdr.depth-1 td.delta-new {
   color: #ffe08a;
   background: var(--coffee-2);
+}
+
+table.retailer-rollup-table tr.grp-hdr.depth-1 td.inventory-build-value {
+  color: #8fe59d !important;
+}
+
+table.retailer-rollup-table tr.grp-hdr.depth-1 td.inventory-burn-value {
+  color: #ffb0b0 !important;
 }
 
 .data-footnote {

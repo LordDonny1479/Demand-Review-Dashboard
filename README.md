@@ -15,6 +15,11 @@ group, MPG, and promo ID. Retailer-specific tabs include a YoY/MoM selector and
 expand from product group to MPG to promo ID. All drilldown values switch with
 the display blending toggle.
 
+The By Retailer and By Product Group YoY/MoM tabs also include a second table
+for net inventory build and burn. It uses the same hierarchy, promo drilldowns,
+month range, quarter, zero filtering, and display treatment as the forecast
+volume table above it.
+
 ## Source data
 
 Raw workbooks are stored in `data/raw`:
@@ -33,6 +38,8 @@ Generated dashboard data is written to:
 - `data/promo-yoy-detail.csv` for row-level audit detail
 - `data/promo-mom-dashboard.json` for the month-over-month table payload
 - `data/promo-mom-detail.csv` for month-over-month row-level audit detail
+- `data/promo-yoy-inventory-detail.csv` for YoY inventory build/burn audit detail
+- `data/promo-mom-inventory-detail.csv` for MoM inventory build/burn audit detail
 - `data/display-conversion-audit.csv` for DRP/display conversion checks
 - `data/promo-yoy-excluded-rows.csv` for rows excluded by methodology
 - `data/promo-mom-excluded-rows.csv` for MoM rows excluded by methodology
@@ -55,6 +62,12 @@ The builder:
 - compares YoY as 2026 less 2025 and MoM as the September-labelled pull less the August pull;
 - uses `Execution Start` through `Execution End`;
 - pro-rates cases into calendar months by inclusive execution days;
+- treats inventory build as positive cases prorated from `TLS Ship Start`
+  through `Execution Start`, inclusive;
+- treats inventory burn as the same volume in negative cases prorated from
+  `Execution Start` through `Execution End`, inclusive;
+- assigns the full build to the `TLS Ship Start` month when a source row has
+  ship start after execution start;
 - maps products through the product list and combines flavours at MPG pack-size
   level;
 - maps retailer/customer names through `Market List.xlsx` and renders active

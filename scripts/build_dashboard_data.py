@@ -26,6 +26,8 @@ OUTPUT_DASHBOARD_JSON = ROOT / "data" / "promo-yoy-dashboard.json"
 OUTPUT_MOM_DASHBOARD_JSON = ROOT / "data" / "promo-mom-dashboard.json"
 OUTPUT_DETAIL = ROOT / "data" / "promo-yoy-detail.csv"
 OUTPUT_MOM_DETAIL = ROOT / "data" / "promo-mom-detail.csv"
+OUTPUT_INVENTORY_DETAIL = ROOT / "data" / "promo-yoy-inventory-detail.csv"
+OUTPUT_MOM_INVENTORY_DETAIL = ROOT / "data" / "promo-mom-inventory-detail.csv"
 OUTPUT_EXCLUDED = ROOT / "data" / "promo-yoy-excluded-rows.csv"
 OUTPUT_MOM_EXCLUDED = ROOT / "data" / "promo-mom-excluded-rows.csv"
 OUTPUT_DISPLAY_AUDIT = ROOT / "data" / "display-conversion-audit.csv"
@@ -898,6 +900,34 @@ def month_splits(start: date, end: date):
     return splits
 
 
+def inventory_movement_splits(ship_start: date, execution_start: date, execution_end: date):
+    if ship_start > execution_start:
+        build_splits = [(ship_start.month - 1, 1.0, 1, 1)]
+        build_rule = "Ship start after execution start; full build assigned to ship-start month"
+    else:
+        build_splits = month_splits(ship_start, execution_start)
+        build_rule = "Build prorated from TLS Ship Start through Execution Start, inclusive"
+
+    return [
+        {
+            "movement_type": "Build",
+            "movement_sign": 1,
+            "timing_start": ship_start,
+            "timing_end": execution_start if ship_start <= execution_start else ship_start,
+            "timing_rule": build_rule,
+            "splits": build_splits,
+        },
+        {
+            "movement_type": "Burn",
+            "movement_sign": -1,
+            "timing_start": execution_start,
+            "timing_end": execution_end,
+            "timing_rule": "Burn prorated from Execution Start through Execution End, inclusive",
+            "splits": month_splits(execution_start, execution_end),
+        },
+    ]
+
+
 def round_cases(value: float) -> int:
     if value >= 0:
         return int(math.floor(value + 0.5))
@@ -1144,6 +1174,14 @@ def values_delta(values: dict) -> float:
     return sum(values["comparison"]) - sum(values["base"])
 
 
+def has_month_activity(values: dict) -> bool:
+    return any(
+        abs(value) > 1e-9
+        for period in PERIOD_KEYS
+        for value in values[period]
+    )
+
+
 def retailer_change_visibility(rows: list[dict]) -> dict:
     retailer_values = defaultdict(empty_years)
     total_values = empty_years()
@@ -1194,7 +1232,7 @@ def build_retailer_rollup(
         banner
         for banner in BANNER_ORDER
         if visible_retailer_banners is None or banner in visible_retailer_banners
-        if sum(retailer_values[banner]["base"]) or sum(retailer_values[banner]["comparison"])
+        if has_month_activity(retailer_values[banner])
     ]
 
     if not include_product_drilldown:
@@ -1448,6 +1486,40 @@ def build_dashboard_from_rows(rows: list[dict]):
     }
 
 
+def build_inventory_dashboard_from_rows(rows: list[dict], visible_retailer_banners: set[str]):
+    rollup_rows = [
+        row
+        for row in rows
+        if row["banner"] not in ROLLUP_EXCLUDED_BANNERS
+    ]
+    rollup_ret, total_values = build_retailer_rollup(
+        rollup_rows,
+        visible_retailer_banners,
+        include_product_drilldown=True,
+        include_promo_drilldown=True,
+    )
+    stats = build_stats(total_values)
+    stats["banners"] = len({row["banner"] for row in rollup_rows})
+    return {
+        "rollup_ret": rollup_ret,
+        "rollup_grp": build_product_table(
+            rollup_rows,
+            include_retailer_drilldown=True,
+            visible_retailer_banners=visible_retailer_banners,
+            include_promo_drilldown=True,
+        ),
+        "rollup_segment": build_segment_table(
+            rollup_rows,
+            include_retailer_drilldown=True,
+            visible_retailer_banners=visible_retailer_banners,
+            include_promo_drilldown=True,
+        ),
+        "promo_rows": build_promo_rows(rollup_rows),
+        "visible_retailer_banners": ordered_banner_subset(visible_retailer_banners),
+        "stats": stats,
+    }
+
+
 def build_non_mulo_dashboard_from_rows(rows: list[dict]):
     scoped_rows = [
         row
@@ -1485,9 +1557,14 @@ def build_non_mulo_dashboard_from_rows(rows: list[dict]):
 
 def transform_comparison(comparison_key: str, config: dict, demand_rows: list[dict], base_lookup: dict, market_map: dict):
     mode_rows = {mode: [] for mode in DATA_MODES}
+    inventory_mode_rows = {mode: [] for mode in DATA_MODES}
     detail_rows = []
+    inventory_detail_rows = []
     included_split_keys = set()
     included_source_rows = set()
+    inventory_source_rows = set()
+    inventory_missing_ship_start_rows = set()
+    inventory_ship_after_execution_rows = set()
     excluded_rows = []
     display_audit = {}
 
@@ -1563,32 +1640,33 @@ def transform_comparison(comparison_key: str, config: dict, demand_rows: list[di
                     "conversion_note": component["conversion_note"],
                 }
 
+        mode_definitions = [
+            {
+                "data_mode": "blended",
+                "product_group": component["product_group"],
+                "mpg": component["mpg"],
+                "mode_cases": source_cases * component["conversion"],
+                "cases_per_display": component["conversion"],
+                "converted_fcst_inc_cases": source_cases * component["conversion"],
+                "conversion_note": component["conversion_note"],
+            }
+            for component in blended_components
+        ]
+        mode_definitions.append(
+            {
+                "data_mode": "separate",
+                "product_group": separate_product_group,
+                "mpg": separate_mpg,
+                "mode_cases": source_cases,
+                "cases_per_display": conversion["conversion"],
+                "converted_fcst_inc_cases": source_cases * conversion["conversion"],
+                "conversion_note": conversion["conversion_note"],
+            }
+        )
+
         for month_index, weight, split_days, total_days in month_splits(row["execution_start"], row["execution_end"]):
             included_split_keys.add((row["source_workbook"], row["source_sheet"], row["source_row"], month_index))
             included_source_rows.add((row["source_workbook"], row["source_sheet"], row["source_row"]))
-            mode_definitions = [
-                {
-                    "data_mode": "blended",
-                    "product_group": component["product_group"],
-                    "mpg": component["mpg"],
-                    "mode_cases": source_cases * component["conversion"],
-                    "cases_per_display": component["conversion"],
-                    "converted_fcst_inc_cases": source_cases * component["conversion"],
-                    "conversion_note": component["conversion_note"],
-                }
-                for component in blended_components
-            ]
-            mode_definitions.append(
-                {
-                    "data_mode": "separate",
-                    "product_group": separate_product_group,
-                    "mpg": separate_mpg,
-                    "mode_cases": source_cases,
-                    "cases_per_display": conversion["conversion"],
-                    "converted_fcst_inc_cases": source_cases * conversion["conversion"],
-                    "conversion_note": conversion["conversion_note"],
-                }
-            )
             for mode_definition in mode_definitions:
                 data_mode = mode_definition["data_mode"]
                 product_group = mode_definition["product_group"]
@@ -1642,13 +1720,91 @@ def transform_comparison(comparison_key: str, config: dict, demand_rows: list[di
                     "conversion_note": mode_definition["conversion_note"],
                 })
 
+        if not row["tls_ship_start"]:
+            inventory_missing_ship_start_rows.add(
+                (row["source_workbook"], row["source_sheet"], row["source_row"])
+            )
+            continue
+
+        inventory_source_key = (row["source_workbook"], row["source_sheet"], row["source_row"])
+        inventory_source_rows.add(inventory_source_key)
+        if row["tls_ship_start"] > row["execution_start"]:
+            inventory_ship_after_execution_rows.add(inventory_source_key)
+
+        for movement in inventory_movement_splits(
+            row["tls_ship_start"],
+            row["execution_start"],
+            row["execution_end"],
+        ):
+            for month_index, weight, split_days, total_days in movement["splits"]:
+                for mode_definition in mode_definitions:
+                    data_mode = mode_definition["data_mode"]
+                    mode_cases = mode_definition["mode_cases"]
+                    month_cases = mode_cases * weight * movement["movement_sign"]
+                    inventory_mode_rows[data_mode].append(
+                        {
+                            "banner": banner,
+                            "market": row["market"],
+                            "year": year,
+                            "period_key": row["period_key"],
+                            "period_label": row["period_label"],
+                            "month": MONTHS[month_index],
+                            "month_index": month_index,
+                            "product_group": mode_definition["product_group"],
+                            "mpg": mode_definition["mpg"],
+                            "promo_id": promo_label(row),
+                            "cases": month_cases,
+                        }
+                    )
+                    inventory_detail_rows.append({
+                        "comparison_key": comparison_key,
+                        "data_mode": data_mode,
+                        "banner": banner,
+                        "market": row["market"],
+                        "year": year,
+                        "period": row["period_label"],
+                        "month": MONTHS[month_index],
+                        "product_group": mode_definition["product_group"],
+                        "mpg": mode_definition["mpg"],
+                        "product_id": row["product_id"],
+                        "product": row["product"],
+                        "promo_id": row["promo_id"],
+                        "promo_status": row["promo_status"],
+                        "movement_type": movement["movement_type"],
+                        "movement_sign": movement["movement_sign"],
+                        "tls_ship_start": row["tls_ship_start"].isoformat(),
+                        "execution_start": row["execution_start"].isoformat(),
+                        "execution_end": row["execution_end"].isoformat(),
+                        "timing_start": movement["timing_start"].isoformat(),
+                        "timing_end": movement["timing_end"].isoformat(),
+                        "source_fcst_inc_cases": round(source_cases, 6),
+                        "unit_type": conversion["unit_type"],
+                        "cases_per_display": "" if conversion["unit_type"] == "CASE" else round(mode_definition["cases_per_display"], 6),
+                        "converted_fcst_inc_cases": round(mode_definition["converted_fcst_inc_cases"], 6),
+                        "mode_fcst_inc_cases": round(mode_cases, 6),
+                        "prorate_weight": round(weight, 8),
+                        "movement_days_in_month": split_days,
+                        "movement_days_total": total_days,
+                        "month_cases": round(month_cases, 6),
+                        "timing_rule": movement["timing_rule"],
+                        "source_workbook": row["source_workbook"],
+                        "source_sheet": row["source_sheet"],
+                        "source_row": row["source_row"],
+                        "conversion_note": mode_definition["conversion_note"],
+                    })
+
     return {
         "mode_rows": mode_rows,
+        "inventory_mode_rows": inventory_mode_rows,
         "detail_rows": detail_rows,
+        "inventory_detail_rows": inventory_detail_rows,
         "excluded_rows": excluded_rows,
         "display_audit": display_audit,
         "included_split_keys": included_split_keys,
         "included_source_rows": included_source_rows,
+        "inventory_source_rows": inventory_source_rows,
+        "inventory_missing_ship_start_rows": inventory_missing_ship_start_rows,
+        "inventory_ship_after_execution_rows": inventory_ship_after_execution_rows,
         "source_rows_read": len(demand_rows),
         "workbooks": list(dict.fromkeys(sheet["workbook"].name for sheet in config["sheets"])),
     }
@@ -1679,6 +1835,10 @@ def comparison_summary(config: dict, transformed: dict, dashboard_modes: dict):
         "display_products_converted": sum(1 for row in display_audit.values() if row["converted"] == "yes"),
         "unconverted_display_products": sum(1 for row in display_audit.values() if row["converted"] == "no"),
         "detail_rows": len(transformed["detail_rows"]),
+        "inventory_detail_rows": len(transformed["inventory_detail_rows"]),
+        "inventory_source_rows": len(transformed["inventory_source_rows"]),
+        "inventory_missing_ship_start_rows": len(transformed["inventory_missing_ship_start_rows"]),
+        "inventory_ship_after_execution_rows": len(transformed["inventory_ship_after_execution_rows"]),
         "mode_totals": {
             mode: data["stats"]
             for mode, data in dashboard_modes.items()
@@ -1724,13 +1884,18 @@ def build_outputs():
             mode: build_dashboard_from_rows(rows)
             for mode, rows in transformed[key]["mode_rows"].items()
         }
+        for mode, data in dashboard_modes.items():
+            data["inventory"] = build_inventory_dashboard_from_rows(
+                transformed[key]["inventory_mode_rows"][mode],
+                set(data["visible_retailer_banners"]),
+            )
         comparison_visible_banners = set(SPECIAL_RETAILER_TAB_BANNERS) & set(BANNER_ORDER)
         for data in dashboard_modes.values():
             comparison_visible_banners.update(data["visible_retailer_banners"])
         legacy_blended = {
             field: value
             for field, value in dashboard_modes["blended"].items()
-            if field != "promo_rows"
+            if field not in {"promo_rows", "inventory"}
         }
         comparison_dashboards[key] = {
             "label": config["label"],
@@ -1752,7 +1917,7 @@ def build_outputs():
         mode: {
             field: value
             for field, value in data.items()
-            if field != "promo_rows"
+            if field not in {"promo_rows", "inventory"}
         }
         for mode, data in yoy_dashboard["modes"].items()
     }
@@ -1782,6 +1947,7 @@ def build_outputs():
             "volume_source": "Product-level Fcst Inc Cases",
             "row_filter": "Fcst Inc Cases > 0",
             "date_method": "Execution Start through Execution End, prorated by inclusive execution days per calendar month",
+            "inventory_method": "Inventory build is positive and prorated from TLS Ship Start through Execution Start, inclusive; inventory burn is the same volume negative and prorated from Execution Start through Execution End, inclusive; if TLS Ship Start is after Execution Start, the full build is assigned to the TLS Ship Start month",
             "year_status_filter": {
                 "2025": sorted(STATUS_BY_YEAR[2025]),
                 "2026": sorted(STATUS_BY_YEAR[2026]),
@@ -1833,6 +1999,16 @@ def build_outputs():
 
     write_csv(OUTPUT_DETAIL, detail_fieldnames(), transformed["yoy"]["detail_rows"])
     write_csv(OUTPUT_MOM_DETAIL, detail_fieldnames(), transformed["mom"]["detail_rows"])
+    write_csv(
+        OUTPUT_INVENTORY_DETAIL,
+        inventory_detail_fieldnames(),
+        transformed["yoy"]["inventory_detail_rows"],
+    )
+    write_csv(
+        OUTPUT_MOM_INVENTORY_DETAIL,
+        inventory_detail_fieldnames(),
+        transformed["mom"]["inventory_detail_rows"],
+    )
     write_csv(OUTPUT_EXCLUDED, excluded_fieldnames(), transformed["yoy"]["excluded_rows"])
     write_csv(OUTPUT_MOM_EXCLUDED, excluded_fieldnames(), transformed["mom"]["excluded_rows"])
     all_display_audit = [
@@ -1932,6 +2108,45 @@ def detail_fieldnames():
         "execution_days_in_month",
         "execution_days_total",
         "month_cases",
+        "source_workbook",
+        "source_sheet",
+        "source_row",
+        "conversion_note",
+    ]
+
+
+def inventory_detail_fieldnames():
+    return [
+        "comparison_key",
+        "data_mode",
+        "banner",
+        "market",
+        "year",
+        "period",
+        "month",
+        "product_group",
+        "mpg",
+        "product_id",
+        "product",
+        "promo_id",
+        "promo_status",
+        "movement_type",
+        "movement_sign",
+        "tls_ship_start",
+        "execution_start",
+        "execution_end",
+        "timing_start",
+        "timing_end",
+        "source_fcst_inc_cases",
+        "unit_type",
+        "cases_per_display",
+        "converted_fcst_inc_cases",
+        "mode_fcst_inc_cases",
+        "prorate_weight",
+        "movement_days_in_month",
+        "movement_days_total",
+        "month_cases",
+        "timing_rule",
         "source_workbook",
         "source_sheet",
         "source_row",
