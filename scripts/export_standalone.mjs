@@ -26,7 +26,7 @@ function escapeInlineScript(value) {
 
 const output = path.resolve(ROOT, readArg("--output", DEFAULT_OUTPUT));
 const title = readArg("--title", "TH CPG Demand Review Dashboard");
-const dataPath = path.join(ROOT, "public", "data", "promo-dashboard-data.json");
+const dataPath = path.resolve(ROOT, readArg("--data", "public/data/promo-dashboard-data.json"));
 const cssPath = path.join(ROOT, "app", "globals.css");
 
 const [dashboardJson, css] = await Promise.all([
@@ -38,8 +38,30 @@ JSON.parse(dashboardJson);
 
 const vitePackage = await fs.realpath(path.join(ROOT, "node_modules", "vite", "package.json"));
 const viteRequire = createRequire(vitePackage);
+const postcss = viteRequire("postcss");
 const esbuildPath = viteRequire.resolve("esbuild");
 const esbuild = await import(pathToFileURL(esbuildPath).href);
+
+// Include the layout's self-hosted fonts so the archive has no font dependencies.
+const fontRoot = path.join(ROOT, ".vinext", "fonts");
+const fontDirectories = (await fs.readdir(fontRoot, { withFileTypes: true }))
+  .filter((entry) => entry.isDirectory() && /^geist(?:-mono)?-/.test(entry.name));
+if (!fontDirectories.length) throw new Error("Build the dashboard before exporting its self-hosted fonts.");
+const fontStyles = [];
+for (const directory of fontDirectories) {
+  const folder = path.join(fontRoot, directory.name);
+  const stylesheet = postcss.parse(await fs.readFile(path.join(folder, "style.css"), "utf8"));
+  const sources = [];
+  stylesheet.walkDecls("src", (declaration) => sources.push(declaration));
+  for (const declaration of sources) {
+    const reference = declaration.value.match(/url\(([^)]+)\)/)?.[1];
+    if (!reference) throw new Error("Unable to resolve an archived font asset.");
+    const font = await fs.readFile(path.join(folder, path.basename(reference.replaceAll('"', "").replaceAll("'", ""))));
+    declaration.value = `url("data:font/woff2;base64,${font.toString("base64")}") format("woff2")`;
+  }
+  fontStyles.push(stylesheet.toString());
+}
+const layoutFonts = `${fontStyles.join("\n")}\n:root { --font-geist-sans: 'Geist'; --font-geist-mono: 'Geist Mono'; }`;
 
 const entry = `
 import React from "react";
@@ -95,7 +117,7 @@ const html = `<!doctype html>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Archived standalone Tim Hortons CPG demand review dashboard.">
   <title>${title}</title>
-  <style>${css}</style>
+  <style>${layoutFonts}\n${css}</style>
 </head>
 <body>
   <div id="root"></div>
