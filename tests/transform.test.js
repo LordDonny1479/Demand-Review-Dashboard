@@ -30,6 +30,7 @@ assert.deepStrictEqual(RAW.all_banner_order.slice(0, 5), [
 ]);
 assert.deepStrictEqual(RAW.banner_order, [
   "Amazon",
+  "Associated Grocers",
   "Canadian Tire",
   "Colabor",
   "Costco",
@@ -47,7 +48,7 @@ assert.deepStrictEqual(RAW.banner_order, [
   "Walmart",
 ]);
 assert.strictEqual(RAW.banner_order.includes("Canada"), false);
-assert.strictEqual(RAW.banner_order.includes("Associated Grocers"), false);
+assert.strictEqual(RAW.banner_order.includes("Associated Grocers"), true);
 assert.strictEqual(RAW.banner_order.includes("Pratts Wholesale"), false);
 assert.strictEqual(RAW.default_mode, "blended");
 assert.ok(RAW.comparisons.yoy);
@@ -57,27 +58,27 @@ assert.ok(RAW.modes.separate);
 assert.ok(RAW.modes.blended.rollup_segment);
 assert.ok(RAW.modes.separate.rollup_segment);
 assert.strictEqual(RAW.modes.blended.stats.fy25, 1519951);
-assert.strictEqual(RAW.modes.blended.stats.fy26, 1365751);
-assert.strictEqual(RAW.modes.blended.stats.delta, -154200);
-assert.strictEqual(RAW.modes.blended.stats.delta_pct, -10.1);
+assert.strictEqual(RAW.modes.blended.stats.fy26, 1394725);
+assert.strictEqual(RAW.modes.blended.stats.delta, -125226);
+assert.strictEqual(RAW.modes.blended.stats.delta_pct, -8.2);
 assert.strictEqual(RAW.modes.blended.stats.banners, 31);
 assert.strictEqual(RAW.modes.separate.stats.fy25, 1199918);
-assert.strictEqual(RAW.modes.separate.stats.fy26, 1088695);
-assert.strictEqual(RAW.modes.separate.stats.delta, -111223);
-assert.strictEqual(RAW.modes.separate.stats.delta_pct, -9.3);
+assert.strictEqual(RAW.modes.separate.stats.fy26, 1099579);
+assert.strictEqual(RAW.modes.separate.stats.delta, -100339);
+assert.strictEqual(RAW.modes.separate.stats.delta_pct, -8.4);
 assert.strictEqual(RAW.modes.separate.stats.banners, 31);
 assert.strictEqual(RAW.comparisons.yoy.modes.blended.stats.fy26, RAW.modes.blended.stats.fy26);
-assert.strictEqual(RAW.comparisons.mom.period_labels.base, "August");
-assert.strictEqual(RAW.comparisons.mom.period_labels.comparison, "September");
-assert.strictEqual(RAW.comparisons.mom.modes.blended.stats.fy25, 1339295);
-assert.strictEqual(RAW.comparisons.mom.modes.blended.stats.fy26, 1365751);
-assert.strictEqual(RAW.comparisons.mom.modes.blended.stats.delta, 26456);
-assert.strictEqual(RAW.comparisons.mom.modes.blended.stats.delta_pct, 2.0);
+assert.strictEqual(RAW.comparisons.mom.period_labels.base, "September");
+assert.strictEqual(RAW.comparisons.mom.period_labels.comparison, "October");
+assert.strictEqual(RAW.comparisons.mom.modes.blended.stats.fy25, 1365751);
+assert.strictEqual(RAW.comparisons.mom.modes.blended.stats.fy26, 1394725);
+assert.strictEqual(RAW.comparisons.mom.modes.blended.stats.delta, 28974);
+assert.strictEqual(RAW.comparisons.mom.modes.blended.stats.delta_pct, 2.1);
 assert.strictEqual(RAW.comparisons.mom.modes.blended.stats.banners, 29);
-assert.strictEqual(RAW.comparisons.mom.modes.separate.stats.fy25, 1071799);
-assert.strictEqual(RAW.comparisons.mom.modes.separate.stats.fy26, 1088695);
-assert.strictEqual(RAW.comparisons.mom.modes.separate.stats.delta, 16896);
-assert.strictEqual(RAW.comparisons.mom.modes.separate.stats.delta_pct, 1.6);
+assert.strictEqual(RAW.comparisons.mom.modes.separate.stats.fy25, 1088695);
+assert.strictEqual(RAW.comparisons.mom.modes.separate.stats.fy26, 1099579);
+assert.strictEqual(RAW.comparisons.mom.modes.separate.stats.delta, 10884);
+assert.strictEqual(RAW.comparisons.mom.modes.separate.stats.delta_pct, 1.0);
 assert.strictEqual(RAW.comparisons.mom.modes.separate.stats.banners, 29);
 assert.strictEqual(
   RAW.comparisons.mom.modes.blended.stats.fy26,
@@ -89,10 +90,10 @@ assert.strictEqual(
 );
 assert.ok(RAW.comparisons.mom.modes.blended.non_mulo);
 assert.ok(RAW.comparisons.mom.modes.separate.non_mulo);
-assert.strictEqual(RAW.comparisons.mom.modes.blended.non_mulo.stats.fy25, 1287925);
-assert.strictEqual(RAW.comparisons.mom.modes.blended.non_mulo.stats.fy26, 1349983);
-assert.strictEqual(RAW.comparisons.mom.modes.blended.non_mulo.stats.delta, 62058);
-assert.strictEqual(RAW.comparisons.mom.modes.blended.non_mulo.stats.delta_pct, 4.8);
+assert.strictEqual(RAW.comparisons.mom.modes.blended.non_mulo.stats.fy25, 1349983);
+assert.strictEqual(RAW.comparisons.mom.modes.blended.non_mulo.stats.fy26, 1350058);
+assert.strictEqual(RAW.comparisons.mom.modes.blended.non_mulo.stats.delta, 75);
+assert.strictEqual(RAW.comparisons.mom.modes.blended.non_mulo.stats.delta_pct, 0.0);
 assert.strictEqual(RAW.comparisons.mom.modes.blended.non_mulo.stats.banners, 2);
 assert.deepStrictEqual(RAW.comparisons.mom.modes.blended.non_mulo.visible_retailer_banners, [
   "Amazon",
@@ -104,13 +105,13 @@ assert.deepStrictEqual(
     .map((row) => row.label),
   ["Amazon", "Costco", "GRAND TOTAL"],
 );
-assert.strictEqual(RAW.comparisons.mom.modes.blended.non_mulo.rollup_ret[0].fy25, 81774);
+assert.strictEqual(RAW.comparisons.mom.modes.blended.non_mulo.rollup_ret[0].fy25, 91831);
 assert.strictEqual(RAW.comparisons.mom.modes.blended.non_mulo.rollup_ret[0].fy26, 91831);
 const nonMuloMomCostco = RAW.comparisons.mom.modes.blended.non_mulo.rollup_ret.find(
   (row) => row.label === "Costco" && row.depth === 0,
 );
-assert.strictEqual(nonMuloMomCostco.fy25, 1206151);
-assert.strictEqual(nonMuloMomCostco.fy26, 1258152);
+assert.strictEqual(nonMuloMomCostco.fy25, 1258152);
+assert.strictEqual(nonMuloMomCostco.fy26, 1258227);
 
 const grandTotal = RAW.modes.blended.rollup_ret.find((row) => row.label === "GRAND TOTAL");
 assert.ok(grandTotal);
@@ -133,8 +134,8 @@ assert.ok(costcoStandalone);
 assert.strictEqual(canadaStandalone, undefined);
 assert.strictEqual(amazonStandalone.fy25, 54677);
 assert.strictEqual(amazonStandalone.fy26, 91831);
-assert.strictEqual(costcoStandalone.fy25, 749784);
-assert.strictEqual(costcoStandalone.fy26, 1258152);
+assert.strictEqual(costcoStandalone.fy25, 750040);
+assert.strictEqual(costcoStandalone.fy26, 1258227);
 const amazonTabGrandTotal = RAW.modes.blended.retailers.Amazon.find((row) => row.label === "GRAND TOTAL");
 assert.ok(amazonTabGrandTotal);
 assert.strictEqual(amazonTabGrandTotal.fy25, amazonStandalone.fy25);
@@ -143,17 +144,17 @@ assert.strictEqual(amazonTabGrandTotal.fy26, amazonStandalone.fy26);
 const walmart = RAW.modes.blended.rollup_ret.find((row) => row.label === "Walmart");
 assert.ok(walmart);
 assert.strictEqual(walmart.fy25, 310693);
-assert.strictEqual(walmart.fy26, 323769);
+assert.strictEqual(walmart.fy26, 330980);
 
 const separateWalmart = RAW.modes.separate.rollup_ret.find((row) => row.label === "Walmart");
 assert.ok(separateWalmart);
 assert.strictEqual(separateWalmart.fy25, 81906);
-assert.strictEqual(separateWalmart.fy26, 138171);
+assert.strictEqual(separateWalmart.fy26, 126012);
 
 const separateDisplayGroup = RAW.modes.separate.rollup_grp.find((row) => row.label === "Roast & Ground Displays");
 assert.ok(separateDisplayGroup);
 assert.strictEqual(separateDisplayGroup.fy25, 5906);
-assert.strictEqual(separateDisplayGroup.fy26, 5189);
+assert.strictEqual(separateDisplayGroup.fy26, 4927);
 
 const blendedDisplayGroup = RAW.modes.blended.rollup_grp.find((row) => row.label === "Roast & Ground Displays");
 assert.strictEqual(blendedDisplayGroup, undefined);
@@ -257,23 +258,23 @@ function assertSortedByDeltaDesc(rows) {
 
 const blendedRetailers = retailerRowsForMpg(RAW.modes.blended.rollup_grp, "R&G Small Bag 6/300g");
 assert.ok(blendedRetailers.length > 5);
-assert.strictEqual(blendedRetailers[0].label, "Walmart");
-assert.strictEqual(blendedRetailers[0].fy25, 0);
-assert.strictEqual(blendedRetailers[0].fy26, 18000);
+assert.strictEqual(blendedRetailers[0].label, "Metro Quebec");
+assert.strictEqual(blendedRetailers[0].fy25, 7983);
+assert.strictEqual(blendedRetailers[0].fy26, 14548);
 assertSortedByDeltaDesc(blendedRetailers);
 
 const separateRetailers = retailerRowsForMpg(RAW.modes.separate.rollup_grp, "R&G Small Bag 6/300g");
 assert.ok(separateRetailers.length > 5);
-assert.strictEqual(separateRetailers[0].label, "Walmart");
-assert.strictEqual(separateRetailers[0].fy25, 0);
-assert.strictEqual(separateRetailers[0].fy26, 18000);
+assert.strictEqual(separateRetailers[0].label, "Metro Quebec");
+assert.strictEqual(separateRetailers[0].fy25, 5975);
+assert.strictEqual(separateRetailers[0].fy26, 11572);
 assertSortedByDeltaDesc(separateRetailers);
 
 const momRetailers = retailerRowsForMpg(RAW.comparisons.mom.modes.blended.rollup_grp, "R&G Small Bag 6/300g");
 assert.ok(momRetailers.length > 5);
-assert.strictEqual(momRetailers[0].label, "Sobeys ROC");
-assert.strictEqual(momRetailers[0].fy25, 43479);
-assert.strictEqual(momRetailers[0].fy26, 45479);
+assert.strictEqual(momRetailers[0].label, "Metro Quebec");
+assert.strictEqual(momRetailers[0].fy25, 13498);
+assert.strictEqual(momRetailers[0].fy26, 14548);
 assertSortedByDeltaDesc(momRetailers);
 
 const mpgRoastGround = RAW.modes.blended.rollup_grp.find((row) => row.label === "Roast & Ground" && row.is_group);
@@ -287,9 +288,9 @@ assert.strictEqual(segmentRoastGround.fy26, mpgRoastGround.fy26);
 assert.strictEqual(RAW.modes.blended.rollup_segment.some((row) => row.is_mpg), false);
 const segmentRetailers = retailerRowsForSegment(RAW.modes.blended.rollup_segment, "Roast & Ground");
 assert.ok(segmentRetailers.length > 5);
-assert.strictEqual(segmentRetailers[0].label, "Walmart");
-assert.strictEqual(segmentRetailers[0].fy25, 34293);
-assert.strictEqual(segmentRetailers[0].fy26, 48450);
+assert.strictEqual(segmentRetailers[0].label, "Metro Quebec");
+assert.strictEqual(segmentRetailers[0].fy25, 33333);
+assert.strictEqual(segmentRetailers[0].fy26, 44658);
 assert.ok(segmentRetailers.every((row) => row.parent_level === "group"));
 assertSortedByDeltaDesc(segmentRetailers);
 
@@ -299,6 +300,7 @@ assert.deepStrictEqual(RAW.modes.blended.visible_retailer_banners, [
   "Fed Coop",
   "Giant Tiger",
   "Loblaw",
+  "London Drugs",
   "Metro Ontario",
   "Metro Quebec",
   "PFG",
@@ -491,12 +493,18 @@ assert.ok(audit.includes("TDPS-24/473,SAUCES 24/473 ML,Sauces,Sauces 6/473ml,Sau
 assert.strictEqual(META.methodology.volume_source, "Product-level Fcst Inc Cases");
 assert.strictEqual(META.methodology.row_filter, "Fcst Inc Cases > 0");
 assert.strictEqual(META.methodology.product_level, "Product group is sourced from Product List column Q (Demand Review Planner); MPG pack-size level combines individual flavours");
-assert.strictEqual(META.generated_from.yoy_2025_workbook, "DR 2025 - 2026-08-28 (EXCEXP_TLS_000JHWRHC).xlsx");
-assert.strictEqual(META.generated_from.yoy_2026_workbook, "DR 2026 - 2026-08-28 (EXCEXP_TLS_000JHWRH0).xlsx");
-assert.strictEqual(META.generated_from.mom_august_workbook, "DR 2026 - 2026-08-04 (EXCEXP_TLS_000JGVABX).xlsx");
+assert.strictEqual(META.generated_from.yoy_2025_workbook, "DR 2025 - 2026-10-02 (EXCEXP_TLS_000JJKSK3).xlsx");
+assert.strictEqual(META.generated_from.yoy_2026_workbook, "DR 2026 - 2026-10-02 (EXCEXP_TLS_000JJKSJR).xlsx");
+assert.strictEqual(META.generated_from.mom_october_workbook, "DR 2026 - 2026-10-02 (EXCEXP_TLS_000JJKSJR).xlsx");
 assert.strictEqual(META.generated_from.mom_september_workbook, "DR 2026 - 2026-08-28 (EXCEXP_TLS_000JHWRH0).xlsx");
 assert.strictEqual(META.generated_from.product_workbook, "Product List 20260629 (2).xlsx");
 assert.strictEqual(META.generated_from.market_workbook, "Market List.xlsx");
+assert.deepStrictEqual(META.methodology.market_overrides, { "CG-LCL": "Loblaw" });
+const loblaw = RAW.comparisons.yoy.modes.blended.retailer_totals.find((row) => row.label === "Loblaw");
+assert.strictEqual(loblaw.fy26, 171330);
+const loblawMom = RAW.comparisons.mom.modes.blended.retailer_totals.find((row) => row.label === "Loblaw");
+assert.strictEqual(loblawMom.fy25, 130618);
+assert.strictEqual(loblawMom.fy26, loblaw.fy26);
 assert.deepStrictEqual(META.methodology.year_status_filter["2026"], [
   "Closed",
   "Committed",
@@ -526,20 +534,20 @@ assert.strictEqual(
 assert.deepStrictEqual(META.methodology.visible_banner_tabs, RAW.banner_order);
 assert.strictEqual(META.mode_totals.blended.fy25, 1519951);
 assert.strictEqual(META.mode_totals.separate.fy25, 1199918);
-assert.strictEqual(META.mode_totals.blended.fy26, 1365751);
-assert.strictEqual(META.mode_totals.separate.fy26, 1088695);
-assert.strictEqual(META.display_products_converted, 77);
+assert.strictEqual(META.mode_totals.blended.fy26, 1394725);
+assert.strictEqual(META.mode_totals.separate.fy26, 1099579);
+assert.strictEqual(META.display_products_converted, 76);
 assert.strictEqual(META.unconverted_display_products, 0);
-assert.strictEqual(META.comparisons.mom.mode_totals.blended.fy25, 1339295);
-assert.strictEqual(META.comparisons.mom.mode_totals.blended.fy26, 1365751);
-assert.strictEqual(META.comparisons.mom.display_products_converted, 57);
+assert.strictEqual(META.comparisons.mom.mode_totals.blended.fy25, 1365751);
+assert.strictEqual(META.comparisons.mom.mode_totals.blended.fy26, 1394725);
+assert.strictEqual(META.comparisons.mom.display_products_converted, 60);
 assert.strictEqual(META.comparisons.mom.unconverted_display_products, 0);
-assert.strictEqual(META.comparisons.yoy.inventory_detail_rows, 35894);
-assert.strictEqual(META.comparisons.yoy.inventory_source_rows, 6268);
+assert.strictEqual(META.comparisons.yoy.inventory_detail_rows, 35927);
+assert.strictEqual(META.comparisons.yoy.inventory_source_rows, 6249);
 assert.strictEqual(META.comparisons.yoy.inventory_missing_ship_start_rows, 0);
 assert.strictEqual(META.comparisons.yoy.inventory_ship_after_execution_rows, 6);
-assert.strictEqual(META.comparisons.mom.inventory_detail_rows, 32252);
-assert.strictEqual(META.comparisons.mom.inventory_source_rows, 5686);
+assert.strictEqual(META.comparisons.mom.inventory_detail_rows, 32747);
+assert.strictEqual(META.comparisons.mom.inventory_source_rows, 5756);
 assert.strictEqual(META.comparisons.mom.inventory_missing_ship_start_rows, 0);
 assert.strictEqual(META.comparisons.mom.inventory_ship_after_execution_rows, 2);
 assert.strictEqual(

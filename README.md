@@ -2,7 +2,7 @@
 
 Sites dashboard for reviewing Tim Hortons CPG promotional forecast incremental
 cases year-over-year between 2025 and 2026, plus month-over-month changes
-between the August and September-labelled forecast pulls.
+between the September and October forecast pulls.
 
 The dashboard is built from embedded generated data. There is no upload control
 in the site.
@@ -24,11 +24,15 @@ volume table above it.
 
 Raw workbooks are stored in `data/raw`:
 
-- `DR 2025 - 2026-08-28 (EXCEXP_TLS_000JHWRHC).xlsx` for the latest 2025 YoY pull
-- `DR 2026 - 2026-08-28 (EXCEXP_TLS_000JHWRH0).xlsx` for the latest 2026 YoY and September-labelled MoM pull
-- `DR 2026 - 2026-08-04 (EXCEXP_TLS_000JGVABX).xlsx` for the retained August MoM baseline
+- `DR 2025 - 2026-10-02 (EXCEXP_TLS_000JJKSK3).xlsx` for the latest 2025 YoY pull
+- `DR 2026 - 2026-10-02 (EXCEXP_TLS_000JJKSJR).xlsx` for the latest 2026 YoY and October MoM pull
+- `DR 2026 - 2026-08-28 (EXCEXP_TLS_000JHWRH0).xlsx` for the September-labelled MoM baseline previously in the site
 - `Product List 20260629 (2).xlsx`
 - `Market List.xlsx`
+
+Approved market alias: `CG-LCL` maps to `Loblaw`. This retains the two promotions
+that moved from `NA-LOBLAWS` to `CG-LCL` in the October pull. Original reports
+and the market mapping workbook remain unchanged.
 
 Generated dashboard data is written to:
 
@@ -59,7 +63,7 @@ The builder:
 - keeps only rows where `Fcst Inc Cases > 0`;
 - includes 2025 rows with `Closed` or `Committed` promo status;
 - includes 2026 rows with `Closed`, `Planned`, or `Committed` promo status;
-- compares YoY as 2026 less 2025 and MoM as the September-labelled pull less the August pull;
+- compares YoY as 2026 less 2025 and MoM as the October pull less the September-labelled pull;
 - uses `Execution Start` through `Execution End`;
 - pro-rates cases into calendar months by inclusive execution days;
 - treats inventory build as positive cases prorated from `TLS Ship Start`

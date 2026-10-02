@@ -14,9 +14,9 @@ from openpyxl import load_workbook
 
 ROOT = Path(__file__).resolve().parents[1]
 RAW_DIR = ROOT / "data" / "raw"
-YOY_2025_XLSX = RAW_DIR / "DR 2025 - 2026-08-28 (EXCEXP_TLS_000JHWRHC).xlsx"
-AUGUST_2026_XLSX = RAW_DIR / "DR 2026 - 2026-08-04 (EXCEXP_TLS_000JGVABX).xlsx"
+YOY_2025_XLSX = RAW_DIR / "DR 2025 - 2026-10-02 (EXCEXP_TLS_000JJKSK3).xlsx"
 SEPTEMBER_2026_XLSX = RAW_DIR / "DR 2026 - 2026-08-28 (EXCEXP_TLS_000JHWRH0).xlsx"
+OCTOBER_2026_XLSX = RAW_DIR / "DR 2026 - 2026-10-02 (EXCEXP_TLS_000JJKSJR).xlsx"
 PRODUCT_XLSX = RAW_DIR / "Product List 20260629 (2).xlsx"
 MARKET_XLSX = RAW_DIR / "Market List.xlsx"
 
@@ -45,7 +45,7 @@ COMPARISON_CONFIGS = {
         "label": "YoY",
         "sheets": [
             {"workbook": YOY_2025_XLSX, "name": "Rebates", "period_key": "base", "label": "2025", "short_label": "'25", "actual_year": 2025},
-            {"workbook": SEPTEMBER_2026_XLSX, "name": "Rebates", "period_key": "comparison", "label": "2026", "short_label": "'26", "actual_year": 2026},
+            {"workbook": OCTOBER_2026_XLSX, "name": "Rebates", "period_key": "comparison", "label": "2026", "short_label": "'26", "actual_year": 2026},
         ],
         "period_labels": {
             "base": "2025",
@@ -63,20 +63,20 @@ COMPARISON_CONFIGS = {
     "mom": {
         "label": "MoM",
         "sheets": [
-            {"workbook": AUGUST_2026_XLSX, "name": "Rebates", "period_key": "base", "label": "August", "short_label": "August", "actual_year": 2026},
-            {"workbook": SEPTEMBER_2026_XLSX, "name": "Rebates", "period_key": "comparison", "label": "September", "short_label": "September", "actual_year": 2026},
+            {"workbook": SEPTEMBER_2026_XLSX, "name": "Rebates", "period_key": "base", "label": "September", "short_label": "September", "actual_year": 2026},
+            {"workbook": OCTOBER_2026_XLSX, "name": "Rebates", "period_key": "comparison", "label": "October", "short_label": "October", "actual_year": 2026},
         ],
         "period_labels": {
-            "base": "August",
-            "comparison": "September",
-            "base_short": "August",
-            "comparison_short": "September",
-            "base_stat": "August Cases",
-            "comparison_stat": "September Cases",
+            "base": "September",
+            "comparison": "October",
+            "base_short": "September",
+            "comparison_short": "October",
+            "base_stat": "September Cases",
+            "comparison_stat": "October Cases",
             "delta": "Change",
             "delta_stat": "MoM Change Cases",
             "pct_stat": "MoM %",
-            "legend": "Grey = August pull | Bold = September pull | Full Year change includes %",
+            "legend": "Grey = September pull | Bold = October pull | Full Year change includes %",
         },
     },
 }
@@ -128,6 +128,7 @@ FOCUS_RETAILER_BANNERS = {
 SPECIAL_RETAILER_TAB_BANNERS = {"Amazon", "Costco"}
 NON_MULO_BANNERS = SPECIAL_RETAILER_TAB_BANNERS
 CHANGE_VISIBILITY_THRESHOLD = 0.05
+MARKET_OVERRIDES = {"CG-LCL": "Loblaw"}
 
 DISPLAY_RE = re.compile(
     r"DISPLAY|DISPLAYER|\bDISP\b|\bDRP\b|1/2\s*DRP|HALF\s*DRP|PDQ|DISPLY",
@@ -457,6 +458,7 @@ def load_market_map():
             banner_order.append(banner)
 
     workbook.close()
+    market_map.update(MARKET_OVERRIDES)
     return market_map, banner_order
 
 
@@ -1933,13 +1935,13 @@ def build_outputs():
 
     summary = {
         "generated_from": {
-            "demand_workbook": f"{YOY_2025_XLSX.name} + {SEPTEMBER_2026_XLSX.name}",
-            "yoy_workbook": f"{YOY_2025_XLSX.name} + {SEPTEMBER_2026_XLSX.name}",
+            "demand_workbook": f"{YOY_2025_XLSX.name} + {OCTOBER_2026_XLSX.name}",
+            "yoy_workbook": f"{YOY_2025_XLSX.name} + {OCTOBER_2026_XLSX.name}",
             "yoy_2025_workbook": YOY_2025_XLSX.name,
-            "yoy_2026_workbook": SEPTEMBER_2026_XLSX.name,
-            "mom_workbook": f"{AUGUST_2026_XLSX.name} (August) + {SEPTEMBER_2026_XLSX.name} (September)",
-            "mom_august_workbook": AUGUST_2026_XLSX.name,
+            "yoy_2026_workbook": OCTOBER_2026_XLSX.name,
+            "mom_workbook": f"{SEPTEMBER_2026_XLSX.name} (September) + {OCTOBER_2026_XLSX.name} (October)",
             "mom_september_workbook": SEPTEMBER_2026_XLSX.name,
+            "mom_october_workbook": OCTOBER_2026_XLSX.name,
             "product_workbook": PRODUCT_XLSX.name,
             "market_workbook": MARKET_XLSX.name,
         },
@@ -1957,7 +1959,8 @@ def build_outputs():
             "banner_scope": BANNER_ORDER,
             "visible_banner_tabs": visible_banner_order,
             "market_mapping": "Retailer/customer names are mapped from Market List.xlsx",
-            "mom_comparison": "MoM compares the September-labelled August 28 pull against the retained August 4 pull using the same product, market, status, date, and display-conversion methodology",
+            "market_overrides": MARKET_OVERRIDES,
+            "mom_comparison": "MoM compares the October 2 pull against the September-labelled August 28 pull previously in the site using the same product, market, status, date, and display-conversion methodology",
             "site_excluded_banners": sorted(SITE_EXCLUDED_BANNERS),
             "rollup_excluded_banners": sorted(ROLLUP_EXCLUDED_BANNERS),
             "retailer_visibility_rule": f"Show focus retailers plus retailers whose absolute change is greater than {CHANGE_VISIBILITY_THRESHOLD:.0%} of the total absolute change for the active comparison and display mode",

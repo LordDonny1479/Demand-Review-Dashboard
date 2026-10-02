@@ -1,0 +1,260 @@
+{
+  "sources": [
+    {
+      "file": "DR 2025 - 2026-10-02 (EXCEXP_TLS_000JJKSK3).xlsx",
+      "sha256": "bd6ccc58b978126eb33119452c5abc0e4ce5aa9ea7a03e8f645aaa18aa0a7628",
+      "nonempty_rows": 4711
+    },
+    {
+      "file": "DR 2026 - 2026-08-28 (EXCEXP_TLS_000JHWRH0).xlsx",
+      "sha256": "1c7d5809ba11f672b4e6cfddf35bdcf7bd99a772ccd2d55c822746beab8c3560",
+      "nonempty_rows": 3842
+    },
+    {
+      "file": "DR 2026 - 2026-10-02 (EXCEXP_TLS_000JJKSJR).xlsx",
+      "sha256": "9e746a926fe1ccfb3d10c7cc93d6f7bc49618537ffbabd75143a39990f7b14c5",
+      "nonempty_rows": 3861
+    }
+  ],
+  "comparisons": {
+    "yoy": {
+      "raw_rows": 8572,
+      "included_source_rows": 6249,
+      "excluded_source_rows": 2323,
+      "excluded_reasons": {
+        "Fcst Inc Cases is not positive": 2301,
+        "Promo status outside dashboard methodology": 13,
+        "Product cannot be mapped to an MPG pack size": 9
+      },
+      "blended_totals": {
+        "fy25": 1519951,
+        "fy26": 1394725,
+        "base_total": 1519951,
+        "comparison_total": 1394725,
+        "delta": -125226,
+        "delta_pct": -8.2,
+        "banners": 31
+      },
+      "separate_totals": {
+        "fy25": 1199918,
+        "fy26": 1099579,
+        "base_total": 1199918,
+        "comparison_total": 1099579,
+        "delta": -100339,
+        "delta_pct": -8.4,
+        "banners": 31
+      }
+    },
+    "mom": {
+      "raw_rows": 7703,
+      "included_source_rows": 5756,
+      "excluded_source_rows": 1947,
+      "excluded_reasons": {
+        "Fcst Inc Cases is not positive": 1922,
+        "Promo status outside dashboard methodology": 17,
+        "Product cannot be mapped to an MPG pack size": 8
+      },
+      "blended_totals": {
+        "fy25": 1365751,
+        "fy26": 1394725,
+        "base_total": 1365751,
+        "comparison_total": 1394725,
+        "delta": 28974,
+        "delta_pct": 2.1,
+        "banners": 29
+      },
+      "separate_totals": {
+        "fy25": 1088695,
+        "fy26": 1099579,
+        "base_total": 1088695,
+        "comparison_total": 1099579,
+        "delta": 10884,
+        "delta_pct": 1.0,
+        "banners": 29
+      }
+    }
+  },
+  "spot_checks": [
+    {
+      "comparison": "yoy",
+      "retailer": "Walmart",
+      "base_cases": 310693,
+      "current_cases": 330980,
+      "change": 20287,
+      "current_months": [
+        426,
+        12388,
+        51032,
+        5249,
+        18671,
+        47710,
+        6329,
+        13154,
+        22587,
+        48836,
+        48098,
+        56500
+      ]
+    },
+    {
+      "comparison": "yoy",
+      "retailer": "Canadian Tire",
+      "base_cases": 22500,
+      "current_cases": 43079,
+      "change": 20579,
+      "current_months": [
+        0,
+        672,
+        1481,
+        2514,
+        1117,
+        803,
+        721,
+        482,
+        659,
+        4303,
+        17086,
+        13241
+      ]
+    },
+    {
+      "comparison": "yoy",
+      "retailer": "Amazon",
+      "base_cases": 54677,
+      "current_cases": 91831,
+      "change": 37154,
+      "current_months": [
+        10679,
+        8873,
+        2003,
+        1316,
+        1069,
+        0,
+        26177,
+        20014,
+        15857,
+        5363,
+        240,
+        240
+      ]
+    },
+    {
+      "comparison": "yoy",
+      "retailer": "Costco",
+      "base_cases": 750040,
+      "current_cases": 1258227,
+      "change": 508187,
+      "current_months": [
+        47,
+        115375,
+        8925,
+        0,
+        163027,
+        162735,
+        301749,
+        14956,
+        190658,
+        0,
+        432,
+        300324
+      ]
+    },
+    {
+      "comparison": "mom",
+      "retailer": "Walmart",
+      "base_cases": 323769,
+      "current_cases": 330980,
+      "change": 7211,
+      "current_months": [
+        426,
+        12388,
+        51032,
+        5249,
+        18671,
+        47710,
+        6329,
+        13154,
+        22587,
+        48836,
+        48098,
+        56500
+      ]
+    },
+    {
+      "comparison": "mom",
+      "retailer": "Canadian Tire",
+      "base_cases": 42651,
+      "current_cases": 43079,
+      "change": 428,
+      "current_months": [
+        0,
+        672,
+        1481,
+        2514,
+        1117,
+        803,
+        721,
+        482,
+        659,
+        4303,
+        17086,
+        13241
+      ]
+    },
+    {
+      "comparison": "mom",
+      "retailer": "Amazon",
+      "base_cases": 91831,
+      "current_cases": 91831,
+      "change": 0,
+      "current_months": [
+        10679,
+        8873,
+        2003,
+        1316,
+        1069,
+        0,
+        26177,
+        20014,
+        15857,
+        5363,
+        240,
+        240
+      ]
+    },
+    {
+      "comparison": "mom",
+      "retailer": "Costco",
+      "base_cases": 1258152,
+      "current_cases": 1258227,
+      "change": 75,
+      "current_months": [
+        47,
+        115375,
+        8925,
+        0,
+        163027,
+        162735,
+        301749,
+        14956,
+        190658,
+        0,
+        432,
+        300324
+      ]
+    }
+  ],
+  "unmapped_retailer_exceptions": [],
+  "baseline_vectors_checked": 23604,
+  "existing_display_components_unchanged": 74,
+  "checks": {
+    "checks": 2222126,
+    "sales_detail_rows": 37407,
+    "inventory_detail_rows": 68674,
+    "table_rows": 11707,
+    "promo_rows": 33384
+  },
+  "rounding_boundaries": {},
+  "errors": [],
+  "result": "PASS"
+}
